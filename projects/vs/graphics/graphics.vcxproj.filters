@@ -24,10 +24,10 @@
     <ClInclude Include="..\..\..\src\graphics\opengl\glcall.hpp">
       <Filter>opengl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\graphics\opengl\vertex_buffer.hpp">
+    <ClInclude Include="..\..\..\src\graphics\opengl\buffer.hpp">
       <Filter>opengl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\graphics\opengl\index_buffer.hpp">
+    <ClInclude Include="..\..\..\src\graphics\opengl\vertex_array.hpp">
       <Filter>opengl</Filter>
     </ClInclude>
   </ItemGroup>
@@ -42,12 +42,6 @@
       <Filter>glfw</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\graphics\opengl\glerrors.cpp">
-      <Filter>opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\graphics\opengl\vertex_buffer.cpp">
-      <Filter>opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\graphics\opengl\index_buffer.cpp">
       <Filter>opengl</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,13 +2,6 @@
 
 namespace opengl
 {
-	VertexBuffer::VertexBuffer(const void* data, GLuint size)
-	{
-		GLCall(glGenBuffers(1, &mBuffer));
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, mBuffer));
-		GLCall(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
-	}
-
 	VertexBuffer::VertexBuffer(VertexBuffer&& other) noexcept : mBuffer(other.mBuffer)
 	{
 		other.mBuffer = 0;
@@ -30,7 +23,7 @@ namespace opengl
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, mBuffer));
 	}
 
-	void VertexBuffer::unbind() const
+	void VertexBuffer::unbind()
 	{
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	}

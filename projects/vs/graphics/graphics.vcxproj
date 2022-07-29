@@ -14,18 +14,16 @@
     <ClInclude Include="..\..\..\src\graphics\glfw\errors.hpp" />
     <ClInclude Include="..\..\..\src\graphics\glfw\library.hpp" />
     <ClInclude Include="..\..\..\src\graphics\glfw\window.hpp" />
+    <ClInclude Include="..\..\..\src\graphics\opengl\buffer.hpp" />
     <ClInclude Include="..\..\..\src\graphics\opengl\glcall.hpp" />
     <ClInclude Include="..\..\..\src\graphics\opengl\glerrors.hpp" />
-    <ClInclude Include="..\..\..\src\graphics\opengl\index_buffer.hpp" />
-    <ClInclude Include="..\..\..\src\graphics\opengl\vertex_buffer.hpp" />
+    <ClInclude Include="..\..\..\src\graphics\opengl\vertex_array.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\graphics\glfw\errors.cpp" />
     <ClCompile Include="..\..\..\src\graphics\glfw\library.cpp" />
     <ClCompile Include="..\..\..\src\graphics\glfw\window.cpp" />
     <ClCompile Include="..\..\..\src\graphics\opengl\glerrors.cpp" />
-    <ClCompile Include="..\..\..\src\graphics\opengl\index_buffer.cpp" />
-    <ClCompile Include="..\..\..\src\graphics\opengl\vertex_buffer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

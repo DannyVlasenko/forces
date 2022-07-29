@@ -1,7 +1,6 @@
 #include "application.hpp"
 
-#include "opengl/index_buffer.hpp"
-#include "opengl/vertex_buffer.hpp"
+#include "opengl/buffer.hpp"
 
 static GLuint compile_shader(GLuint type, const char* source)
 {
@@ -94,12 +93,12 @@ void Application::run() const
 	GLCall(glGenVertexArrays(1, &vao));
 	GLCall(glBindVertexArray(vao));
 
-	opengl::VertexBuffer vb(positions, sizeof(positions));
+	opengl::VertexBuffer vb(positions);
 
 	GLCall(glEnableVertexAttribArray(0));
 	GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
-
-	opengl::IndexBuffer ib(indices, 6);
+	
+	opengl::IndexBuffer ib(indices);
 
 	const auto shader = create_shader(VertexShader, FragmentShader);
 	GLCall(glUseProgram(shader));

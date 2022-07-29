@@ -1,7 +1,8 @@
 #ifndef INDEX_BUFFER_HPP
 #define INDEX_BUFFER_HPP
 
-#include <memory>
+#include <span>
+
 #include "glcall.hpp"
 
 namespace opengl
@@ -9,7 +10,7 @@ namespace opengl
 	class IndexBuffer
 	{
 	public:
-		IndexBuffer(const GLuint* data, GLuint count);
+		explicit IndexBuffer(std::span<const GLuint> indices);
 
 		IndexBuffer(const IndexBuffer& other) = delete;
 		IndexBuffer& operator=(const IndexBuffer& other) = delete;

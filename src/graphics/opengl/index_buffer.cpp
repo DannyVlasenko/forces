@@ -2,12 +2,14 @@
 
 namespace opengl
 {
-	IndexBuffer::IndexBuffer(const GLuint* data, GLuint count):
-		mCount(count)
+	IndexBuffer::IndexBuffer(std::span<const GLuint> indices):
+		mBuffer(0),
+		mCount(indices.size())
 	{
 		GLCall(glGenBuffers(1, &mBuffer));
 		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBuffer));
-		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count*sizeof(GLuint), data, GL_STATIC_DRAW));
+		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size_bytes(), indices.data(), GL_STATIC_DRAW));
+		glBufferData()
 	}
 
 	IndexBuffer::IndexBuffer(IndexBuffer&& other) noexcept :
