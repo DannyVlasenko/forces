@@ -12,6 +12,11 @@ namespace glfw
 		}
 	}
 
+	void Window::process_events()
+	{
+		glfwPollEvents();
+	}
+
 	void Window::make_context_current() const
 	{
 		glfwMakeContextCurrent(mWindow.get());

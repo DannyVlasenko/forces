@@ -26,5 +26,8 @@
     <ClInclude Include="..\..\..\src\app\application.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\app\window_loop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

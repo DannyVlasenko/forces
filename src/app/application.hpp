@@ -3,19 +3,25 @@
 
 #include "opengl/glcall.hpp"
 #include "glfw/library.hpp"
-#include "glfw/window.hpp"
+#include "window_loop.h"
 
-class Application : glfw::EnableLibrary
+namespace forces
 {
-public:
-	Application();
 
-	[[nodiscard]]
-	const char* gl_version() const noexcept;
+	class Application : glfw::EnableLibrary
+	{
+	public:
+		Application();
 
-	void run() const;
+		[[nodiscard]]
+		const char* gl_version() const noexcept;
 
-private:
-	const glfw::Window mMainWindow{ 800, 600, "forces" };
-};
+		void run() const;
+
+	private:
+		const glfw::Window mMainWindow{ 800, 600, "forces" };
+		const WindowLoop mMainLoop;
+	};
+
+}
 #endif // FORCES_APPLICATION_HPP

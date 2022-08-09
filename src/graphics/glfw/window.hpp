@@ -13,6 +13,8 @@ namespace glfw
 	public:
 		Window(int width, int height, const char* title);
 
+		static void process_events();
+
 		void make_context_current() const;
 
 		[[nodiscard]]

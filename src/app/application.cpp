@@ -61,76 +61,77 @@ void main()
 }
 )--";
 
-Application::Application()
+namespace forces
 {
-	mMainWindow.make_context_current();
-	if (glewInit() != GLEW_OK)
+	Application::Application() :
+		mMainLoop(mMainWindow)
 	{
-		throw std::runtime_error("GLEW init error.");
-	}
-}
-
-const char* Application::gl_version() const noexcept
-{
-	return reinterpret_cast<const char*>(glGetString(GL_VERSION));
-}
-
-void Application::run() const
-{
-	constexpr float positions[] = {
-		-0.5f, -0.5f,
-		0.5f, -0.5f,
-		0.5f,  0.5f,
-		-0.5f,  0.5f
-	};
-
-	constexpr GLuint indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	GLuint vao;
-	GLCall(glGenVertexArrays(1, &vao));
-	GLCall(glBindVertexArray(vao));
-
-	opengl::VertexBuffer vb(positions);
-
-	GLCall(glEnableVertexAttribArray(0));
-	GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
-	
-	opengl::IndexBuffer ib(indices);
-
-	const auto shader = create_shader(VertexShader, FragmentShader);
-	GLCall(glUseProgram(shader));
-	GLCall(const auto location = glGetUniformLocation(shader, "u_Color"));
-	GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
-	
-	GLCall(glBindVertexArray(0));
-	GLCall(glUseProgram(0));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
-	float r = 0.0f;
-	float increment = 0.05f;
-
-	while (!mMainWindow.should_close())
-	{
-		GLCall(glClear(GL_COLOR_BUFFER_BIT));
-
-		GLCall(glUseProgram(shader));
-		GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
-		GLCall(glBindVertexArray(vao));
-		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-
-		if (r < 0.0f || r > 1.0f)
+		mMainWindow.make_context_current();
+		if (glewInit() != GLEW_OK)
 		{
-			increment = -increment;
+			throw std::runtime_error("GLEW init error.");
 		}
-		r += increment;
-
-		mMainWindow.swap_buffers();
-		glfwPollEvents();
 	}
 
-	GLCall(glDeleteProgram(shader));
+	const char* Application::gl_version() const noexcept
+	{
+		return reinterpret_cast<const char*>(glGetString(GL_VERSION));
+	}
+
+	void Application::run() const
+	{
+		constexpr float positions[] = {
+			-0.5f, -0.5f,
+			0.5f, -0.5f,
+			0.5f, 0.5f,
+			-0.5f, 0.5f
+		};
+
+		constexpr GLuint indices[] = {
+			0, 1, 2,
+			2, 3, 0
+		};
+
+		GLuint vao;
+		GLCall(glGenVertexArrays(1, &vao));
+		GLCall(glBindVertexArray(vao));
+
+		opengl::VertexBuffer vb(positions);
+
+		GLCall(glEnableVertexAttribArray(0));
+		GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
+
+		opengl::IndexBuffer ib(indices);
+
+		const auto shader = create_shader(VertexShader, FragmentShader);
+		GLCall(glUseProgram(shader));
+		GLCall(const auto location = glGetUniformLocation(shader, "u_Color"));
+		GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
+
+		GLCall(glBindVertexArray(0));
+		GLCall(glUseProgram(0));
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+
+		float r = 0.0f;
+		float increment = 0.05f;
+
+		mMainLoop.run([&]
+		{
+			GLCall(glClear(GL_COLOR_BUFFER_BIT));
+
+			GLCall(glUseProgram(shader));
+			GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
+			GLCall(glBindVertexArray(vao));
+			GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+
+			if (r < 0.0f || r > 1.0f)
+			{
+				increment = -increment;
+			}
+			r += increment;
+		});
+
+		GLCall(glDeleteProgram(shader));
+	}
 }

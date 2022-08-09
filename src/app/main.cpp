@@ -13,7 +13,7 @@ int main()
 {
 	try
 	{
-		Application app{};
+		forces::Application app{};
 		std::cout << app.gl_version() << std::endl;
 		app.run();
 		return EXIT_SUCCESS;
