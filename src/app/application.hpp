@@ -3,7 +3,7 @@
 
 #include "opengl/glcall.hpp"
 #include "glfw/library.hpp"
-#include "window_loop.h"
+#include "window_loop.hpp"
 
 namespace forces
 {

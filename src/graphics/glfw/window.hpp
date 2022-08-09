@@ -15,6 +15,8 @@ namespace glfw
 
 		static void process_events();
 
+		void set_swap_interval(int screen_updates) const;
+
 		void make_context_current() const;
 
 		[[nodiscard]]

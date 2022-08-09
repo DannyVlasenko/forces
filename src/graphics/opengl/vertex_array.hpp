@@ -7,10 +7,7 @@
 namespace opengl
 {
 	template <typename T>
-	constexpr GLenum gl_type()
-	{
-		static_assert(false);
-	}
+	constexpr GLenum gl_type() = delete;
 
 	template <>
 	constexpr GLenum gl_type<float>()
@@ -18,18 +15,21 @@ namespace opengl
 		return GL_FLOAT;
 	}
 
+	template <>
+	constexpr GLenum gl_type<unsigned int>()
+	{
+		return GL_UNSIGNED_INT;
+	}
+
+	template <>
+	constexpr GLenum gl_type<unsigned char>()
+	{
+		return GL_UNSIGNED_BYTE;
+	}
+
 	class VertexBufferLayout
 	{
 	public:
-
-		template <typename T>
-		VertexBufferLayout & push(GLuint count, GLboolean normalized = GL_FALSE)
-		{
-			mElements.emplace_back(count, gl_type<T>(), normalized);
-			return *this;
-		}
-
-	private:
 		struct Element
 		{
 			GLuint count;
@@ -37,16 +37,85 @@ namespace opengl
 			GLboolean normalized;
 		};
 
+		template <typename T>
+		VertexBufferLayout& push(GLuint count, GLboolean normalized = GL_FALSE)
+		{
+			mElements.emplace_back(count, gl_type<T>(), normalized);
+			mStride += sizeof(T) * count;
+			return *this;
+		}
+
+		[[nodiscard]]
+		GLuint stride() const noexcept
+		{
+			return mStride;
+		}
+
+		[[nodiscard]]
+		const std::vector<Element>& elements() const noexcept
+		{
+			return mElements;
+		}
+
+	private:
 		std::vector<Element> mElements;
+		GLuint mStride{0};
 	};
 
 	class VertexArray
 	{
 	public:
-		VertexArray& add_buffer(const VertexBuffer& vb, const VertexBufferLayout& layout)
+		VertexArray()
 		{
-			
+			GLCall(glGenVertexArrays(1, &mId));
 		}
+
+		VertexArray(const VertexArray& other) = delete;
+		VertexArray& operator=(const VertexArray& other) = delete;
+
+		VertexArray(VertexArray&& other) noexcept :
+			mId(other.mId)
+		{
+			other.mId = 0;
+		}
+
+		VertexArray& operator=(VertexArray&& other) noexcept
+		{
+			std::swap(mId, other.mId);
+			return *this;
+		}
+
+		~VertexArray()
+		{
+			glDeleteVertexArrays(1, &mId);
+		}
+
+		void bind() const
+		{
+			GLCall(glBindVertexArray(mId));
+		}
+
+		static void unbind()
+		{
+			GLCall(glBindVertexArray(0));
+		}
+
+		VertexArray& add_buffer(const auto& vb, const VertexBufferLayout& layout)
+		{
+			bind();
+			vb.bind();
+			for (GLuint i = 0; i < layout.elements().size(); ++i)
+			{
+				GLCall(glEnableVertexAttribArray(i));
+				GLCall(glVertexAttribPointer(i, layout.elements()[i].count, layout.elements()[i].type, 
+												layout.elements()[i].normalized, layout.stride(), 
+												(const void *)(layout.stride() * i)));
+			}
+			return *this;
+		}
+
+	private:
+		GLuint mId{0};
 	};
 }
 

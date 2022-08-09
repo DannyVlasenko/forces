@@ -1,6 +1,7 @@
 #include "application.hpp"
 
 #include "opengl/buffer.hpp"
+#include "opengl/vertex_array.hpp"
 
 static GLuint compile_shader(GLuint type, const char* source)
 {
@@ -15,7 +16,7 @@ static GLuint compile_shader(GLuint type, const char* source)
 		int length;
 		GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
 		std::string error(length, '\0');
-		GLCall(glGetShaderInfoLog(id, error.length(), &length, error.data()));
+		GLCall(glGetShaderInfoLog(id, static_cast<GLsizei>(error.length()), &length, error.data()));
 		throw std::runtime_error("Shader compilation error: " + error);
 	}
 
@@ -80,6 +81,8 @@ namespace forces
 
 	void Application::run() const
 	{
+		mMainWindow.set_swap_interval(1);
+
 		constexpr float positions[] = {
 			-0.5f, -0.5f,
 			0.5f, -0.5f,
@@ -92,14 +95,11 @@ namespace forces
 			2, 3, 0
 		};
 
-		GLuint vao;
-		GLCall(glGenVertexArrays(1, &vao));
-		GLCall(glBindVertexArray(vao));
-
+		opengl::VertexArray va;
 		opengl::VertexBuffer vb(positions);
-
-		GLCall(glEnableVertexAttribArray(0));
-		GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
+		opengl::VertexBufferLayout layout;
+		layout.push<float>(2);
+		va.add_buffer(vb, layout);		
 
 		opengl::IndexBuffer ib(indices);
 
@@ -122,7 +122,7 @@ namespace forces
 
 			GLCall(glUseProgram(shader));
 			GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
-			GLCall(glBindVertexArray(vao));
+			va.bind();
 			GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
 			if (r < 0.0f || r > 1.0f)

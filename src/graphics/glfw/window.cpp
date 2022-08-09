@@ -17,6 +17,12 @@ namespace glfw
 		glfwPollEvents();
 	}
 
+	void Window::set_swap_interval(int screen_updates) const
+	{
+		make_context_current();
+		glfwSwapInterval(screen_updates);
+	}
+
 	void Window::make_context_current() const
 	{
 		glfwMakeContextCurrent(mWindow.get());
