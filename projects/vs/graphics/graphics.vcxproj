@@ -25,6 +25,7 @@
     <ClCompile Include="..\..\..\src\graphics\glfw\library.cpp" />
     <ClCompile Include="..\..\..\src\graphics\glfw\window.cpp" />
     <ClCompile Include="..\..\..\src\graphics\opengl\glerrors.cpp" />
+    <ClCompile Include="..\..\..\src\graphics\opengl\shader.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

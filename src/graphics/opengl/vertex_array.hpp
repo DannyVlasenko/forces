@@ -87,7 +87,7 @@ namespace opengl
 
 		~VertexArray()
 		{
-			glDeleteVertexArrays(1, &mId);
+			GLCall(glDeleteVertexArrays(1, &mId));
 		}
 
 		void bind() const

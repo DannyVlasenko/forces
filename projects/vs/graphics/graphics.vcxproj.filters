@@ -47,5 +47,8 @@
     <ClCompile Include="..\..\..\src\graphics\opengl\glerrors.cpp">
       <Filter>opengl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\graphics\opengl\shader.cpp">
+      <Filter>opengl</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
