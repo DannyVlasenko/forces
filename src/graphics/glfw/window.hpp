@@ -2,6 +2,7 @@
 #define GLFW_WINDOW_HPP
 
 #include <memory>
+#include <vec2.hpp>
 
 #include "GLFW/glfw3.h"
 
@@ -23,6 +24,9 @@ namespace glfw
 		bool should_close() const;
 
 		void swap_buffers() const;
+
+		[[nodiscard]]
+		glm::vec2 size() const;
 
 	private:
 		std::unique_ptr<GLFWwindow, decltype(&glfwDestroyWindow)> mWindow;

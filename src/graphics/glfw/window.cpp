@@ -41,4 +41,12 @@ namespace glfw
 		glfwSwapBuffers(mWindow.get());
 		LibraryError::checkLastError();
 	}
+
+	glm::vec2 Window::size() const
+	{
+		int width, height;
+		glfwGetWindowSize(mWindow.get(), &width, &height);
+		LibraryError::checkLastError();
+		return { width,height };
+	}
 }

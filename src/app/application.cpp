@@ -66,10 +66,10 @@ namespace forces
 		mMainWindow.set_swap_interval(1);
 
 		constexpr float positions[] = {
-			-0.5f, -0.5f,
-			0.5f, -0.5f,
-			0.5f, 0.5f,
-			-0.5f, 0.5f
+			250.f, 250.f,
+			500.f, 250.f,
+			500.f, 500.f,
+			250.f, 500.f
 		};
 
 		constexpr GLuint indices[] = {
@@ -82,10 +82,11 @@ namespace forces
 		opengl::VertexBufferLayout layout;
 		layout.push<float>(2);
 		va.add_buffer(vb, layout);		
-		
+
 		opengl::IndexBuffer ib(indices);
 
-		glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+		auto wndSize = mMainWindow.size();
+		glm::mat4 proj = glm::ortho(0.f, wndSize.x, 0.f, wndSize.y, -1.0f, 1.0f);
 
 		opengl::Program colorProgram{ opengl::Shader{ VertexSrc }, opengl::Shader{ FragmentSrc } };
 		colorProgram.set_uniform_mat4("u_MVP", proj);
@@ -103,8 +104,9 @@ namespace forces
 		mMainLoop.run([&]
 		{
 			GLCall(glClear(GL_COLOR_BUFFER_BIT));
-
-			colorProgram.bind();
+			auto wndSize = mMainWindow.size();
+			proj = glm::ortho(0.f, wndSize.x, 0.f, wndSize.y, -1.0f, 1.0f);
+			colorProgram.set_uniform_mat4("u_MVP", proj);
 			colorProgram.set_uniform_4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 
 			renderer.draw(va, ib, colorProgram);
