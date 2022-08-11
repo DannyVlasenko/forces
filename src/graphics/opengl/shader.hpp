@@ -5,6 +5,8 @@
 #include <iterator>
 #include <ranges>
 
+#include "glm.hpp"
+
 namespace opengl
 {
 	struct ShaderSource
@@ -48,10 +50,19 @@ namespace opengl
 			mId(create_program())
 		{			
 			for (const auto &shader : shaders) {
-				GLCall(glAttachShader(mId, shader));
+				attach(shader);
 			}
 			link_validate();
 		}
+
+		template <typename... Sh> requires (std::is_same_v<Shader, Sh> && ...)
+		Program(const Sh&... shader) :
+			mId(create_program())
+		{
+			(attach(shader), ...);
+			link_validate();
+		}
+
 		Program(const Program& other) = delete;
 		Program& operator=(const Program& other) = delete;
 		Program(Program&& other) noexcept;
@@ -63,11 +74,13 @@ namespace opengl
 		static void unbind();
 
 		void set_uniform_4f(const char* name, GLfloat f0, GLfloat f1, GLfloat f2, GLfloat f3) const;
+		void set_uniform_mat4(const char* name, glm::mat4 mat) const;
 
 	private:
 		GLuint mId;
 
 		static GLuint create_program();
+		void attach(const Shader& shader);
 		void link_validate() const;
 	};
 }

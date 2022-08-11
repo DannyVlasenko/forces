@@ -33,6 +33,9 @@
     <ClInclude Include="..\..\..\src\graphics\opengl\shader.hpp">
       <Filter>opengl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\graphics\opengl\renderer.hpp">
+      <Filter>opengl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\graphics\glfw\window.cpp">

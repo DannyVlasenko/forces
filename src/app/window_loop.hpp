@@ -12,7 +12,8 @@ namespace forces
 			mWindow(window)
 		{}
 
-		void run(const auto&... tasks) const
+		template <typename... Fn> requires (std::is_invocable_v<Fn> && ...)
+		void run(const Fn&... tasks) const
 		{
 			while (!mWindow.should_close()) {
 				(tasks(), ...);

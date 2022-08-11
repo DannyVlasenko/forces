@@ -22,7 +22,7 @@ namespace opengl
 			GLCall(glGetShaderiv(mId, GL_INFO_LOG_LENGTH, &length));
 			std::string error(length, '\0');
 			GLCall(glGetShaderInfoLog(mId, static_cast<GLsizei>(error.length()), &length, error.data()));
-			throw OpenGLError("Shader compilation error: " + error);
+			ErrorBehavior.report(error.c_str(), "Shader compiler");
 		}
 	}
 
@@ -77,10 +77,22 @@ namespace opengl
 		GLCall(glUniform4f(location, f0, f1, f2, f3));
 	}
 
+	void Program::set_uniform_mat4(const char* name, glm::mat4 mat) const
+	{
+		bind();
+		GLCall(const auto location = glGetUniformLocation(mId, name));
+		glUniformMatrix4fv(location, 1, 0, &mat[0][0]);
+	}
+
 	GLuint Program::create_program()
 	{
 		GLCall(const auto id = glCreateProgram());
 		return id;
+	}
+
+	void Program::attach(const Shader& shader)
+	{
+		GLCall(glAttachShader(mId, shader));
 	}
 
 	void Program::link_validate() const

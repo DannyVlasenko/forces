@@ -3,10 +3,12 @@
 #include "opengl/buffer.hpp"
 #include "opengl/shader.hpp"
 #include "opengl/vertex_array.hpp"
+#include "opengl/renderer.hpp"
 
-#include <array>
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
 
-opengl::ShaderSource VertexShader
+opengl::ShaderSource VertexSrc
 {
 	.type = GL_VERTEX_SHADER,
 	.code = 
@@ -15,14 +17,16 @@ R"--(
 
 layout(location = 0) in vec4 position;
 
+uniform mat4 u_MVP;
+
 void main()
 {
-	gl_Position = position;
+	gl_Position = u_MVP * position;
 }
 )--"
 };
 
-opengl::ShaderSource FragmentShader
+opengl::ShaderSource FragmentSrc
 {
 	.type = GL_FRAGMENT_SHADER,
 	.code =
@@ -81,13 +85,17 @@ namespace forces
 		
 		opengl::IndexBuffer ib(indices);
 
-		auto src = std::array{ VertexShader, FragmentShader };
-		opengl::Program colorProgram{ src | opengl::shader_view };
+		glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
+		opengl::Program colorProgram{ opengl::Shader{ VertexSrc }, opengl::Shader{ FragmentSrc } };
+		colorProgram.set_uniform_mat4("u_MVP", proj);
 		colorProgram.set_uniform_4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
 
 		opengl::Program::unbind();
 		opengl::VertexArray::unbind();
 		vb.unbind();
+
+		opengl::Renderer renderer;
 
 		float r = 0.0f;
 		float increment = 0.05f;
@@ -98,8 +106,8 @@ namespace forces
 
 			colorProgram.bind();
 			colorProgram.set_uniform_4f("u_Color", r, 0.3f, 0.8f, 1.0f);
-			va.bind();
-			GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+
+			renderer.draw(va, ib, colorProgram);
 
 			if (r < 0.0f || r > 1.0f)
 			{

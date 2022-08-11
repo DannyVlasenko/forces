@@ -17,6 +17,7 @@
     <ClInclude Include="..\..\..\src\graphics\opengl\buffer.hpp" />
     <ClInclude Include="..\..\..\src\graphics\opengl\glcall.hpp" />
     <ClInclude Include="..\..\..\src\graphics\opengl\glerrors.hpp" />
+    <ClInclude Include="..\..\..\src\graphics\opengl\renderer.hpp" />
     <ClInclude Include="..\..\..\src\graphics\opengl\shader.hpp" />
     <ClInclude Include="..\..\..\src\graphics\opengl\vertex_array.hpp" />
   </ItemGroup>
@@ -69,7 +70,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../../../third_parties/glew/include;../../../third_parties/glfw/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../third_parties/glew/include;../../../third_parties/glfw/include;../../../third_parties/glm/glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -101,7 +102,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../../../third_parties/glew/include;../../../third_parties/glfw/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../third_parties/glew/include;../../../third_parties/glfw/include;../../../third_parties/glm/glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
