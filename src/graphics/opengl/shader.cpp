@@ -1,6 +1,7 @@
 #include "shader.hpp"
-
 #include "glcall.hpp"
+
+#include <string>
 
 namespace opengl
 {

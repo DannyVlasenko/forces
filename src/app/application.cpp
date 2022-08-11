@@ -50,10 +50,12 @@ namespace forces
 		mMainLoop(mMainWindow)
 	{
 		mMainWindow.make_context_current();
+#ifdef WIN32
 		if (glewInit() != GLEW_OK)
 		{
 			throw std::runtime_error("GLEW init error.");
 		}
+#endif
 	}
 
 	const char* Application::gl_version() const noexcept

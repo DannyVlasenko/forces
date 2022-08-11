@@ -35,16 +35,24 @@ namespace opengl
 		GLuint mId{ 0 };
 	};
 
+#ifdef __cpp_lib_ranges
 	constexpr auto shader_view = std::ranges::views::transform([](const auto& source) { return Shader(source); });
+#endif
 
 	class Program
 	{
 	public:
 		template <std::input_iterator InIt>
 		Program(InIt begin, InIt end) :
-			Program(std::ranges::subrange(begin, end))
-		{}
+            mId(create_program())
+		{
+            while(begin!=end){
+                attach(*begin++);
+            }
+            link_validate();
+        }
 
+#ifdef __cpp_lib_ranges
 		template <std::ranges::range ShRng>
 		Program(ShRng shaders):
 			mId(create_program())
@@ -54,7 +62,8 @@ namespace opengl
 			}
 			link_validate();
 		}
-
+#endif
+        
 		template <typename... Sh> requires (std::is_same_v<Shader, Sh> && ...)
 		Program(const Sh&... shader) :
 			mId(create_program())

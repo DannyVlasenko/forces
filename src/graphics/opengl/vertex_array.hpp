@@ -32,6 +32,12 @@ namespace opengl
 	public:
 		struct Element
 		{
+            Element(GLuint count, GLenum type, GLboolean normalized):
+                count(count),
+                type(type),
+                normalized(normalized)
+            {}
+            
 			GLuint count;
 			GLenum type;
 			GLboolean normalized;

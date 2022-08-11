@@ -25,12 +25,13 @@ namespace opengl
 
 		case GL_OUT_OF_MEMORY:
 			return "(GL_OUT_OF_MEMORY) There is not enough memory left to execute the command.The state of the GL is undefined, except for the state of the error flags.";
-
+#ifdef WIN32
 		case GL_STACK_UNDERFLOW:
 			return "(GL_STACK_UNDERFLOW) An attempt has been made to perform an operation that would cause an internal stack to underflow.";
 
 		case GL_STACK_OVERFLOW:
 			return "(GL_STACK_OVERFLOW) An attempt has been made to perform an operation that would cause an internal stack to overflow.";
+#endif
 		default:
 			return "Unspecified error.";
 		}
@@ -50,7 +51,7 @@ namespace opengl
 	{
 		std::cout << "Graphics error in expression \'" << expr << "\': ";
 		std::cout << msg << std::endl;
-		__debugbreak();
+        assert(false);
 	}
 
 	DefaultErrorBehavior ErrorBehavior{};
