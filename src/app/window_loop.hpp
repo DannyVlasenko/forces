@@ -16,9 +16,9 @@ namespace forces
 		void run(const Fn&... tasks) const
 		{
 			while (!mWindow.should_close()) {
+				glfw::Window::process_events();
 				(tasks(), ...);
 				mWindow.swap_buffers();
-				glfw::Window::process_events();
 			}
 		}
 

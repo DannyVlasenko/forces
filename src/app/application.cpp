@@ -6,6 +6,9 @@
 #include "opengl/renderer.hpp"
 
 #include "glm.hpp"
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 #include "gtc/matrix_transform.hpp"
 
 opengl::ShaderSource VertexSrc
@@ -118,40 +121,76 @@ namespace forces
 
 		float grad = 0;
 
-		GLCall(glEnable(GL_MULTISAMPLE));
-		GLCall(glClearColor(0.3f, 0.3f, 0.3f, 1.0f));
+		GLCall(glEnable(GL_MULTISAMPLE));		
 		GLCall(glEnable(GL_CULL_FACE));
 		GLCall(glFrontFace(GL_CCW));
 		GLCall(glCullFace(GL_BACK));
 
+		ImGui::CreateContext();
+		ImGui::StyleColorsDark();
+		ImGui_ImplGlfw_InitForOpenGL(mMainWindow, true);
+		ImGui_ImplOpenGL3_Init("#version 330");
+		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 		mMainLoop.run([&]
 		{
+			int display_w, display_h;
+			glfwGetFramebufferSize(mMainWindow, &display_w, &display_h);
+			glViewport(0, 0, display_w, display_h);
+			GLCall(glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w));
 			GLCall(glClear(GL_COLOR_BUFFER_BIT));
-			colorProgram.set_uniform_mat4("u_MVP", proj * view * model);
-
-			colorProgram.set_uniform_4f("u_Color", r, 0.3f, 0.8f, 1.0f);
-			renderer.draw(va, ibFront, colorProgram);
-
-			colorProgram.set_uniform_4f("u_Color", 0.2f, r, 0.3f, 1.0f);
-			renderer.draw(va, ibBack, colorProgram);
-
-			auto y = 100 * glm::sin(glm::radians(grad));
-			auto z = 100 * glm::cos(glm::radians(grad));
-			grad += 0.5f;
-			if (grad >= 360.f)
 			{
-				grad = 0.0f;
+				colorProgram.set_uniform_mat4("u_MVP", proj * view * model);
+
+				colorProgram.set_uniform_4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+				renderer.draw(va, ibFront, colorProgram);
+
+				colorProgram.set_uniform_4f("u_Color", 0.2f, r, 0.3f, 1.0f);
+				renderer.draw(va, ibBack, colorProgram);
+
+				auto y = 100 * glm::sin(glm::radians(grad));
+				auto z = 100 * glm::cos(glm::radians(grad));
+				grad += 0.5f;
+				if (grad >= 360.f)
+				{
+					grad = 0.0f;
+				}
+
+				view = glm::lookAt(glm::vec3(-20.f, y, z),
+					glm::vec3(10, 0, 0),
+					glm::vec3(0, 1, 0));
+
+				if (r < 0.0f || r > 1.0f)
+				{
+					increment = -increment;
+				}
+				r += increment;
 			}
-
-			view = glm::lookAt(glm::vec3(-20.f, y, z),
-				glm::vec3(10, 0, 0),
-				glm::vec3(0, 1, 0));
-
-			if (r < 0.0f || r > 1.0f)
 			{
-				increment = -increment;
+				ImGui_ImplOpenGL3_NewFrame();
+				ImGui_ImplGlfw_NewFrame();
+				ImGui::NewFrame();
+				ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+				ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+				static float f = 0.0f;
+				static int counter = 0;
+				ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+				ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+				if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+					counter++;
+				ImGui::SameLine();
+				ImGui::Text("counter = %d", counter);
+
+				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+				ImGui::End();
+
+				ImGui::Render();
+				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 			}
-			r += increment;
 		});
+
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
 	}
 }

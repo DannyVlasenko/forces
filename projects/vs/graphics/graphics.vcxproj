@@ -20,6 +20,14 @@
     <ClInclude Include="..\..\..\src\graphics\opengl\renderer.hpp" />
     <ClInclude Include="..\..\..\src\graphics\opengl\shader.hpp" />
     <ClInclude Include="..\..\..\src\graphics\opengl\vertex_array.hpp" />
+    <ClInclude Include="..\..\..\third_parties\imgui\imconfig.h" />
+    <ClInclude Include="..\..\..\third_parties\imgui\imgui.h" />
+    <ClInclude Include="..\..\..\third_parties\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="..\..\..\third_parties\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\..\..\third_parties\imgui\imgui_internal.h" />
+    <ClInclude Include="..\..\..\third_parties\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\..\..\third_parties\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\..\..\third_parties\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\graphics\glfw\errors.cpp" />
@@ -27,6 +35,13 @@
     <ClCompile Include="..\..\..\src\graphics\glfw\window.cpp" />
     <ClCompile Include="..\..\..\src\graphics\opengl\glerrors.cpp" />
     <ClCompile Include="..\..\..\src\graphics\opengl\shader.cpp" />
+    <ClCompile Include="..\..\..\third_parties\imgui\imgui.cpp" />
+    <ClCompile Include="..\..\..\third_parties\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\..\..\third_parties\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\..\..\third_parties\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\..\..\third_parties\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\..\..\third_parties\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\..\..\third_parties\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -16,6 +16,8 @@ namespace glfw
 
 		static void process_events();
 
+		operator GLFWwindow* () const noexcept;
+
 		void set_swap_interval(int screen_updates) const;
 
 		void make_context_current() const;

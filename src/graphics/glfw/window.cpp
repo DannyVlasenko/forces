@@ -17,6 +17,11 @@ namespace glfw
 		glfwPollEvents();
 	}
 
+	Window::operator GLFWwindow*() const noexcept
+	{
+		return mWindow.get();
+	}
+
 	void Window::set_swap_interval(int screen_updates) const
 	{
 		make_context_current();
