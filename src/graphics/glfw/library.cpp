@@ -11,6 +11,7 @@ namespace glfw
 		{
 			LibraryError::checkLastError();
 		}
+		glfwWindowHint(GLFW_SAMPLES, 8);
 	}
 
 	Library::~Library()

@@ -118,7 +118,8 @@ namespace forces
 
 		float grad = 0;
 
-		GLCall(glClearColor(0.2f, 0.2f, 0.2f, 1.0f));
+		GLCall(glEnable(GL_MULTISAMPLE));
+		GLCall(glClearColor(0.3f, 0.3f, 0.3f, 1.0f));
 		GLCall(glEnable(GL_CULL_FACE));
 		GLCall(glFrontFace(GL_CCW));
 		GLCall(glCullFace(GL_BACK));

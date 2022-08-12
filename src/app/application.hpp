@@ -19,7 +19,7 @@ namespace forces
 		void run() const;
 
 	private:
-		const glfw::Window mMainWindow{ 800, 600, "forces" };
+		const glfw::Window mMainWindow{ 1920, 1080, "forces" };
 		const WindowLoop mMainLoop;
 	};
 
