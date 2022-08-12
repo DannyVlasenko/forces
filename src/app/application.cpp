@@ -50,7 +50,7 @@ namespace forces
 		mMainLoop(mMainWindow)
 	{
 		mMainWindow.make_context_current();
-#ifdef WIN32
+#ifdef _WIN32
 		if (glewInit() != GLEW_OK)
 		{
 			throw std::runtime_error("GLEW init error.");
@@ -74,9 +74,14 @@ namespace forces
 			-25.f, 25.f
 		};
 
-		constexpr GLuint indices[] = {
+		constexpr GLuint indicesFront[] = {
 			0, 1, 2,
 			2, 3, 0
+		};
+
+		constexpr GLuint indicesBack[] = {
+			2, 1, 0,
+			0, 3, 2
 		};
 
 		opengl::VertexArray va;
@@ -85,7 +90,8 @@ namespace forces
 		layout.push<float>(2);
 		va.add_buffer(vb, layout);		
 
-		opengl::IndexBuffer ib(indices);
+		opengl::IndexBuffer ibFront(indicesFront);
+		opengl::IndexBuffer ibBack(indicesBack);
 
 		auto wndSize = mMainWindow.size();
 		//glm::mat4 proj = glm::ortho(0.f, wndSize.x, 0.f, wndSize.y, -1.0f, 1.0f);
@@ -112,13 +118,22 @@ namespace forces
 
 		float grad = 0;
 
+		GLCall(glClearColor(0.2f, 0.2f, 0.2f, 1.0f));
+		GLCall(glEnable(GL_CULL_FACE));
+		GLCall(glFrontFace(GL_CCW));
+		GLCall(glCullFace(GL_BACK));
+
 		mMainLoop.run([&]
 		{
 			GLCall(glClear(GL_COLOR_BUFFER_BIT));
 			colorProgram.set_uniform_mat4("u_MVP", proj * view * model);
-			colorProgram.set_uniform_4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 
-			renderer.draw(va, ib, colorProgram);
+			colorProgram.set_uniform_4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+			renderer.draw(va, ibFront, colorProgram);
+
+			colorProgram.set_uniform_4f("u_Color", 0.2f, r, 0.3f, 1.0f);
+			renderer.draw(va, ibBack, colorProgram);
+
 			auto y = 100 * glm::sin(glm::radians(grad));
 			auto z = 100 * glm::cos(glm::radians(grad));
 			grad += 0.5f;
@@ -127,8 +142,8 @@ namespace forces
 				grad = 0.0f;
 			}
 
-			view = glm::lookAt(glm::vec3(0.f, y, z),
-				glm::vec3(0, 0, 0),
+			view = glm::lookAt(glm::vec3(-20.f, y, z),
+				glm::vec3(10, 0, 0),
 				glm::vec3(0, 1, 0));
 
 			if (r < 0.0f || r > 1.0f)

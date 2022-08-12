@@ -1,5 +1,6 @@
 #include "glerrors.hpp"
 
+#include <cassert>
 #include <iostream>
 
 namespace opengl
@@ -25,7 +26,7 @@ namespace opengl
 
 		case GL_OUT_OF_MEMORY:
 			return "(GL_OUT_OF_MEMORY) There is not enough memory left to execute the command.The state of the GL is undefined, except for the state of the error flags.";
-#ifdef WIN32
+#ifdef _WIN32
 		case GL_STACK_UNDERFLOW:
 			return "(GL_STACK_UNDERFLOW) An attempt has been made to perform an operation that would cause an internal stack to underflow.";
 

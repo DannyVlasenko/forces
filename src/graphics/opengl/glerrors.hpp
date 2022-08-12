@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "GL/glew.h"
 #else
 #include <OpenGL/gl3.h>

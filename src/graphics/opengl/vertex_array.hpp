@@ -1,8 +1,7 @@
 #ifndef OPENGL_VERTEX_ARRAY_HPP
 #define OPENGL_VERTEX_ARRAY_HPP
-#include <vector>
 
-#include "buffer.hpp"
+#include <vector>
 
 namespace opengl
 {
