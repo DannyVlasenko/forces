@@ -10,6 +10,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "gtc/matrix_transform.hpp"
+#include "opengl/camera.hpp"
 
 opengl::ShaderSource VertexSrc
 {
@@ -100,14 +101,15 @@ namespace forces
 		//glm::mat4 proj = glm::ortho(0.f, wndSize.x, 0.f, wndSize.y, -1.0f, 1.0f);
 
 		auto proj = glm::perspective(glm::radians(60.f), wndSize.x / wndSize.y, 0.1f, 200.f);
-		auto view = glm::lookAt(glm::vec3(0.f, 0.f, -100.f),
-								glm::vec3(0,0,0),
-								glm::vec3(0,1,0));
+
+		opengl::Camera camera;
+		camera.look_at() = glm::vec3(0.f, 0.f, -100.f);
+
 		auto model = glm::mat4(1.f);
 		model = glm::rotate(model, glm::radians(30.f), glm::vec3(0.f, 1.f, 0.f));
 
 		opengl::Program colorProgram{ opengl::Shader{ VertexSrc }, opengl::Shader{ FragmentSrc } };
-		colorProgram.set_uniform_mat4("u_MVP", proj * view * model);
+		colorProgram.set_uniform_mat4("u_MVP", proj * camera.view_matrix() * model);
 		colorProgram.set_uniform_4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
 
 		opengl::Program::unbind();
@@ -118,8 +120,6 @@ namespace forces
 
 		float r = 0.0f;
 		float increment = 0.05f;
-
-		float grad = 0;
 
 		GLCall(glEnable(GL_MULTISAMPLE));		
 		GLCall(glEnable(GL_CULL_FACE));
@@ -139,25 +139,13 @@ namespace forces
 			GLCall(glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w));
 			GLCall(glClear(GL_COLOR_BUFFER_BIT));
 			{
-				colorProgram.set_uniform_mat4("u_MVP", proj * view * model);
+				colorProgram.set_uniform_mat4("u_MVP", proj * camera.view_matrix() * model);
 
 				colorProgram.set_uniform_4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 				renderer.draw(va, ibFront, colorProgram);
 
 				colorProgram.set_uniform_4f("u_Color", 0.2f, r, 0.3f, 1.0f);
 				renderer.draw(va, ibBack, colorProgram);
-
-				auto y = 100 * glm::sin(glm::radians(grad));
-				auto z = 100 * glm::cos(glm::radians(grad));
-				grad += 0.5f;
-				if (grad >= 360.f)
-				{
-					grad = 0.0f;
-				}
-
-				view = glm::lookAt(glm::vec3(-20.f, y, z),
-					glm::vec3(10, 0, 0),
-					glm::vec3(0, 1, 0));
 
 				if (r < 0.0f || r > 1.0f)
 				{
@@ -169,12 +157,14 @@ namespace forces
 				ImGui_ImplOpenGL3_NewFrame();
 				ImGui_ImplGlfw_NewFrame();
 				ImGui::NewFrame();
-				ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+				ImGui::Begin("Camera");                          // Create a window called "Hello, world!" and append into it.
 
-				ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+
 				static float f = 0.0f;
 				static int counter = 0;
-				ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+				ImGui::DragFloat3("Translation", &camera.translation()[0]);           // Edit 1 float using a slider from 0.0f to 1.0f
+				ImGui::DragFloat3("Look At", &camera.look_at()[0]);           // Edit 1 float using a slider from 0.0f to 1.0f
+				ImGui::DragFloat3("Up", &camera.up()[0]);           // Edit 1 float using a slider from 0.0f to 1.0f
 				ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
 				if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)

@@ -63,6 +63,9 @@
     <ClInclude Include="..\..\..\third_parties\imgui\imgui_impl_opengl3.h">
       <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\graphics\opengl\camera.hpp">
+      <Filter>opengl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\graphics\glfw\window.cpp">
@@ -100,6 +103,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\third_parties\imgui\imgui_impl_opengl3.cpp">
       <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\graphics\opengl\camera.cpp">
+      <Filter>opengl</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
