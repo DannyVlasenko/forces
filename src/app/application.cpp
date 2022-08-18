@@ -113,8 +113,9 @@ namespace forces
 		CameraViewModel cameraViewModel{ camera, mMainWindow };
 		ui.add_view(std::make_unique<views::CameraView>(cameraViewModel));
 
-		camera.translation() = glm::vec3(0.0f, 0.0f, 0.0f);
+		camera.translation() = glm::vec3(-1.0f, 4.0f, 5.0f);
 		camera.look_at() = glm::vec3(0.0f, 0.0f, -5.0f);
+		camera.far() = 20.f;
 		auto model = glm::mat4(1.f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
 		model = glm::rotate(model, glm::radians(30.f), glm::vec3(0.f, 1.f, 0.f));
