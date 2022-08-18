@@ -30,6 +30,9 @@ namespace glfw
 		[[nodiscard]]
 		glm::vec2 size() const;
 
+		[[nodiscard]]
+		glm::vec2 framebuffer_size() const;
+
 	private:
 		std::unique_ptr<GLFWwindow, decltype(&glfwDestroyWindow)> mWindow;
 	};

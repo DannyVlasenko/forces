@@ -1,5 +1,6 @@
 #include "application.hpp"
 
+#include "app_ui.hpp"
 #include "opengl/buffer.hpp"
 #include "opengl/shader.hpp"
 #include "opengl/vertex_array.hpp"
@@ -7,10 +8,9 @@
 
 #include "glm.hpp"
 #include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
 #include "gtc/matrix_transform.hpp"
-#include "opengl/camera.hpp"
+#include "camera.hpp"
+#include "camera_view.hpp"
 
 opengl::ShaderSource VertexSrc
 {
@@ -48,6 +48,45 @@ void main()
 )--"
 };
 
+class CameraViewModel final : public views::ICameraViewModel
+{
+public:
+	CameraViewModel(models::Camera &camera, const glfw::Window &window):
+		mCamera(camera),
+		mWindow(window)
+	{}
+
+	glm::vec3& look_at() noexcept override { return mCamera.look_at(); }
+	glm::vec3& translation() noexcept override { return mCamera.translation(); }
+	glm::vec3& up() noexcept override { return mCamera.up(); }
+	float& fov() noexcept override { return mCamera.fov(); }
+	glm::vec2& viewport() noexcept override { return mCamera.viewport(); }
+	float& near() noexcept override { return mCamera.near(); }
+	float& far() noexcept override { return mCamera.far(); }
+	bool& v_sync() noexcept override { return mVSync; }
+	bool& viewport_match_window() noexcept override { return mViewportMatchWindow; }
+	glm::vec4& clear_color() noexcept override { return mClearColor; }
+
+	void update()
+	{
+		mWindow.set_swap_interval(mVSync);
+		if (mViewportMatchWindow)
+		{
+			mCamera.viewport() = mWindow.framebuffer_size();
+		}
+		GLCall(glViewport(0, 0, mCamera.viewport().x, mCamera.viewport().y));
+		GLCall(glClearColor(mClearColor.x * mClearColor.w, mClearColor.y * mClearColor.w, mClearColor.z * mClearColor.w, mClearColor.w));
+		GLCall(glClear(GL_COLOR_BUFFER_BIT));
+	}
+
+private:
+	bool mVSync{ true };
+	bool mViewportMatchWindow{ true };
+	glm::vec4 mClearColor{ 0.2f, 0.2f, 0.2f, 1.0f };
+	models::Camera& mCamera;
+	const glfw::Window& mWindow;
+}; 
+
 namespace forces
 {
 	Application::Application() :
@@ -69,13 +108,26 @@ namespace forces
 
 	void Application::run() const
 	{
-		mMainWindow.set_swap_interval(1);
+		views::AppUI ui{ mMainWindow };
+		models::Camera camera;
+		CameraViewModel cameraViewModel{ camera, mMainWindow };
+		ui.add_view(std::make_unique<views::CameraView>(cameraViewModel));
+
+		camera.translation() = glm::vec3(0.0f, 0.0f, 0.0f);
+		camera.look_at() = glm::vec3(0.0f, 0.0f, -5.0f);
+		auto model = glm::mat4(1.f);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
+		model = glm::rotate(model, glm::radians(30.f), glm::vec3(0.f, 1.f, 0.f));
+
+		opengl::Program colorProgram{ opengl::Shader{ VertexSrc }, opengl::Shader{ FragmentSrc } };
+		colorProgram.set_uniform_mat4("u_MVP", camera.view_projection() * model);
+		colorProgram.set_uniform_4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
 
 		constexpr float positions[] = {
-			-25.f, -25.f,
-			25.f, -25.f,
-			25.f, 25.f,
-			-25.f, 25.f
+			-2.f, -2.f,
+			 2.f, -2.f,
+			 2.f,  2.f,
+			-2.f,  2.f
 		};
 
 		constexpr GLuint indicesFront[] = {
@@ -92,26 +144,10 @@ namespace forces
 		opengl::VertexBuffer vb(positions);
 		opengl::VertexBufferLayout layout;
 		layout.push<float>(2);
-		va.add_buffer(vb, layout);		
+		va.add_buffer(vb, layout);
 
 		opengl::IndexBuffer ibFront(indicesFront);
 		opengl::IndexBuffer ibBack(indicesBack);
-
-		auto wndSize = mMainWindow.size();
-		//glm::mat4 proj = glm::ortho(0.f, wndSize.x, 0.f, wndSize.y, -1.0f, 1.0f);
-
-		auto proj = glm::perspective(glm::radians(60.f), wndSize.x / wndSize.y, 0.1f, 200.f);
-
-		opengl::Camera camera;
-		camera.look_at() = glm::vec3(0.f, 0.f, -100.f);
-
-		auto model = glm::mat4(1.f);
-		model = glm::rotate(model, glm::radians(30.f), glm::vec3(0.f, 1.f, 0.f));
-
-		opengl::Program colorProgram{ opengl::Shader{ VertexSrc }, opengl::Shader{ FragmentSrc } };
-		colorProgram.set_uniform_mat4("u_MVP", proj * camera.view_matrix() * model);
-		colorProgram.set_uniform_4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
-
 		opengl::Program::unbind();
 		opengl::VertexArray::unbind();
 		vb.unbind();
@@ -125,21 +161,12 @@ namespace forces
 		GLCall(glEnable(GL_CULL_FACE));
 		GLCall(glFrontFace(GL_CCW));
 		GLCall(glCullFace(GL_BACK));
-
-		ImGui::CreateContext();
-		ImGui::StyleColorsDark();
-		ImGui_ImplGlfw_InitForOpenGL(mMainWindow, true);
-		ImGui_ImplOpenGL3_Init("#version 330");
-		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+				
 		mMainLoop.run([&]
 		{
-			int display_w, display_h;
-			glfwGetFramebufferSize(mMainWindow, &display_w, &display_h);
-			glViewport(0, 0, display_w, display_h);
-			GLCall(glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w));
-			GLCall(glClear(GL_COLOR_BUFFER_BIT));
+			cameraViewModel.update();
 			{
-				colorProgram.set_uniform_mat4("u_MVP", proj * camera.view_matrix() * model);
+				colorProgram.set_uniform_mat4("u_MVP", camera.view_projection() * model);
 
 				colorProgram.set_uniform_4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 				renderer.draw(va, ibFront, colorProgram);
@@ -153,34 +180,7 @@ namespace forces
 				}
 				r += increment;
 			}
-			{
-				ImGui_ImplOpenGL3_NewFrame();
-				ImGui_ImplGlfw_NewFrame();
-				ImGui::NewFrame();
-				ImGui::Begin("Camera");                          // Create a window called "Hello, world!" and append into it.
-
-
-				static float f = 0.0f;
-				static int counter = 0;
-				ImGui::DragFloat3("Translation", &camera.translation()[0]);           // Edit 1 float using a slider from 0.0f to 1.0f
-				ImGui::DragFloat3("Look At", &camera.look_at()[0]);           // Edit 1 float using a slider from 0.0f to 1.0f
-				ImGui::DragFloat3("Up", &camera.up()[0]);           // Edit 1 float using a slider from 0.0f to 1.0f
-				ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-				if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-					counter++;
-				ImGui::SameLine();
-				ImGui::Text("counter = %d", counter);
-
-				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-				ImGui::End();
-
-				ImGui::Render();
-				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-			}
+			ui.render();
 		});
-
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
 	}
 }
