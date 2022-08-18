@@ -13,7 +13,13 @@ namespace views
 		ImGui::DragFloat("FOV", &mViewModel.fov());
 		ImGui::DragFloat("Near", &mViewModel.near());
 		ImGui::DragFloat("Far", &mViewModel.far());
+		if (mViewModel.viewport_match_window()) {
+			ImGui::BeginDisabled();
+		}
 		ImGui::DragFloat2("Viewport", &mViewModel.viewport()[0]);
+		if (mViewModel.viewport_match_window()) {
+			ImGui::EndDisabled();
+		}
 		ImGui::Checkbox("Match window size", &mViewModel.viewport_match_window());
 		ImGui::ColorEdit3("Clear color", &mViewModel.clear_color()[0]);
 		ImGui::Checkbox("Vertical sync", &mViewModel.v_sync());
