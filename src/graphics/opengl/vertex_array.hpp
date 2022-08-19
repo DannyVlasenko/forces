@@ -31,21 +31,23 @@ namespace opengl
 	public:
 		struct Element
 		{
-            Element(GLuint count, GLenum type, GLboolean normalized):
+            Element(GLuint count, GLenum type, GLboolean normalized, GLuint offset):
                 count(count),
                 type(type),
-                normalized(normalized)
+                normalized(normalized),
+				offset(offset)
             {}
             
 			GLuint count;
 			GLenum type;
 			GLboolean normalized;
+			GLuint offset;
 		};
 
 		template <typename T>
 		VertexBufferLayout& push(GLuint count, GLboolean normalized = GL_FALSE)
 		{
-			mElements.emplace_back(count, gl_type<T>(), normalized);
+			mElements.emplace_back(count, gl_type<T>(), normalized, mStride);
 			mStride += sizeof(T) * count;
 			return *this;
 		}
@@ -114,7 +116,7 @@ namespace opengl
 				GLCall(glEnableVertexAttribArray(i));
 				GLCall(glVertexAttribPointer(i, layout.elements()[i].count, layout.elements()[i].type, 
 												layout.elements()[i].normalized, layout.stride(), 
-												(const void *)(layout.stride() * i)));
+												(const void *)(layout.elements()[i].offset)));
 			}
 			return *this;
 		}

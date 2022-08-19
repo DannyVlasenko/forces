@@ -14,6 +14,9 @@ namespace views
 		virtual bool& ambient_light_enabled() noexcept = 0;
 		virtual glm::vec3& ambient_color() noexcept = 0;
 		virtual float& ambient_strength() noexcept = 0;
+		virtual bool& diffuse_light_enabled() noexcept = 0;
+		virtual glm::vec3& diffuse_color() noexcept = 0;
+		virtual glm::vec3& diffuse_position() noexcept = 0;
 	};
 
 	class GlobalLightView final : public IView
