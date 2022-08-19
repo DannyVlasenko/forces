@@ -71,11 +71,11 @@ namespace opengl
 		GLCall(glUseProgram(0));
 	}
 
-	void Program::set_uniform_4f(const char* name, GLfloat f0, GLfloat f1, GLfloat f2, GLfloat f3) const
+	void Program::set_uniform_3f(const char* name, GLfloat f0, GLfloat f1, GLfloat f2) const
 	{
 		bind();
 		GLCall(const auto location = glGetUniformLocation(mId, name));
-		GLCall(glUniform4f(location, f0, f1, f2, f3));
+		GLCall(glUniform3f(location, f0, f1, f2));
 	}
 
 	void Program::set_uniform_mat4(const char* name, glm::mat4 mat) const

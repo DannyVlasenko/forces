@@ -11,6 +11,7 @@
 #include "gtc/matrix_transform.hpp"
 #include "camera.hpp"
 #include "camera_view.hpp"
+#include "global_light_view.hpp"
 
 opengl::ShaderSource VertexSrc
 {
@@ -21,11 +22,12 @@ R"--(
 
 layout(location = 0) in vec4 position;
 
-uniform mat4 u_MVP;
+uniform mat4 viewProjection;
+uniform mat4 model;
 
 void main()
 {
-	gl_Position = u_MVP * position;
+	gl_Position = viewProjection * model * position;
 }
 )--"
 };
@@ -39,11 +41,13 @@ R"--(
 
 layout(location = 0) out vec4 color;
 
-uniform vec4 u_Color;
+uniform vec3 objectColor;
+uniform vec3 ambientLightColor;
 
 void main()
 {
-	color = u_Color;
+	vec3 resColor = ambientLightColor * objectColor;
+	color = vec4(resColor, 1.0);
 }
 )--"
 };
@@ -65,7 +69,7 @@ public:
 	float& far() noexcept override { return mCamera.far(); }
 	bool& v_sync() noexcept override { return mVSync; }
 	bool& viewport_match_window() noexcept override { return mViewportMatchWindow; }
-	glm::vec4& clear_color() noexcept override { return mClearColor; }
+	glm::vec3& clear_color() noexcept override { return mClearColor; }
 
 	void update()
 	{
@@ -75,17 +79,53 @@ public:
 			mCamera.viewport() = mWindow.framebuffer_size();
 		}
 		GLCall(glViewport(0, 0, mCamera.viewport().x, mCamera.viewport().y));
-		GLCall(glClearColor(mClearColor.x * mClearColor.w, mClearColor.y * mClearColor.w, mClearColor.z * mClearColor.w, mClearColor.w));
+		GLCall(glClearColor(mClearColor.x, mClearColor.y, mClearColor.z, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 	}
 
 private:
 	bool mVSync{ true };
 	bool mViewportMatchWindow{ true };
-	glm::vec4 mClearColor{ 0.2f, 0.2f, 0.2f, 1.0f };
+	glm::vec3 mClearColor{ 0.2f, 0.2f, 0.2f };
 	models::Camera& mCamera;
 	const glfw::Window& mWindow;
-}; 
+};
+
+class GlobalLightViewModel final : public views::IGlobalLightViewModel
+{
+public:
+	GlobalLightViewModel(opengl::Program &shader):
+		mShader(shader)
+	{}
+
+	bool& ambient_light_enabled() noexcept override
+	{
+		return mAmbientEnabled;
+	}
+
+	glm::vec3& ambient_color() noexcept override
+	{
+		return mAmbientColor;
+	}
+
+	float& ambient_strength() noexcept override
+	{
+		return mAmbientStrength;
+	}
+
+
+	void update()
+	{
+		const auto resultColor = mAmbientEnabled ? mAmbientColor * mAmbientStrength : glm::vec3(0.0f);
+		mShader.set_uniform_3f("ambientLightColor", resultColor.x, resultColor.y, resultColor.z);
+	}
+
+private:
+	opengl::Program& mShader;
+	bool mAmbientEnabled{ true };
+	glm::vec3 mAmbientColor{ 1.0f };
+	float mAmbientStrength{ 1.0f };
+};
 
 namespace forces
 {
@@ -108,22 +148,31 @@ namespace forces
 
 	void Application::run() const
 	{
-		views::AppUI ui{ mMainWindow };
+		//Camera
 		models::Camera camera;
-		CameraViewModel cameraViewModel{ camera, mMainWindow };
-		ui.add_view(std::make_unique<views::CameraView>(cameraViewModel));
-
 		camera.translation() = glm::vec3(-1.0f, 4.0f, 5.0f);
 		camera.look_at() = glm::vec3(0.0f, 0.0f, -5.0f);
 		camera.far() = 20.f;
+		CameraViewModel cameraViewModel{ camera, mMainWindow };
+
+		//Material
+		opengl::Program colorProgram{ opengl::Shader{ VertexSrc }, opengl::Shader{ FragmentSrc } };
+		colorProgram.set_uniform_mat4("viewProjection", camera.view_projection());
+		colorProgram.set_uniform_3f("objectColor", 0.2f, 0.3f, 0.8f);
+		colorProgram.set_uniform_3f("ambientLightColor", 1.0f, 1.0f, 1.0f);
+		GlobalLightViewModel globalLightViewModel{ colorProgram };
+
+		//UI
+		views::AppUI ui{ mMainWindow };
+		ui.add_view(std::make_unique<views::CameraView>(cameraViewModel));
+		ui.add_view(std::make_unique<views::GlobalLightView>(globalLightViewModel));
+
+		//Model
 		auto model = glm::mat4(1.f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
 		model = glm::rotate(model, glm::radians(30.f), glm::vec3(0.f, 1.f, 0.f));
-
-		opengl::Program colorProgram{ opengl::Shader{ VertexSrc }, opengl::Shader{ FragmentSrc } };
-		colorProgram.set_uniform_mat4("u_MVP", camera.view_projection() * model);
-		colorProgram.set_uniform_4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
-
+		colorProgram.set_uniform_mat4("model", model);
+				
 		constexpr float positions[] = {
 			-2.f, -2.f,
 			 2.f, -2.f,
@@ -166,13 +215,14 @@ namespace forces
 		mMainLoop.run([&]
 		{
 			cameraViewModel.update();
+			globalLightViewModel.update();
 			{
-				colorProgram.set_uniform_mat4("u_MVP", camera.view_projection() * model);
+				colorProgram.set_uniform_mat4("viewProjection", camera.view_projection());
 
-				colorProgram.set_uniform_4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+				colorProgram.set_uniform_3f("objectColor", r, 0.3f, 0.8f);
 				renderer.draw(va, ibFront, colorProgram);
 
-				colorProgram.set_uniform_4f("u_Color", 0.2f, r, 0.3f, 1.0f);
+				colorProgram.set_uniform_3f("objectColor", 0.2f, r, 0.3f);
 				renderer.draw(va, ibBack, colorProgram);
 
 				if (r < 0.0f || r > 1.0f)

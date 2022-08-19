@@ -51,6 +51,9 @@
     <ClInclude Include="..\..\..\src\views\view.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\views\global_light_view.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\third_parties\imgui\imgui.cpp">
@@ -78,6 +81,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\views\camera_view.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\views\global_light_view.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\src\views\app_ui.hpp" />
     <ClInclude Include="..\..\..\src\views\camera_view.hpp" />
+    <ClInclude Include="..\..\..\src\views\global_light_view.hpp" />
     <ClInclude Include="..\..\..\src\views\view.hpp" />
     <ClInclude Include="..\..\..\third_parties\imgui\imconfig.h" />
     <ClInclude Include="..\..\..\third_parties\imgui\imgui.h" />
@@ -34,6 +35,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\views\app_ui.cpp" />
     <ClCompile Include="..\..\..\src\views\camera_view.cpp" />
+    <ClCompile Include="..\..\..\src\views\global_light_view.cpp" />
     <ClCompile Include="..\..\..\third_parties\imgui\imgui.cpp" />
     <ClCompile Include="..\..\..\third_parties\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\..\..\third_parties\imgui\imgui_draw.cpp" />

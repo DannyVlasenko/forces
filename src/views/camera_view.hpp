@@ -20,7 +20,7 @@ namespace views
 		virtual float& far() noexcept = 0;
 		virtual bool& v_sync() noexcept = 0;
 		virtual bool& viewport_match_window() noexcept = 0;
-		virtual glm::vec4& clear_color() noexcept = 0;
+		virtual glm::vec3& clear_color() noexcept = 0;
 	};
 
 	class CameraView final : public IView
