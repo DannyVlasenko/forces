@@ -9,9 +9,8 @@
 #include "glm.hpp"
 #include "imgui.h"
 #include "gtc/matrix_transform.hpp"
-#include "camera.hpp"
-#include "camera_view.hpp"
-#include "global_light_view.hpp"
+#include "camera_view_model.hpp"
+#include "global_light_view_model.hpp"
 
 opengl::ShaderSource VertexSrc
 {
@@ -68,103 +67,6 @@ void main()
 )--"
 };
 
-class CameraViewModel final : public views::ICameraViewModel
-{
-public:
-	CameraViewModel(models::Camera& camera, const glfw::Window& window):
-		mCamera(camera),
-		mWindow(window)
-	{
-	}
-
-	glm::vec3& look_at() noexcept override { return mCamera.look_at(); }
-	glm::vec3& translation() noexcept override { return mCamera.translation(); }
-	glm::vec3& up() noexcept override { return mCamera.up(); }
-	float& fov() noexcept override { return mCamera.fov(); }
-	glm::vec2& viewport() noexcept override { return mCamera.viewport(); }
-	float& near() noexcept override { return mCamera.near(); }
-	float& far() noexcept override { return mCamera.far(); }
-	bool& v_sync() noexcept override { return mVSync; }
-	bool& viewport_match_window() noexcept override { return mViewportMatchWindow; }
-	glm::vec3& clear_color() noexcept override { return mClearColor; }
-
-	void update()
-	{
-		mWindow.set_swap_interval(mVSync);
-		if (mViewportMatchWindow)
-		{
-			mCamera.viewport() = mWindow.framebuffer_size();
-		}
-		GLCall(glViewport(0, 0, mCamera.viewport().x, mCamera.viewport().y));
-		GLCall(glClearColor(mClearColor.x, mClearColor.y, mClearColor.z, 1.0f));
-		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-	}
-
-private:
-	bool mVSync{true};
-	bool mViewportMatchWindow{true};
-	glm::vec3 mClearColor{0.2f, 0.2f, 0.2f};
-	models::Camera& mCamera;
-	const glfw::Window& mWindow;
-};
-
-class GlobalLightViewModel final : public views::IGlobalLightViewModel
-{
-public:
-	GlobalLightViewModel(opengl::Program& shader):
-		mShader(shader)
-	{
-	}
-
-	bool& ambient_light_enabled() noexcept override
-	{
-		return mAmbientEnabled;
-	}
-
-	glm::vec3& ambient_color() noexcept override
-	{
-		return mAmbientColor;
-	}
-
-	float& ambient_strength() noexcept override
-	{
-		return mAmbientStrength;
-	}
-
-	bool& diffuse_light_enabled() noexcept override
-	{
-		return mDiffuseEnabled;
-	}
-
-	glm::vec3& diffuse_color() noexcept override
-	{
-		return mDiffuseColor;
-	}
-
-	glm::vec3& diffuse_position() noexcept override
-	{
-		return mDiffusePosition;
-	}
-
-	void update()
-	{
-		const auto ambientColor = mAmbientEnabled ? mAmbientColor * mAmbientStrength : glm::vec3(0.0f);
-		mShader.set_uniform_3f("ambientLightColor", ambientColor.x, ambientColor.y, ambientColor.z);
-		const auto diffuseColor = mDiffuseEnabled ? mDiffuseColor : glm::vec3(0.0f);
-		mShader.set_uniform_3f("diffuseLightColor", diffuseColor.x, diffuseColor.y, diffuseColor.z);
-		mShader.set_uniform_3f("diffuseLightPosition", mDiffusePosition.x, mDiffusePosition.y, mDiffusePosition.z);
-	}
-
-private:
-	opengl::Program& mShader;
-	bool mAmbientEnabled{true};
-	glm::vec3 mAmbientColor{1.0f};
-	float mAmbientStrength{1.0f};
-	bool mDiffuseEnabled{true};
-	glm::vec3 mDiffuseColor{1.0f};
-	glm::vec3 mDiffusePosition{0.0f};
-};
-
 namespace forces
 {
 	Application::Application() :
@@ -191,13 +93,13 @@ namespace forces
 		camera.translation() = glm::vec3(-1.0f, 3.0f, 5.0f);
 		camera.look_at() = glm::vec3(0.0f, 0.0f, 0.0f);
 		camera.far() = 20.f;
-		CameraViewModel cameraViewModel{camera, mMainWindow};
+		view_models::CameraViewModel cameraViewModel{camera, mMainWindow};
 
 		//Material
 		opengl::Program colorProgram{opengl::Shader{VertexSrc}, opengl::Shader{FragmentSrc}};
 		colorProgram.set_uniform_mat4("viewProjection", camera.view_projection());
 		colorProgram.set_uniform_3f("objectColor", 0.2f, 0.3f, 0.8f);
-		GlobalLightViewModel globalLightViewModel{colorProgram};
+		view_models::GlobalLightViewModel globalLightViewModel{colorProgram};
 
 		//UI
 		views::AppUI ui{mMainWindow};
@@ -214,16 +116,16 @@ namespace forces
 
 		float vertices[] = {
 			//0
-			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-			 0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-			 0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-			-0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-
-			//4
 			-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
 			 0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
 			 0.5f,  0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
 			-0.5f,  0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+
+			//4
+			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+			 0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+			 0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+			-0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
 
 			//8
 			-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
@@ -278,7 +180,7 @@ namespace forces
 		float increment = 0.05f;
 
 		GLCall(glEnable(GL_MULTISAMPLE));
-		//GLCall(glEnable(GL_CULL_FACE));
+		GLCall(glEnable(GL_CULL_FACE));
 		GLCall(glEnable(GL_DEPTH_TEST));
 
 		mMainLoop.run([&]

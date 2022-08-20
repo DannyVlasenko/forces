@@ -21,6 +21,9 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
     </ProjectReference>
+    <ProjectReference Include="..\logic\logic.vcxproj">
+      <Project>{84d6e686-442b-4a09-9df7-38f56eb6f01b}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\models\models.vcxproj">
       <Project>{110502f7-2ff8-4097-971e-84ec38cca038}</Project>
     </ProjectReference>
@@ -73,7 +76,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>../../../src/models;../../../src/views;../../../src/graphics;../../../third_parties/glew/include;../../../third_parties/glfw/include;../../../third_parties/glm/glm;../../../third_parties/imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/models;../../../src/logic;../../../src/views;../../../src/graphics;../../../third_parties/glew/include;../../../third_parties/glfw/include;../../../third_parties/glm/glm;../../../third_parties/imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,7 +96,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../../src/models;../../../src/views;../../../src/graphics;../../../third_parties/glew/include;../../../third_parties/glfw/include;../../../third_parties/glm/glm;../../../third_parties/imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/models;../../../src/logic;../../../src/views;../../../src/graphics;../../../third_parties/glew/include;../../../third_parties/glfw/include;../../../third_parties/glm/glm;../../../third_parties/imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>

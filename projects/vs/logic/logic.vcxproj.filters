@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="view_models">
+      <UniqueIdentifier>{a71e8d02-edea-47f0-a918-935a96543a0c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\logic\global_light_view_model.cpp">
+      <Filter>view_models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\logic\camera_view_model.cpp">
+      <Filter>view_models</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\logic\global_light_view_model.hpp">
+      <Filter>view_models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\logic\camera_view_model.hpp">
+      <Filter>view_models</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
