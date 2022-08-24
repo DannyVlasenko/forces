@@ -62,4 +62,9 @@ namespace glfw
 		LibraryError::checkLastError();
 		return { width,height };
 	}
+
+    bool Window::isKeyPressed(int key_code) const
+    {
+		return glfwGetKey(mWindow.get(), key_code) == GLFW_PRESS;
+    }
 }

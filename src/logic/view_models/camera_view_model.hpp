@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LOGIC_CAMERA_VIEW_MODEL_HPP
+#define LOGIC_CAMERA_VIEW_MODEL_HPP
 
 #include "camera_view.hpp"
 #include "camera.hpp"
@@ -35,3 +36,4 @@ namespace view_models
 		const glfw::Window& mWindow;
 	};
 }
+#endif // LOGIC_CAMERA_VIEW_MODEL_HPP

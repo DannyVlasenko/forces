@@ -19,12 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\logic\camera_view_model.hpp" />
-    <ClInclude Include="..\..\..\src\logic\global_light_view_model.hpp" />
+    <ClInclude Include="..\..\..\src\logic\controllers\camera_move_controller.hpp" />
+    <ClInclude Include="..\..\..\src\logic\view_models\camera_view_model.hpp" />
+    <ClInclude Include="..\..\..\src\logic\view_models\global_light_view_model.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\logic\camera_view_model.cpp" />
-    <ClCompile Include="..\..\..\src\logic\global_light_view_model.cpp" />
+    <ClCompile Include="..\..\..\src\logic\controllers\camera_move_controller.cpp" />
+    <ClCompile Include="..\..\..\src\logic\view_models\camera_view_model.cpp" />
+    <ClCompile Include="..\..\..\src\logic\view_models\global_light_view_model.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

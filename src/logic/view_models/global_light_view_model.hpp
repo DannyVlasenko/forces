@@ -1,3 +1,6 @@
+#ifndef LOGIC_GLOBAL_LIGHT_VIEW_MODEL_HPP
+#define LOGIC_GLOBAL_LIGHT_VIEW_MODEL_HPP
+
 #include "global_light_view.hpp"
 #include "opengl/shader.hpp"
 
@@ -47,9 +50,10 @@ namespace view_models
 		opengl::Program& mShader;
 		bool mAmbientEnabled{ true };
 		glm::vec3 mAmbientColor{ 1.0f };
-		float mAmbientStrength{ 1.0f };
+		float mAmbientStrength{ 0.2f };
 		bool mDiffuseEnabled{ true };
 		glm::vec3 mDiffuseColor{ 1.0f };
 		glm::vec3 mDiffusePosition{ 0.0f };
 	};
 }
+#endif // LOGIC_GLOBAL_LIGHT_VIEW_MODEL_HPP

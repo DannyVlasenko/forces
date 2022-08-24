@@ -8,9 +8,10 @@
 
 #include "glm.hpp"
 #include "imgui.h"
+#include "controllers/camera_move_controller.hpp"
 #include "gtc/matrix_transform.hpp"
-#include "camera_view_model.hpp"
-#include "global_light_view_model.hpp"
+#include "view_models/camera_view_model.hpp"
+#include "view_models/global_light_view_model.hpp"
 
 opengl::ShaderSource VertexSrc
 {
@@ -90,10 +91,11 @@ namespace forces
 	{
 		//Camera
 		models::Camera camera;
-		camera.translation() = glm::vec3(-1.0f, 3.0f, 5.0f);
-		camera.look_at() = glm::vec3(0.0f, 0.0f, 0.0f);
+		camera.translation() = glm::vec3(0.0f, 0.0f, 0.0f);
+		camera.look_at() = glm::vec3(0.0f, 0.0f, -1.0f);
 		camera.far() = 20.f;
 		view_models::CameraViewModel cameraViewModel{camera, mMainWindow};
+		controllers::CameraMoveController cameraMoveController{ mMainWindow, camera };
 
 		//Material
 		opengl::Program colorProgram{opengl::Shader{VertexSrc}, opengl::Shader{FragmentSrc}};
@@ -108,8 +110,8 @@ namespace forces
 
 		//Model
 		auto model = glm::mat4(1.f);
-		//model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
-		//model = glm::rotate(model, glm::radians(30.f), glm::vec3(0.f, 1.f, 0.f));
+		model = translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
+		model = rotate(model, glm::radians(15.f), glm::vec3(0.f, 1.f, 0.f));
 		colorProgram.set_uniform_mat4("model", model);
 		auto normalModel = transpose(inverse(glm::mat3(model)));
 		colorProgram.set_uniform_mat3("normalModel", normalModel);
@@ -187,6 +189,7 @@ namespace forces
 		{
 			cameraViewModel.update();
 			globalLightViewModel.update();
+			cameraMoveController.update();
 			{
 				colorProgram.set_uniform_mat4("viewProjection", camera.view_projection());
 

@@ -33,6 +33,9 @@ namespace glfw
 		[[nodiscard]]
 		glm::vec2 framebuffer_size() const;
 
+        [[nodiscard]]
+	    bool isKeyPressed(int key_code) const;
+
 	private:
 		std::unique_ptr<GLFWwindow, decltype(&glfwDestroyWindow)> mWindow;
 	};
