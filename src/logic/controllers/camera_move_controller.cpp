@@ -10,74 +10,54 @@ namespace controllers
 
     void CameraMoveController::update()
     {
-        constexpr float moveSpeed = 0.5f;
-        constexpr float rotateSpeed = 0.07f;
-        const auto back = normalize(mCamera.translation() - mCamera.look_at());
-        const auto right = normalize(cross(mCamera.up(), back));
-        const auto up = cross(back, right);
-        mCamera.up() = up;
+        constexpr float moveSpeed = 0.3f;
+        constexpr float rotateSpeed = 2.0f;
 
         //WASD strafe 
         if (mWindow.isKeyPressed(GLFW_KEY_W))
         {
-            const auto shift = moveSpeed * -back;
-            mCamera.translation() += shift;
-            mCamera.look_at() += shift;
+            mCamera.position() += moveSpeed * mCamera.front();
         }
         if (mWindow.isKeyPressed(GLFW_KEY_S))
         {
-            const auto shift = moveSpeed * back;
-            mCamera.translation() += shift;
-            mCamera.look_at() += shift;
+            mCamera.position() -= moveSpeed * mCamera.front();
         }
         if (mWindow.isKeyPressed(GLFW_KEY_A))
         {
-            const auto shift = moveSpeed * -right;
-            mCamera.translation() += shift;
-            mCamera.look_at() += shift;
+            mCamera.position() += moveSpeed * mCamera.right();
         }
         if (mWindow.isKeyPressed(GLFW_KEY_D))
         {
-            const auto shift = moveSpeed * right;
-            mCamera.translation() += shift;
-            mCamera.look_at() += shift;
+            mCamera.position() -= moveSpeed * mCamera.right();
         }
 
         //Arrow keys rotations
         if (mWindow.isKeyPressed(GLFW_KEY_UP))
         {
-            const auto axis = right;
-            mCamera.look_at() = rotate(glm::mat4(1.f), rotateSpeed, axis) * glm::vec4(mCamera.look_at(), 1.0f);
+            mCamera.rotation().x -= rotateSpeed;
         }
         if (mWindow.isKeyPressed(GLFW_KEY_DOWN))
         {
-            const auto axis = right;
-            mCamera.look_at() = rotate(glm::mat4(1.f), -rotateSpeed, axis) * glm::vec4(mCamera.look_at(), 1.0f);
+            mCamera.rotation().x += rotateSpeed;
         }
         if (mWindow.isKeyPressed(GLFW_KEY_LEFT))
         {
-            const auto axis = up;
-            mCamera.look_at() = rotate(glm::mat4(1.f), rotateSpeed, axis) * glm::vec4(mCamera.look_at(), 1.0f);
+            mCamera.rotation().y -= rotateSpeed;
         }
         if (mWindow.isKeyPressed(GLFW_KEY_RIGHT))
         {
-            const auto axis = up;
-            mCamera.look_at() = rotate(glm::mat4(1.f), -rotateSpeed, axis) * glm::vec4(mCamera.look_at(), 1.0f);
+            mCamera.rotation().y += rotateSpeed;
         }
 
         //Space/Ctrl up/down
         //Arrow keys rotations
         if (mWindow.isKeyPressed(GLFW_KEY_SPACE))
         {
-            const auto shift = moveSpeed * up;
-            mCamera.translation() += shift;
-            mCamera.look_at() += shift;
+            mCamera.position() += moveSpeed * mCamera.up();
         }
         if (mWindow.isKeyPressed(GLFW_KEY_LEFT_CONTROL))
         {
-            const auto shift = moveSpeed * -up;
-            mCamera.translation() += shift;
-            mCamera.look_at() += shift;
+            mCamera.position() -= moveSpeed * mCamera.up();
         }
     }
 }

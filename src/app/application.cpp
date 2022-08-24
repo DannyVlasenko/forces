@@ -91,8 +91,8 @@ namespace forces
 	{
 		//Camera
 		models::Camera camera;
-		camera.translation() = glm::vec3(0.0f, 0.0f, 0.0f);
-		camera.look_at() = glm::vec3(0.0f, 0.0f, -1.0f);
+		camera.position() = glm::vec3(0.0f, 0.0f, 0.0f);
+		//camera.look_at() = glm::vec3(0.0f, 0.0f, -1.0f);
 		camera.far() = 20.f;
 		view_models::CameraViewModel cameraViewModel{camera, mMainWindow};
 		controllers::CameraMoveController cameraMoveController{ mMainWindow, camera };
@@ -110,7 +110,7 @@ namespace forces
 
 		//Model
 		auto model = glm::mat4(1.f);
-		model = translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
+		model = translate(model, glm::vec3(0.0f, 0.0f, 5.0f));
 		model = rotate(model, glm::radians(15.f), glm::vec3(0.f, 1.f, 0.f));
 		colorProgram.set_uniform_mat4("model", model);
 		auto normalModel = transpose(inverse(glm::mat3(model)));

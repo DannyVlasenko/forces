@@ -15,9 +15,11 @@ namespace view_models
 			mWindow(window)
 		{}
 
-		glm::vec3& look_at() noexcept override { return mCamera.look_at(); }
-		glm::vec3& translation() noexcept override { return mCamera.translation(); }
-		glm::vec3& up() noexcept override { return mCamera.up(); }
+		glm::vec3& position() noexcept override { return mCamera.position(); }
+		glm::vec3& rotation() noexcept override { return mCamera.rotation(); }
+		glm::vec3 up() const noexcept override { return mCamera.up(); }
+		glm::vec3 front() const noexcept override { return mCamera.front(); }
+		glm::vec3 right() const noexcept override { return mCamera.right(); }
 		float& fov() noexcept override { return mCamera.fov(); }
 		glm::vec2& viewport() noexcept override { return mCamera.viewport(); }
 		float& near() noexcept override { return mCamera.near(); }

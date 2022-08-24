@@ -11,9 +11,11 @@ namespace views
 	public:
 		virtual ~ICameraViewModel() = default;
 
-		virtual glm::vec3& look_at() noexcept = 0;
-		virtual glm::vec3& translation() noexcept = 0;
-		virtual glm::vec3& up() noexcept = 0;
+		virtual glm::vec3& position() noexcept = 0;
+		virtual glm::vec3& rotation() noexcept = 0;
+		virtual glm::vec3 up() const noexcept = 0;
+		virtual glm::vec3 front() const noexcept = 0;
+		virtual glm::vec3 right() const noexcept = 0;
 		virtual float& fov() noexcept = 0;
 		virtual glm::vec2& viewport() noexcept = 0;
 		virtual float& near() noexcept = 0;

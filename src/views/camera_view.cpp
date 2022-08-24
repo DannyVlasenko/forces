@@ -7,9 +7,13 @@ namespace views
 	void CameraView::render()
 	{
 		ImGui::Begin("Camera");
-		ImGui::DragFloat3("Translation", &mViewModel.translation()[0]);
-		ImGui::DragFloat3("Look At", &mViewModel.look_at()[0]);
+		ImGui::DragFloat3("Position", &mViewModel.position()[0]);
+		ImGui::DragFloat3("Rotation", &mViewModel.rotation()[0]);
+		ImGui::BeginDisabled();
+		ImGui::DragFloat3("Front", &mViewModel.front()[0]);
+		ImGui::DragFloat3("Right", &mViewModel.right()[0]);
 		ImGui::DragFloat3("Up", &mViewModel.up()[0]);
+		ImGui::EndDisabled();
 		ImGui::DragFloat("FOV", &mViewModel.fov());
 		ImGui::DragFloat("Near", &mViewModel.near());
 		ImGui::DragFloat("Far", &mViewModel.far());

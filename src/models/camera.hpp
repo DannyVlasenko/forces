@@ -8,14 +8,14 @@ namespace models
 	class Camera
 	{
 	public:
-		glm::vec3& look_at() noexcept
-		{
-			return mLookAt;
-		}
-
 		glm::vec3& position() noexcept
 		{
 			return mPosition;
+		}
+
+		glm::vec3& rotation() noexcept
+		{
+			return mRotation;
 		}
 
 		float& fov() noexcept
@@ -44,21 +44,13 @@ namespace models
 
 		glm::vec3 right() const noexcept;
 
-		void yaw(float grad) noexcept;
-		float yaw() const noexcept;
-
-		void pitch(float grad) noexcept;
-		float pitch() const noexcept;
-
-		void roll(float grad) noexcept;
-		float roll() const noexcept;
+		void look_at(const glm::vec3& at) noexcept;
 
 		glm::mat4 view_projection() const;
 
 	private:
 		glm::vec3 mPosition{ 0, 0, 0 };
-		glm::vec3 mUp{ 0, 1, 0 };
-		glm::vec3 mLookAt{ 0, 0, 1 };
+		glm::vec3 mRotation{ 0, 0, 0 };
 		float mFOV{ 60.0f };
 		glm::vec2 mViewport{ 800.0f , 600.0f };
 		float mNear{ 0.1f };
