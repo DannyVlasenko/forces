@@ -1,8 +1,33 @@
 #include "camera_move_controller.hpp"
 #include "gtc/matrix_transform.hpp"
+#include "gtx/euler_angles.hpp"
 
 namespace controllers
 {
+    static void yaw(models::Camera& camera, float grad) 
+    {
+        const auto rotation = glm::rotate(glm::mat4{ 1.0f }, glm::radians(grad), camera.up());
+        glm::vec3 result;
+        glm::extractEulerAngleYXZ(rotation, result.y, result.x, result.z);
+        camera.rotation() += glm::degrees(result);
+    }
+
+    static void pitch(models::Camera& camera, float grad)
+    {
+        const auto rotation = glm::rotate(glm::mat4{ 1.0f }, glm::radians(grad), camera.right());
+        glm::vec3 result;
+        glm::extractEulerAngleYXZ(rotation, result.y, result.x, result.z);
+        camera.rotation() += glm::degrees(result);
+    }
+
+    static void roll(models::Camera& camera, float grad)
+    {
+        const auto rotation = glm::rotate(glm::mat4{ 1.0f }, glm::radians(grad), camera.front());
+        glm::vec3 result;
+        glm::extractEulerAngleYXZ(rotation, result.y, result.x, result.z);
+        camera.rotation() += glm::degrees(result);
+    }
+
     CameraMoveController::CameraMoveController(const glfw::Window& window, models::Camera& camera):
         mWindow(window),
         mCamera(camera)
@@ -31,26 +56,33 @@ namespace controllers
             mCamera.position() -= moveSpeed * mCamera.right();
         }
 
-        //Arrow keys rotations
+        //Arrow, Q, E keys rotations
         if (mWindow.isKeyPressed(GLFW_KEY_UP))
         {
-            mCamera.rotation().x -= rotateSpeed;
+            pitch(mCamera, -rotateSpeed);
         }
         if (mWindow.isKeyPressed(GLFW_KEY_DOWN))
         {
-            mCamera.rotation().x += rotateSpeed;
+            pitch(mCamera, rotateSpeed);
         }
         if (mWindow.isKeyPressed(GLFW_KEY_LEFT))
         {
-            mCamera.rotation().y -= rotateSpeed;
+            yaw(mCamera, rotateSpeed);
         }
         if (mWindow.isKeyPressed(GLFW_KEY_RIGHT))
         {
-            mCamera.rotation().y += rotateSpeed;
+            yaw(mCamera, -rotateSpeed);
+        }
+        if (mWindow.isKeyPressed(GLFW_KEY_Q))
+        {
+            roll(mCamera, -rotateSpeed);
+        }
+        if (mWindow.isKeyPressed(GLFW_KEY_E))
+        {
+            roll(mCamera, rotateSpeed);
         }
 
         //Space/Ctrl up/down
-        //Arrow keys rotations
         if (mWindow.isKeyPressed(GLFW_KEY_SPACE))
         {
             mCamera.position() += moveSpeed * mCamera.up();
