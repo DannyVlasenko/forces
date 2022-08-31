@@ -4,28 +4,29 @@
 
 namespace controllers
 {
+    static glm::vec3 rotation_angles(glm::mat4 rot_mat) 
+    {
+        glm::vec3 result;
+        glm::extractEulerAngleYXZ(rot_mat, result.y, result.x, result.z);
+        return glm::degrees(result);
+    }
+
     static void yaw(models::Camera& camera, float grad) 
     {
         const auto rotation = glm::rotate(glm::mat4{ 1.0f }, glm::radians(grad), camera.up());
-        glm::vec3 result;
-        glm::extractEulerAngleYXZ(rotation, result.y, result.x, result.z);
-        camera.rotation() += glm::degrees(result);
+        camera.rotation() += rotation_angles(rotation);
     }
 
     static void pitch(models::Camera& camera, float grad)
     {
         const auto rotation = glm::rotate(glm::mat4{ 1.0f }, glm::radians(grad), camera.right());
-        glm::vec3 result;
-        glm::extractEulerAngleYXZ(rotation, result.y, result.x, result.z);
-        camera.rotation() += glm::degrees(result);
+        camera.rotation() += rotation_angles(rotation);
     }
 
     static void roll(models::Camera& camera, float grad)
     {
         const auto rotation = glm::rotate(glm::mat4{ 1.0f }, glm::radians(grad), camera.front());
-        glm::vec3 result;
-        glm::extractEulerAngleYXZ(rotation, result.y, result.x, result.z);
-        camera.rotation() += glm::degrees(result);
+        camera.rotation() += rotation_angles(rotation);
     }
 
     CameraMoveController::CameraMoveController(const glfw::Window& window, models::Camera& camera):
@@ -38,58 +39,81 @@ namespace controllers
         constexpr float moveSpeed = 0.3f;
         constexpr float rotateSpeed = 2.0f;
 
-        //WASD strafe 
-        if (mWindow.isKeyPressed(GLFW_KEY_W))
+        //WASD strafe Space/Ctrl up/down
+        if (mWindow.is_key_pressed(GLFW_KEY_W))
         {
             mCamera.position() += moveSpeed * mCamera.front();
         }
-        if (mWindow.isKeyPressed(GLFW_KEY_S))
+        if (mWindow.is_key_pressed(GLFW_KEY_S))
         {
             mCamera.position() -= moveSpeed * mCamera.front();
         }
-        if (mWindow.isKeyPressed(GLFW_KEY_A))
+        if (mWindow.is_key_pressed(GLFW_KEY_A))
         {
             mCamera.position() += moveSpeed * mCamera.right();
         }
-        if (mWindow.isKeyPressed(GLFW_KEY_D))
+        if (mWindow.is_key_pressed(GLFW_KEY_D))
         {
             mCamera.position() -= moveSpeed * mCamera.right();
         }
+        if (mWindow.is_key_pressed(GLFW_KEY_SPACE))
+        {
+            mCamera.position() += moveSpeed * mCamera.up();
+        }
+        if (mWindow.is_key_pressed(GLFW_KEY_LEFT_CONTROL))
+        {
+            mCamera.position() -= moveSpeed * mCamera.up();
+        }
 
         //Arrow, Q, E keys rotations
-        if (mWindow.isKeyPressed(GLFW_KEY_UP))
+        if (mWindow.is_key_pressed(GLFW_KEY_UP))
         {
             pitch(mCamera, -rotateSpeed);
         }
-        if (mWindow.isKeyPressed(GLFW_KEY_DOWN))
+        if (mWindow.is_key_pressed(GLFW_KEY_DOWN))
         {
             pitch(mCamera, rotateSpeed);
         }
-        if (mWindow.isKeyPressed(GLFW_KEY_LEFT))
+        if (mWindow.is_key_pressed(GLFW_KEY_LEFT))
         {
             yaw(mCamera, rotateSpeed);
         }
-        if (mWindow.isKeyPressed(GLFW_KEY_RIGHT))
+        if (mWindow.is_key_pressed(GLFW_KEY_RIGHT))
         {
             yaw(mCamera, -rotateSpeed);
         }
-        if (mWindow.isKeyPressed(GLFW_KEY_Q))
+        if (mWindow.is_key_pressed(GLFW_KEY_Q))
         {
             roll(mCamera, -rotateSpeed);
         }
-        if (mWindow.isKeyPressed(GLFW_KEY_E))
+        if (mWindow.is_key_pressed(GLFW_KEY_E))
         {
             roll(mCamera, rotateSpeed);
         }
 
-        //Space/Ctrl up/down
-        if (mWindow.isKeyPressed(GLFW_KEY_SPACE))
+        //Mouse move
+        if (mWindow.mouse_button_pressed(GLFW_MOUSE_BUTTON_RIGHT))
         {
-            mCamera.position() += moveSpeed * mCamera.up();
+            const auto cursorPos = mWindow.cursor_position();
+            if (!mMouseRightPressed) {
+                mWindow.disable_cursor(true);
+                mWindow.enable_raw_cursor(true);
+                mLastCursorPos = cursorPos;
+                mMouseRightPressed = true;
+            }
+            const auto sens = 0.3f;
+            const auto cursorMovement = cursorPos - mLastCursorPos;
+            yaw(mCamera, -cursorMovement.x * sens);
+            pitch(mCamera, cursorMovement.y * sens);
+            mLastCursorPos = cursorPos;
         }
-        if (mWindow.isKeyPressed(GLFW_KEY_LEFT_CONTROL))
+        else
         {
-            mCamera.position() -= moveSpeed * mCamera.up();
+            if (mMouseRightPressed) {
+                mWindow.enable_raw_cursor(false);
+                mWindow.disable_cursor(false);
+                mMouseRightPressed = false;
+            }
         }
     }
 }

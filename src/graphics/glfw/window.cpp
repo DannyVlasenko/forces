@@ -63,8 +63,40 @@ namespace glfw
 		return { width,height };
 	}
 
-    bool Window::isKeyPressed(int key_code) const
+    bool Window::is_key_pressed(int key_code) const
     {
-		return glfwGetKey(mWindow.get(), key_code) == GLFW_PRESS;
+		const auto keyState = glfwGetKey(mWindow.get(), key_code);
+		LibraryError::checkLastError();
+		return keyState == GLFW_PRESS;
     }
+
+	bool Window::mouse_button_pressed(int button) const
+	{
+		const auto buttonState = glfwGetMouseButton(mWindow.get(), button);
+		LibraryError::checkLastError();
+		return buttonState == GLFW_PRESS;
+	}
+
+	void Window::enable_raw_cursor(bool enable) const
+	{
+		if (glfwRawMouseMotionSupported()) {
+			LibraryError::checkLastError();
+			glfwSetInputMode(mWindow.get(), GLFW_RAW_MOUSE_MOTION, enable ? GLFW_TRUE : GLFW_FALSE);
+			LibraryError::checkLastError();
+		}
+		LibraryError::checkLastError();
+	}
+
+	void Window::disable_cursor(bool disable) const
+	{
+		glfwSetInputMode(mWindow.get(), GLFW_CURSOR, disable ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+		LibraryError::checkLastError();
+	}
+
+	glm::vec2 Window::cursor_position() const
+	{
+		double x, y;
+		glfwGetCursorPos(mWindow.get(), &x, &y);
+		return { x, y };
+	}
 }

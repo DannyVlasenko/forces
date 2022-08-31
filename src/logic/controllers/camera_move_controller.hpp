@@ -16,6 +16,8 @@ namespace controllers
     private:
         const glfw::Window& mWindow;
         models::Camera& mCamera;
+        bool mMouseRightPressed{ false };
+        glm::vec2 mLastCursorPos{ 0.0f };
     };
 }
 #endif // LOGIC_CAMERA_MOVE_CONTROLLER_HPP

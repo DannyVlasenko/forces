@@ -188,6 +188,7 @@ namespace forces
 		mMainLoop.run([&]
 		{
 			cameraViewModel.update();
+			globalLightViewModel.diffuse_position() = cameraViewModel.position();
 			globalLightViewModel.update();
 			cameraMoveController.update();
 			{
