@@ -16,7 +16,7 @@ namespace view_models
 		{}
 
 		glm::vec3& position() noexcept override { return mCamera.position(); }
-		glm::vec3& rotation() noexcept override { return mCamera.rotation(); }
+		glm::quat& rotation() noexcept override { return mCamera.rotation(); }
 		glm::vec3 up() const noexcept override { return mCamera.up(); }
 		glm::vec3 front() const noexcept override { return mCamera.front(); }
 		glm::vec3 right() const noexcept override { return mCamera.right(); }

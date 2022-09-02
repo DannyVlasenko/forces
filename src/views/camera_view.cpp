@@ -1,5 +1,7 @@
 #include "camera_view.hpp"
 
+#include "gtc/quaternion.hpp"
+
 #include "imgui.h"
 
 namespace views
@@ -8,7 +10,7 @@ namespace views
 	{
 		ImGui::Begin("Camera");
 		ImGui::DragFloat3("Position", &mViewModel.position()[0]);
-		ImGui::DragFloat3("Rotation", &mViewModel.rotation()[0]);
+		ImGui::DragFloat4("Rotation", &mViewModel.rotation()[0]);
 		ImGui::BeginDisabled();
 		ImGui::DragFloat3("Front", &mViewModel.front()[0]);
 		ImGui::DragFloat3("Right", &mViewModel.right()[0]);

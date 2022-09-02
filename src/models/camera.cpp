@@ -6,18 +6,18 @@
 namespace models
 {
     glm::vec3 Camera::front() const noexcept
-    {       
-        return glm::yawPitchRoll(glm::radians(mRotation.y), glm::radians(mRotation.x), glm::radians(mRotation.z)) * glm::vec4{ 0.0f, 0.0f, 1.0f, 0.0f };
+    {        
+        return mRotation * glm::vec3{ 0.0f, 0.0f, 1.0f };
     }
 
     glm::vec3 Camera::up() const noexcept
     {
-        return glm::yawPitchRoll(glm::radians(mRotation.y), glm::radians(mRotation.x), glm::radians(mRotation.z)) * glm::vec4{ 0.0f, 1.0f, 0.0f, 0.0f };
+        return mRotation * glm::vec3{ 0.0f, 1.0f, 0.0f };
     }
 
     glm::vec3 Camera::right() const noexcept
     {
-        return glm::yawPitchRoll(glm::radians(mRotation.y), glm::radians(mRotation.x), glm::radians(mRotation.z)) * glm::vec4{ 1.0f, 0.0f, 0.0f, 0.0f };
+        return mRotation * glm::vec3{ 1.0f, 0.0f, 0.0f };
     }
 
     void Camera::look_at(const glm::vec3& at) noexcept

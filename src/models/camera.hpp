@@ -2,6 +2,7 @@
 #define MODELS_CAMERA_HPP
 
 #include "glm.hpp"
+#include "gtc/quaternion.hpp"
 
 namespace models
 {
@@ -13,7 +14,7 @@ namespace models
 			return mPosition;
 		}
 
-		glm::vec3& rotation() noexcept
+		glm::quat& rotation() noexcept
 		{
 			return mRotation;
 		}
@@ -50,7 +51,7 @@ namespace models
 
 	private:
 		glm::vec3 mPosition{ 0, 0, 0 };
-		glm::vec3 mRotation{ 0, 0, 0 };
+		glm::quat mRotation{ 1.0f, 0.0f, 0.0f, 0.0f };
 		float mFOV{ 60.0f };
 		glm::vec2 mViewport{ 800.0f , 600.0f };
 		float mNear{ 0.1f };

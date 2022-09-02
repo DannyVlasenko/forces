@@ -12,7 +12,7 @@ namespace views
 		virtual ~ICameraViewModel() = default;
 
 		virtual glm::vec3& position() noexcept = 0;
-		virtual glm::vec3& rotation() noexcept = 0;
+		virtual glm::quat& rotation() noexcept = 0;
 		virtual glm::vec3 up() const noexcept = 0;
 		virtual glm::vec3 front() const noexcept = 0;
 		virtual glm::vec3 right() const noexcept = 0;

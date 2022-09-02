@@ -4,29 +4,19 @@
 
 namespace controllers
 {
-    static glm::vec3 rotation_angles(glm::mat4 rot_mat) 
-    {
-        glm::vec3 result;
-        glm::extractEulerAngleYXZ(rot_mat, result.y, result.x, result.z);
-        return glm::degrees(result);
-    }
-
     static void yaw(models::Camera& camera, float grad) 
     {
-        const auto rotation = glm::rotate(glm::mat4{ 1.0f }, glm::radians(grad), camera.up());
-        camera.rotation() += rotation_angles(rotation);
+        camera.rotation() *= glm::quat({ 0.0f, glm::radians(grad), 0.0f });
     }
 
     static void pitch(models::Camera& camera, float grad)
     {
-        const auto rotation = glm::rotate(glm::mat4{ 1.0f }, glm::radians(grad), camera.right());
-        camera.rotation() += rotation_angles(rotation);
+        camera.rotation() *= glm::quat({ glm::radians(grad), 0.0f, 0.0f });
     }
 
     static void roll(models::Camera& camera, float grad)
     {
-        const auto rotation = glm::rotate(glm::mat4{ 1.0f }, glm::radians(grad), camera.front());
-        camera.rotation() += rotation_angles(rotation);
+        camera.rotation() *= glm::quat({ 0.0f, 0.0f, glm::radians(grad) });
     }
 
     CameraMoveController::CameraMoveController(const glfw::Window& window, models::Camera& camera):
@@ -101,10 +91,10 @@ namespace controllers
                 mLastCursorPos = cursorPos;
                 mMouseRightPressed = true;
             }
-            const auto sens = 0.3f;
+            const auto sens = 0.2f;
             const auto cursorMovement = cursorPos - mLastCursorPos;
-            yaw(mCamera, -cursorMovement.x * sens);
             pitch(mCamera, cursorMovement.y * sens);
+            yaw(mCamera, -cursorMovement.x * sens);
             mLastCursorPos = cursorPos;
         }
         else
