@@ -10,6 +10,7 @@
 #include "imgui.h"
 #include "controllers/camera_move_controller.hpp"
 #include "gtc/matrix_transform.hpp"
+#include "opengl/mesh.hpp"
 #include "view_models/camera_view_model.hpp"
 #include "view_models/global_light_view_model.hpp"
 
@@ -68,6 +69,12 @@ void main()
 )--"
 };
 
+class SceneObject
+{
+public:
+	SceneObject();
+};
+
 namespace forces
 {
 	Application::Application() :
@@ -116,67 +123,7 @@ namespace forces
 		auto normalModel = transpose(inverse(glm::mat3(model)));
 		colorProgram.set_uniform_mat3("normalModel", normalModel);
 
-		float vertices[] = {
-			//0
-			-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-			 0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-			 0.5f,  0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-			-0.5f,  0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-
-			//4
-			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-			 0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-			 0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-			-0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-
-			//8
-			-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
-			-0.5f, -0.5f,  0.5f, -1.0f, 0.0f, 0.0f,
-			-0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f,
-			-0.5f,  0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
-
-			//12
-			 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
-			 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-			 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-			 0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
-
-			//16
-			-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
-			 0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
-			 0.5f, -0.5f,  0.5f, 0.0f, -1.0f, 0.0f,
-			-0.5f, -0.5f,  0.5f, 0.0f, -1.0f, 0.0f,
-
-			//20
-			-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-			 0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-			 0.5f, 0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
-			-0.5f, 0.5f,  0.5f, 0.0f, 1.0f, 0.0f
-		};
-
-		GLuint indices[] =
-		{
-			 0,  1,  2,  0,  2,  3,
-			 4,  7,  6,  4,  6,  5,
-			 8,  9, 10,  8, 10, 11,
-			12, 15, 14, 12, 14, 13,
-			16, 17, 18, 16, 18, 19,
-			20, 23, 22, 20, 22, 21
-		};
-
-		opengl::VertexArray va;
-		opengl::VertexBuffer vb(vertices);
-		opengl::VertexBufferLayout layout;
-		layout.push<float>(3);
-		layout.push<float>(3);
-		va.add_buffer(vb, layout);
-
-		opengl::IndexBuffer ib(indices);
-		opengl::Program::unbind();
-		opengl::VertexArray::unbind();
-		vb.unbind();
-
-		opengl::Renderer renderer;
+		const auto meshes = opengl::load_from_file("sphere.obj");
 
 		float r = 0.0f;
 		float increment = 0.05f;
@@ -188,14 +135,16 @@ namespace forces
 		mMainLoop.run([&]
 		{
 			cameraViewModel.update();
-			globalLightViewModel.diffuse_position() = cameraViewModel.position();
+			//globalLightViewModel.diffuse_position() = cameraViewModel.position();
 			globalLightViewModel.update();
 			cameraMoveController.update();
 			{
 				colorProgram.set_uniform_mat4("viewProjection", camera.view_projection());
-
 				colorProgram.set_uniform_3f("objectColor", r, 0.3f, 0.8f);
-				renderer.draw(va, ib, colorProgram);
+				colorProgram.bind();
+				for (const auto& mesh : meshes) {
+					mesh.draw();
+				}
 
 				if (r < 0.0f || r > 1.0f)
 				{

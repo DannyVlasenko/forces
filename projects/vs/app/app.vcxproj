@@ -35,6 +35,11 @@
     <ClInclude Include="..\..\..\src\app\application.hpp" />
     <ClInclude Include="..\..\..\src\app\window_loop.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="..\..\..\res\sphere.obj">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

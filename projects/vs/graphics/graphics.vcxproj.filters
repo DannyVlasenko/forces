@@ -36,6 +36,9 @@
     <ClInclude Include="..\..\..\src\graphics\opengl\renderer.hpp">
       <Filter>opengl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\graphics\opengl\mesh.hpp">
+      <Filter>opengl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\graphics\glfw\window.cpp">
@@ -51,6 +54,9 @@
       <Filter>opengl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\graphics\opengl\shader.cpp">
+      <Filter>opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\graphics\opengl\mesh.cpp">
       <Filter>opengl</Filter>
     </ClCompile>
   </ItemGroup>

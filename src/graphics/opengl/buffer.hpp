@@ -24,15 +24,18 @@ namespace opengl
 		Buffer(const Buffer& other) = delete;
 		Buffer& operator=(const Buffer& other) = delete;
 
-		Buffer(Buffer&& other) noexcept
-			: mId(other.mId)
+		Buffer(Buffer&& other) noexcept	:
+	        mId(other.mId),
+			mCount(other.mCount)
 		{
 			other.mId = 0;
+			other.mCount = 0;
 		}
 		
 		Buffer& operator=(Buffer&& other) noexcept
 		{
 			std::swap(mId, other.mId);
+			std::swap(mCount, other.mCount);
 			return *this;
 		}
 

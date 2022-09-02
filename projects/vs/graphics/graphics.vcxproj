@@ -17,6 +17,7 @@
     <ClInclude Include="..\..\..\src\graphics\opengl\buffer.hpp" />
     <ClInclude Include="..\..\..\src\graphics\opengl\glcall.hpp" />
     <ClInclude Include="..\..\..\src\graphics\opengl\glerrors.hpp" />
+    <ClInclude Include="..\..\..\src\graphics\opengl\mesh.hpp" />
     <ClInclude Include="..\..\..\src\graphics\opengl\renderer.hpp" />
     <ClInclude Include="..\..\..\src\graphics\opengl\shader.hpp" />
     <ClInclude Include="..\..\..\src\graphics\opengl\vertex_array.hpp" />
@@ -26,6 +27,7 @@
     <ClCompile Include="..\..\..\src\graphics\glfw\library.cpp" />
     <ClCompile Include="..\..\..\src\graphics\glfw\window.cpp" />
     <ClCompile Include="..\..\..\src\graphics\opengl\glerrors.cpp" />
+    <ClCompile Include="..\..\..\src\graphics\opengl\mesh.cpp" />
     <ClCompile Include="..\..\..\src\graphics\opengl\shader.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -70,7 +72,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../../../third_parties/glew/include;../../../third_parties/glfw/include;../../../third_parties/glm/glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../third_parties/glew/include;../../../third_parties/glfw/include;../../../third_parties/glm/glm;../../../third_parties/assimp/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -80,10 +82,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;assimp-vc143-mtd.lib;zlibstaticd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>../../../third_parties/glfw/lib/win;../../../third_parties/glew/lib/win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../third_parties/glfw/lib/win;../../../third_parties/glew/lib/win;../../../third_parties/assimp/lib/win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
     </Lib>
@@ -102,7 +104,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../../../third_parties/glew/include;../../../third_parties/glfw/include;../../../third_parties/glm/glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../third_parties/glew/include;../../../third_parties/glfw/include;../../../third_parties/glm/glm;../../../third_parties/assimp/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -114,10 +116,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;assimp-vc143-mt.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>../../../third_parties/glfw/lib/win;../../../third_parties/glew/lib/win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../third_parties/glfw/lib/win;../../../third_parties/glew/lib/win;../../../third_parties/assimp/lib/win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
