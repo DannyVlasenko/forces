@@ -21,15 +21,30 @@ namespace views
 			ImGui::EndDisabled();
 		}
 
-		//Diffuse
-		ImGui::Checkbox("Diffuse light", &mViewModel.diffuse_light_enabled());
-		if (!mViewModel.diffuse_light_enabled())
+		//Point
+		ImGui::Checkbox("Point light", &mViewModel.point_light_enabled());
+		if (!mViewModel.point_light_enabled())
 		{
 			ImGui::BeginDisabled();
 		}
-		ImGui::ColorEdit3("Diffuse color", &mViewModel.diffuse_color()[0]);
-		ImGui::DragFloat3("Diffuse position", &mViewModel.diffuse_position()[0]);
-		if (!mViewModel.diffuse_light_enabled())
+		ImGui::SameLine();
+		ImGui::Checkbox("Follow camera", &mViewModel.point_follow_camera());
+		ImGui::ColorEdit3("Point light color", &mViewModel.point_color()[0]);
+		ImGui::DragFloat3("Point light position", &mViewModel.point_position()[0]);
+		if (!mViewModel.point_light_enabled())
+		{
+			ImGui::EndDisabled();
+		}
+
+		//Directed
+		ImGui::Checkbox("Directed light", &mViewModel.directed_light_enabled());
+		if (!mViewModel.directed_light_enabled())
+		{
+			ImGui::BeginDisabled();
+		}
+		ImGui::ColorEdit3("Directed light color", &mViewModel.directed_color()[0]);
+		ImGui::DragFloat3("Direction", &mViewModel.directed_orientation()[0]);
+		if (!mViewModel.directed_light_enabled())
 		{
 			ImGui::EndDisabled();
 		}

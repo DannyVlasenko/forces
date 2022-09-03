@@ -14,9 +14,13 @@ namespace views
 		virtual bool& ambient_light_enabled() noexcept = 0;
 		virtual glm::vec3& ambient_color() noexcept = 0;
 		virtual float& ambient_strength() noexcept = 0;
-		virtual bool& diffuse_light_enabled() noexcept = 0;
-		virtual glm::vec3& diffuse_color() noexcept = 0;
-		virtual glm::vec3& diffuse_position() noexcept = 0;
+		virtual bool& point_light_enabled() noexcept = 0;
+		virtual bool& point_follow_camera() noexcept = 0;
+		virtual glm::vec3& point_color() noexcept = 0;
+		virtual glm::vec3& point_position() noexcept = 0;
+		virtual bool& directed_light_enabled() noexcept = 0;
+		virtual glm::vec3& directed_color() noexcept = 0;
+		virtual glm::vec3& directed_orientation() noexcept = 0;
 	};
 
 	class GlobalLightView final : public IView

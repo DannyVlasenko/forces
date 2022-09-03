@@ -54,16 +54,23 @@ layout(location = 0) out vec4 color;
 
 uniform vec3 objectColor;
 uniform vec3 ambientLightColor;
-uniform vec3 diffuseLightPosition;  
-uniform vec3 diffuseLightColor;  
+uniform vec3 pointLightPosition;  
+uniform vec3 pointLightColor;
+uniform vec3 directedLightOrient;  
+uniform vec3 directedLightColor;    
 
 void main()
 {
 	vec3 norm = normalize(normal);
-	vec3 lightDir = normalize(diffuseLightPosition - fragPos);
-	float diff = max(dot(norm, lightDir), 0.0);
-	vec3 diffuseColor = diff * diffuseLightColor;
-	vec3 resColor = (diffuseColor + ambientLightColor) * objectColor;
+
+	vec3 pointLightDir = normalize(pointLightPosition - fragPos);
+	float pointDiff = max(dot(norm, pointLightDir), 0.0);
+	vec3 pointDiffuseColor = pointDiff * pointLightColor;
+
+	float directedDiff = max(dot(norm, normalize(directedLightOrient)), 0.0);
+	vec3 directedDiffuseColor = directedDiff * directedLightColor;
+
+	vec3 resColor = (directedDiffuseColor + pointDiffuseColor + ambientLightColor) * objectColor;
 	color = vec4(resColor, 1.0);
 }
 )--"
@@ -72,7 +79,47 @@ void main()
 class SceneObject
 {
 public:
-	SceneObject();
+	SceneObject(const opengl::Mesh &mesh, const opengl::Program &program):
+		mMesh(mesh),
+		mProgram(program)
+	{}
+
+	void draw() 
+	{
+		mProgram.bind();
+		mProgram.set_uniform("objectColor", mColor);
+		auto model = glm::mat4(1.f);
+		model = translate(model, mPosition);
+		model = glm::scale(model, mScale);
+		mProgram.set_uniform("model", model);
+		auto normalModel = transpose(inverse(glm::mat3(model)));
+		mProgram.set_uniform("normalModel", normalModel);
+		mMesh.draw();
+		mProgram.unbind();
+	}
+
+	glm::vec3& postion() noexcept
+	{
+		return mPosition;
+	}
+
+	glm::vec3& scale() noexcept
+	{
+		return mScale;
+	}
+
+	glm::vec3& color() noexcept
+	{
+		return mColor;
+	}
+
+private:
+	const opengl::Mesh & mMesh;
+	const opengl::Program & mProgram;
+	glm::vec3 mColor{ 1.0f };
+	glm::vec3 mPosition{ 0.0f };
+	glm::vec3 mScale{ 1.0f };
+
 };
 
 namespace forces
@@ -99,16 +146,14 @@ namespace forces
 		//Camera
 		models::Camera camera;
 		camera.position() = glm::vec3(0.0f, 0.0f, 0.0f);
-		//camera.look_at() = glm::vec3(0.0f, 0.0f, -1.0f);
 		camera.far() = 20.f;
 		view_models::CameraViewModel cameraViewModel{camera, mMainWindow};
 		controllers::CameraMoveController cameraMoveController{ mMainWindow, camera };
 
 		//Material
 		opengl::Program colorProgram{opengl::Shader{VertexSrc}, opengl::Shader{FragmentSrc}};
-		colorProgram.set_uniform_mat4("viewProjection", camera.view_projection());
-		colorProgram.set_uniform_3f("objectColor", 0.2f, 0.3f, 0.8f);
-		view_models::GlobalLightViewModel globalLightViewModel{colorProgram};
+		colorProgram.set_uniform("viewProjection", camera.view_projection());
+		view_models::GlobalLightViewModel globalLightViewModel{colorProgram, camera};
 
 		//UI
 		views::AppUI ui{mMainWindow};
@@ -116,17 +161,16 @@ namespace forces
 		ui.add_view(std::make_unique<views::GlobalLightView>(globalLightViewModel));
 
 		//Model
-		auto model = glm::mat4(1.f);
-		model = translate(model, glm::vec3(0.0f, 0.0f, 5.0f));
-		model = rotate(model, glm::radians(15.f), glm::vec3(0.f, 1.f, 0.f));
-		colorProgram.set_uniform_mat4("model", model);
-		auto normalModel = transpose(inverse(glm::mat3(model)));
-		colorProgram.set_uniform_mat3("normalModel", normalModel);
-
 		const auto meshes = opengl::load_from_file("sphere.obj");
+		SceneObject sphere1{ meshes.at(0), colorProgram };
+		sphere1.postion() += 1.0f;
+		sphere1.scale() = glm::vec3{ 0.3f }; 
+		sphere1.color() = glm::vec3{ 0.1f, 0.3f, 0.8f };
 
-		float r = 0.0f;
-		float increment = 0.05f;
+		SceneObject sphere2{ meshes.at(0), colorProgram };
+		sphere2.postion() -= 1.0f;
+		sphere2.scale() = glm::vec3{ 0.5f };
+		sphere2.color() = glm::vec3{ 0.1f, 0.8f, 0.3f };
 
 		GLCall(glEnable(GL_MULTISAMPLE));
 		GLCall(glEnable(GL_CULL_FACE));
@@ -139,18 +183,9 @@ namespace forces
 			globalLightViewModel.update();
 			cameraMoveController.update();
 			{
-				colorProgram.set_uniform_mat4("viewProjection", camera.view_projection());
-				colorProgram.set_uniform_3f("objectColor", r, 0.3f, 0.8f);
-				colorProgram.bind();
-				for (const auto& mesh : meshes) {
-					mesh.draw();
-				}
-
-				if (r < 0.0f || r > 1.0f)
-				{
-					increment = -increment;
-				}
-				r += increment;
+				colorProgram.set_uniform("viewProjection", camera.view_projection());
+				sphere1.draw();
+				sphere2.draw();
 			}
 			ui.render();
 		});

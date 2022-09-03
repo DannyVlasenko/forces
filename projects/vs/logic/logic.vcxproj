@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\logic\controllers\camera_move_controller.hpp" />
+    <ClInclude Include="..\..\..\src\logic\controllers\view_projection_controller.hpp" />
     <ClInclude Include="..\..\..\src\logic\view_models\camera_view_model.hpp" />
     <ClInclude Include="..\..\..\src\logic\view_models\global_light_view_model.hpp" />
   </ItemGroup>

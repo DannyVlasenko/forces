@@ -29,6 +29,8 @@ namespace opengl
 		mVertexArray.bind();
 		mIndexBuffer.bind();
 		GLCall(glDrawElements(GL_TRIANGLES, mIndexBuffer.count(), GL_UNSIGNED_INT, nullptr));
+		mIndexBuffer.unbind();
+		mVertexArray.unbind();
     }
 
     Mesh cube_mesh()
