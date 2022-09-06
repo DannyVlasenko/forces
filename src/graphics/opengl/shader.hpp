@@ -82,6 +82,7 @@ namespace opengl
 
 		static void unbind();
 
+		void set_uniform(const char* name, float f) const;
 		void set_uniform(const char* name, const glm::vec3 &vec) const;
 		void set_uniform(const char* name, const glm::mat4& mat) const;
 		void set_uniform(const char* name, const glm::mat3& mat) const;

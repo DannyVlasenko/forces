@@ -10,7 +10,7 @@
 
 namespace opengl
 {
-	struct Vertex
+	struct VertexNormal
 	{
 		glm::vec3 position;
 		glm::vec3 normal;
@@ -18,12 +18,32 @@ namespace opengl
 		static VertexBufferLayout layout();
 	};
 
+	struct VertexSimple
+	{
+		glm::vec3 position;
+
+		static VertexBufferLayout layout();
+	};
+
+	template <typename Vertex>
 	class Mesh
 	{
 	public:
-		Mesh(std::span<Vertex> vertices, std::span<GLuint> indices);
+		Mesh(std::span<Vertex> vertices, std::span<GLuint> indices) :
+			mVertexBuffer(vertices),
+			mIndexBuffer(indices)
+		{
+			mVertexArray.add_buffer(mVertexBuffer, Vertex::layout());
+		}
 
-		void draw() const;
+		void draw(GLenum mode = GL_TRIANGLES) const
+		{
+			mVertexArray.bind();
+			mIndexBuffer.bind();
+			GLCall(glDrawElements(mode, mIndexBuffer.count(), GL_UNSIGNED_INT, nullptr));
+			mIndexBuffer.unbind();
+			mVertexArray.unbind();
+		}
 
 	private:
 		VertexArray mVertexArray;
@@ -31,8 +51,8 @@ namespace opengl
 		IndexBuffer mIndexBuffer;
 	};
 
-	Mesh cube_mesh();
+	Mesh<VertexNormal> cube_mesh();
 
-	std::vector<Mesh> load_from_file(const std::filesystem::path& file);
+	std::vector<Mesh<VertexNormal>> load_from_file(const std::filesystem::path& file);
 }
 #endif // OPENGL_MESH_HPP

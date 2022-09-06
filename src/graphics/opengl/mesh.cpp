@@ -9,7 +9,7 @@ using namespace std::string_literals;
 
 namespace opengl
 {
-    VertexBufferLayout Vertex::layout()
+    VertexBufferLayout VertexNormal::layout()
     {
         VertexBufferLayout layout;
         layout.push<float>(3);
@@ -17,25 +17,16 @@ namespace opengl
         return layout;
     }
 
-    Mesh::Mesh(std::span<Vertex> vertices, std::span<GLuint> indices):
-        mVertexBuffer(vertices),
-        mIndexBuffer(indices)
+    VertexBufferLayout VertexSimple::layout()
     {
-		mVertexArray.add_buffer(mVertexBuffer, Vertex::layout());
+        VertexBufferLayout layout;
+        layout.push<float>(3);
+        return layout;
     }
 
-    void Mesh::draw() const
+    Mesh<VertexNormal> cube_mesh()
     {
-		mVertexArray.bind();
-		mIndexBuffer.bind();
-		GLCall(glDrawElements(GL_TRIANGLES, mIndexBuffer.count(), GL_UNSIGNED_INT, nullptr));
-		mIndexBuffer.unbind();
-		mVertexArray.unbind();
-    }
-
-    Mesh cube_mesh()
-    {
-		Vertex vertices[] = {
+		VertexNormal vertices[] = {
 			//0
             {{-0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
 			 {{0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
@@ -86,16 +77,16 @@ namespace opengl
 		return { vertices, indices };
     }
     
-    static Mesh processMesh(aiMesh* mesh, const aiScene* scene)
+    static Mesh<VertexNormal> processMesh(aiMesh* mesh, const aiScene* scene)
     {
         // data to fill
-        std::vector<Vertex> vertices;
+        std::vector<VertexNormal> vertices;
         std::vector<unsigned int> indices;
 
         // walk through each of the mesh's vertices
         for (unsigned int i = 0; i < mesh->mNumVertices; i++)
         {
-            Vertex vertex;
+            VertexNormal vertex{};
             glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
             // positions
             vector.x = mesh->mVertices[i].x;
@@ -133,7 +124,7 @@ namespace opengl
         return {vertices, indices};
     }
     
-	static void processNode(aiNode* node, const aiScene* scene, std::vector<Mesh> &meshes)
+	static void processNode(aiNode* node, const aiScene* scene, std::vector<Mesh<VertexNormal>> &meshes)
 	{
 		// process each mesh located at the current node
 		for (unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -151,7 +142,7 @@ namespace opengl
 
 	}
 
-    std::vector<Mesh> load_from_file(const std::filesystem::path& file)
+    std::vector<Mesh<VertexNormal>> load_from_file(const std::filesystem::path& file)
     {
 		Assimp::Importer import;
 		const aiScene* scene = import.ReadFile(file.string(), aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -161,7 +152,7 @@ namespace opengl
 			throw std::runtime_error("Scene load error: "s + import.GetErrorString());
 		}
 
-		std::vector<Mesh> result;
+		std::vector<Mesh<VertexNormal>> result;
 		processNode(scene->mRootNode, scene, result);
 
 		return result;

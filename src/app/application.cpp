@@ -76,10 +76,91 @@ void main()
 )--"
 };
 
+opengl::ShaderSource FieldVertexSrc
+{
+	.type = GL_VERTEX_SHADER,
+	.code =
+	R"--(
+#version 330
+
+layout(location = 0) in vec3 position;
+
+uniform vec3 body1Pos;
+uniform float body1Mass;
+uniform vec3 body2Pos;
+uniform float body2Mass;	
+
+out VS_OUT {
+    vec3 potential;
+} vs_out;
+
+void main()
+{
+	float G = 6.6743e-11;
+    vec3 direction1 = normalize(body1Pos - position);
+    float dist1 = distance(body1Pos, position);
+    vec3 pot1 = (G * body1Mass)/(dist1 * dist1) * direction1; 
+
+    vec3 direction2 = normalize(body2Pos - position);
+    float dist2 = distance(body2Pos, position);
+	vec3 pot2 = (G * body2Mass)/(dist2 * dist2) * direction2;
+
+    vs_out.potential = pot1 + pot2; 
+	gl_Position = vec4(position, 1.0);
+}
+)--"
+};
+
+opengl::ShaderSource FieldGeometrySrc
+{
+	.type = GL_GEOMETRY_SHADER,
+	.code =
+	R"--(
+#version 330
+
+layout (points) in;
+layout (line_strip, max_vertices = 2) out;
+
+in VS_OUT {
+    vec3 potential;
+} gs_in[];
+
+uniform mat4 viewProjection;
+uniform mat4 model;
+
+void main()
+{
+	gl_Position = viewProjection * model * gl_in[0].gl_Position; 
+    EmitVertex();
+
+    gl_Position = viewProjection * model * vec4(vec3(gl_in[0].gl_Position) + gs_in[0].potential, 1.0);
+    EmitVertex();
+    
+    EndPrimitive();
+}
+)--"
+};
+
+opengl::ShaderSource FieldFragmentSrc
+{
+	.type = GL_FRAGMENT_SHADER,
+	.code =
+	R"--(
+#version 330
+
+layout(location = 0) out vec4 color;
+
+void main()
+{
+	color = vec4(1.0, 1.0, 1.0, 1.0);
+}
+)--"
+};
+
 class SceneObject
 {
 public:
-	SceneObject(const opengl::Mesh &mesh, const opengl::Program &program):
+	SceneObject(const opengl::Mesh<opengl::VertexNormal> &mesh, const opengl::Program &program):
 		mMesh(mesh),
 		mProgram(program)
 	{}
@@ -114,7 +195,7 @@ public:
 	}
 
 private:
-	const opengl::Mesh & mMesh;
+	const opengl::Mesh<opengl::VertexNormal>& mMesh;
 	const opengl::Program & mProgram;
 	glm::vec3 mColor{ 1.0f };
 	glm::vec3 mPosition{ 0.0f };
@@ -145,8 +226,8 @@ namespace forces
 	{
 		//Camera
 		models::Camera camera;
-		camera.position() = glm::vec3(0.0f, 0.0f, 0.0f);
-		camera.far() = 20.f;
+		camera.position() = glm::vec3(0.0f, 0.0f, -20.0f);
+		camera.far() = 200.f;
 		view_models::CameraViewModel cameraViewModel{camera, mMainWindow};
 		controllers::CameraMoveController cameraMoveController{ mMainWindow, camera };
 
@@ -154,6 +235,7 @@ namespace forces
 		opengl::Program colorProgram{opengl::Shader{VertexSrc}, opengl::Shader{FragmentSrc}};
 		colorProgram.set_uniform("viewProjection", camera.view_projection());
 		view_models::GlobalLightViewModel globalLightViewModel{colorProgram, camera};
+		globalLightViewModel.directed_orientation() = glm::vec3(1.0f, 1.0f, -1.0f);
 
 		//UI
 		views::AppUI ui{mMainWindow};
@@ -163,14 +245,39 @@ namespace forces
 		//Model
 		const auto meshes = opengl::load_from_file("sphere.obj");
 		SceneObject sphere1{ meshes.at(0), colorProgram };
-		sphere1.postion() += 1.0f;
-		sphere1.scale() = glm::vec3{ 0.3f }; 
+		sphere1.postion() = glm::vec3(-5.0f, 0.0f, 0.0f);
+		sphere1.scale() = glm::vec3{ 0.5f }; 
 		sphere1.color() = glm::vec3{ 0.1f, 0.3f, 0.8f };
 
 		SceneObject sphere2{ meshes.at(0), colorProgram };
-		sphere2.postion() -= 1.0f;
-		sphere2.scale() = glm::vec3{ 0.5f };
+		sphere2.postion() = glm::vec3(5.0f, 0.0f, 0.0f);
+		sphere2.scale() = glm::vec3{ 0.3f };
 		sphere2.color() = glm::vec3{ 0.1f, 0.8f, 0.3f };
+
+		opengl::Program fieldProgram{ opengl::Shader{FieldVertexSrc}, opengl::Shader{FieldGeometrySrc}, opengl::Shader{FieldFragmentSrc} };
+		fieldProgram.set_uniform("viewProjection", camera.view_projection());
+		fieldProgram.set_uniform("model", glm::mat4{1.0f});
+		fieldProgram.set_uniform("body1Pos", sphere1.postion());
+		fieldProgram.set_uniform("body1Mass", 5e10f);
+		fieldProgram.set_uniform("body2Pos", sphere2.postion());
+		fieldProgram.set_uniform("body2Mass", 3e10f);
+
+		std::vector<opengl::VertexSimple> fieldVertices;
+		std::vector<GLuint> indices;
+		GLuint i = 0;
+		for (auto x = -80; x <= 80; ++x)
+		{
+			for (auto y = -80; y <= 80; ++y)
+			{
+				const auto point = glm::vec3{ x * 0.5f, y * 0.5f, 0.0f };
+				if (distance(point, sphere1.postion()) < 1.4f) continue;
+				if (distance(point, sphere2.postion()) < 1.4f) continue;
+				fieldVertices.push_back({ glm::vec3{x * 0.5f, y * 0.5f, 0.0f} });
+				indices.push_back(++i);
+			}
+		}
+
+		opengl::Mesh<opengl::VertexSimple> gravityFieldMesh(fieldVertices, indices);
 
 		GLCall(glEnable(GL_MULTISAMPLE));
 		GLCall(glEnable(GL_CULL_FACE));
@@ -186,6 +293,9 @@ namespace forces
 				colorProgram.set_uniform("viewProjection", camera.view_projection());
 				sphere1.draw();
 				sphere2.draw();
+				fieldProgram.set_uniform("viewProjection", camera.view_projection());
+				fieldProgram.bind();
+				gravityFieldMesh.draw(GL_POINTS);
 			}
 			ui.render();
 		});
