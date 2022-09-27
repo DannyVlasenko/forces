@@ -18,7 +18,7 @@
     <ClInclude Include="..\..\..\src\logic\view_models\global_light_view_model.hpp">
       <Filter>view_models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\logic\controllers\view_projection_controller.hpp">
+    <ClInclude Include="..\..\..\src\logic\controllers\object_draw_controller.hpp">
       <Filter>controllers</Filter>
     </ClInclude>
   </ItemGroup>

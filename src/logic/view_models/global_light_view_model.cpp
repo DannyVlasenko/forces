@@ -2,16 +2,16 @@
 
 namespace view_models
 {
-	void GlobalLightViewModel::update()
-	{
+	void GlobalLightViewModel::update() const
+    {
 		const auto ambientColor = mAmbientEnabled ? mAmbientColor * mAmbientStrength : glm::vec3(0.0f);
-		mShader.set_uniform("ambientLightColor", ambientColor);
+		mShader.setAmbientLightColor(ambientColor);
 		const auto pointColor = mPointEnabled ? mPointColor : glm::vec3(0.0f);
-		mShader.set_uniform("pointLightColor", pointColor);
+		mShader.setPointLightColor(pointColor);
 		const auto pointPosition = mPointFollowCamera ? mCamera.position() : mPointPosition;
-		mShader.set_uniform("pointLightPosition", pointPosition);
+		mShader.setPointLightPosition(pointPosition);
 		const auto directedColor = mDirectedEnabled ? mDirectedColor : glm::vec3(0.0f);
-		mShader.set_uniform("directedLightColor", directedColor);
-		mShader.set_uniform("directedLightOrient", mDirectedOrientation);
+		mShader.setDirectedLightColor(directedColor);
+		mShader.setDirectedLightOrientation(mDirectedOrientation);
 	}
 }

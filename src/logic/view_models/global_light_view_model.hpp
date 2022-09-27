@@ -4,13 +4,14 @@
 #include "global_light_view.hpp"
 #include "opengl/shader.hpp"
 #include "camera.hpp"
+#include "light_program.hpp"
 
 namespace view_models 
 {
 	class GlobalLightViewModel final : public views::IGlobalLightViewModel
 	{
 	public:
-		GlobalLightViewModel(opengl::Program& shader, models::Camera &camera) :
+		GlobalLightViewModel(models::LightProgram& shader, models::Camera &camera) :
 			mShader(shader),
 			mCamera(camera)
 		{}
@@ -65,10 +66,10 @@ namespace view_models
 			return mDirectedOrientation;
 		}
 
-		void update();
+		void update() const;
 
 	private:
-		opengl::Program& mShader;
+		models::LightProgram& mShader;
 		models::Camera& mCamera;
 		bool mAmbientEnabled{ true };
 		glm::vec3 mAmbientColor{ 1.0f };

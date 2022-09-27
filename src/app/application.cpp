@@ -8,73 +8,12 @@
 
 #include "glm.hpp"
 #include "imgui.h"
+#include "lighted_object.hpp"
 #include "controllers/camera_move_controller.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "opengl/mesh.hpp"
 #include "view_models/camera_view_model.hpp"
 #include "view_models/global_light_view_model.hpp"
-
-opengl::ShaderSource VertexSrc
-{
-	.type = GL_VERTEX_SHADER,
-	.code =
-	R"--(
-#version 330
-
-layout(location = 0) in vec3 position;
-layout(location = 1) in vec3 inNormal;
-
-uniform mat4 viewProjection;
-uniform mat4 model;
-uniform mat3 normalModel;
-
-out vec3 normal;
-out vec3 fragPos;
-
-void main()
-{	
-	fragPos = vec3(model * vec4(position, 1.0));
-	gl_Position = viewProjection * vec4(fragPos, 1.0);
-	normal = normalModel * inNormal;
-}
-)--"
-};
-
-opengl::ShaderSource FragmentSrc
-{
-	.type = GL_FRAGMENT_SHADER,
-	.code =
-	R"--(
-#version 330
-
-in vec3 normal;
-in vec3 fragPos;
-
-layout(location = 0) out vec4 color;
-
-uniform vec3 objectColor;
-uniform vec3 ambientLightColor;
-uniform vec3 pointLightPosition;  
-uniform vec3 pointLightColor;
-uniform vec3 directedLightOrient;  
-uniform vec3 directedLightColor;    
-
-void main()
-{
-	vec3 norm = normalize(normal);
-
-	vec3 pointLightDir = normalize(pointLightPosition - fragPos);
-	float pointDiff = max(dot(norm, pointLightDir), 0.0);
-	vec3 pointDiffuseColor = pointDiff * pointLightColor;
-
-	float directedDiff = max(dot(norm, normalize(directedLightOrient)), 0.0);
-	vec3 directedDiffuseColor = directedDiff * directedLightColor;
-
-	vec3 resColor = (directedDiffuseColor + pointDiffuseColor + ambientLightColor) * objectColor;
-	color = vec4(resColor, 1.0);
-}
-)--"
-};
 
 opengl::ShaderSource FieldVertexSrc
 {
@@ -89,6 +28,8 @@ uniform vec3 body1Pos;
 uniform float body1Mass;
 uniform vec3 body2Pos;
 uniform float body2Mass;	
+uniform vec3 body3Pos;
+uniform float body3Mass;	
 
 out VS_OUT {
     vec3 potential;
@@ -105,7 +46,11 @@ void main()
     float dist2 = distance(body2Pos, position);
 	vec3 pot2 = (G * body2Mass)/(dist2 * dist2) * direction2;
 
-    vs_out.potential = pot1 + pot2; 
+    vec3 direction3 = normalize(body3Pos - position);
+    float dist3 = distance(body3Pos, position);
+	vec3 pot3 = (G * body3Mass)/(dist3 * dist3) * direction3;
+
+    vs_out.potential = pot1 + pot2 + pot3; 
 	gl_Position = vec4(position, 1.0);
 }
 )--"
@@ -157,52 +102,6 @@ void main()
 )--"
 };
 
-class SceneObject
-{
-public:
-	SceneObject(const opengl::Mesh<opengl::VertexNormal> &mesh, const opengl::Program &program):
-		mMesh(mesh),
-		mProgram(program)
-	{}
-
-	void draw() 
-	{
-		mProgram.bind();
-		mProgram.set_uniform("objectColor", mColor);
-		auto model = glm::mat4(1.f);
-		model = translate(model, mPosition);
-		model = glm::scale(model, mScale);
-		mProgram.set_uniform("model", model);
-		auto normalModel = transpose(inverse(glm::mat3(model)));
-		mProgram.set_uniform("normalModel", normalModel);
-		mMesh.draw();
-		mProgram.unbind();
-	}
-
-	glm::vec3& postion() noexcept
-	{
-		return mPosition;
-	}
-
-	glm::vec3& scale() noexcept
-	{
-		return mScale;
-	}
-
-	glm::vec3& color() noexcept
-	{
-		return mColor;
-	}
-
-private:
-	const opengl::Mesh<opengl::VertexNormal>& mMesh;
-	const opengl::Program & mProgram;
-	glm::vec3 mColor{ 1.0f };
-	glm::vec3 mPosition{ 0.0f };
-	glm::vec3 mScale{ 1.0f };
-
-};
-
 namespace forces
 {
 	Application::Application() :
@@ -232,9 +131,8 @@ namespace forces
 		controllers::CameraMoveController cameraMoveController{ mMainWindow, camera };
 
 		//Material
-		opengl::Program colorProgram{opengl::Shader{VertexSrc}, opengl::Shader{FragmentSrc}};
-		colorProgram.set_uniform("viewProjection", camera.view_projection());
-		view_models::GlobalLightViewModel globalLightViewModel{colorProgram, camera};
+		models::LightProgram lightProgram;
+		view_models::GlobalLightViewModel globalLightViewModel{lightProgram, camera};
 		globalLightViewModel.directed_orientation() = glm::vec3(1.0f, 1.0f, -1.0f);
 
 		//UI
@@ -244,15 +142,20 @@ namespace forces
 
 		//Model
 		const auto meshes = opengl::load_from_file("sphere.obj");
-		SceneObject sphere1{ meshes.at(0), colorProgram };
+		models::LightedObject sphere1{ meshes.at(0), lightProgram };
 		sphere1.postion() = glm::vec3(-5.0f, 0.0f, 0.0f);
 		sphere1.scale() = glm::vec3{ 0.5f }; 
 		sphere1.color() = glm::vec3{ 0.1f, 0.3f, 0.8f };
 
-		SceneObject sphere2{ meshes.at(0), colorProgram };
+		models::LightedObject sphere2{ meshes.at(0), lightProgram };
 		sphere2.postion() = glm::vec3(5.0f, 0.0f, 0.0f);
 		sphere2.scale() = glm::vec3{ 0.3f };
 		sphere2.color() = glm::vec3{ 0.1f, 0.8f, 0.3f };
+
+		models::LightedObject sphere3{ meshes.at(0), lightProgram };
+		sphere3.postion() = glm::vec3(0.0f, 5.0f, 0.0f);
+		sphere3.scale() = glm::vec3{ 0.1f };
+		sphere3.color() = glm::vec3{ 0.8f, 0.1f, 0.3f };
 
 		opengl::Program fieldProgram{ opengl::Shader{FieldVertexSrc}, opengl::Shader{FieldGeometrySrc}, opengl::Shader{FieldFragmentSrc} };
 		fieldProgram.set_uniform("viewProjection", camera.view_projection());
@@ -261,19 +164,25 @@ namespace forces
 		fieldProgram.set_uniform("body1Mass", 5e10f);
 		fieldProgram.set_uniform("body2Pos", sphere2.postion());
 		fieldProgram.set_uniform("body2Mass", 3e10f);
+		fieldProgram.set_uniform("body3Pos", sphere3.postion());
+		fieldProgram.set_uniform("body3Mass", 1e10f);
 
 		std::vector<opengl::VertexSimple> fieldVertices;
 		std::vector<GLuint> indices;
 		GLuint i = 0;
-		for (auto x = -80; x <= 80; ++x)
+		for (auto x = -10; x <= 10; ++x)
 		{
-			for (auto y = -80; y <= 80; ++y)
+			for (auto y = -10; y <= 10; ++y)
 			{
-				const auto point = glm::vec3{ x * 0.5f, y * 0.5f, 0.0f };
-				if (distance(point, sphere1.postion()) < 1.4f) continue;
-				if (distance(point, sphere2.postion()) < 1.4f) continue;
-				fieldVertices.push_back({ glm::vec3{x * 0.5f, y * 0.5f, 0.0f} });
-				indices.push_back(++i);
+				for (auto z = -2; z <= 2; ++z)
+				{
+					const auto point = glm::vec3{ x, y, z };
+					if (distance(point, sphere1.postion()) < 1.4f) continue;
+					if (distance(point, sphere2.postion()) < 1.4f) continue;
+					if (distance(point, sphere3.postion()) < 1.4f) continue;
+					fieldVertices.push_back({ point });
+					indices.push_back(++i);
+				}
 			}
 		}
 
@@ -286,16 +195,15 @@ namespace forces
 		mMainLoop.run([&]
 		{
 			cameraViewModel.update();
-			//globalLightViewModel.diffuse_position() = cameraViewModel.position();
 			globalLightViewModel.update();
 			cameraMoveController.update();
 			{
-				colorProgram.set_uniform("viewProjection", camera.view_projection());
-				sphere1.draw();
-				sphere2.draw();
-				fieldProgram.set_uniform("viewProjection", camera.view_projection());
-				fieldProgram.bind();
-				gravityFieldMesh.draw(GL_POINTS);
+				sphere1.draw(camera.view_projection());
+				sphere2.draw(camera.view_projection());
+				sphere3.draw(camera.view_projection());
+				//fieldProgram.set_uniform("viewProjection", camera.view_projection());
+				//fieldProgram.bind();
+				//gravityFieldMesh.draw(GL_POINTS);
 			}
 			ui.render();
 		});
