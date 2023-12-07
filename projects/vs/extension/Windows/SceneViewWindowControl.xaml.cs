@@ -1,0 +1,96 @@
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Windows;
+using System.Windows.Controls;
+using Forces.Scene;
+using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+
+namespace Forces
+{
+	/// <summary>
+	/// Interaction logic for SceneViewWindowControl.
+	/// </summary>
+	public partial class SceneViewWindowControl : UserControl
+	{
+
+		private readonly SceneViewWindow _parent;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SceneViewWindowControl"/> class.
+		/// </summary>
+		public SceneViewWindowControl(SceneViewWindow parent)
+		{
+			_parent = parent;
+			this.InitializeComponent();
+		}
+
+		/// <summary>
+		/// Handles click on the button by displaying a message box.
+		/// </summary>
+		/// <param name="sender">The event sender.</param>
+		/// <param name="e">The event args.</param>
+		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Sample code")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
+		private void button1_Click(object sender, RoutedEventArgs e)
+		{
+			ThreadHelper.ThrowIfNotOnUIThread();
+			if (textBox.Text.Length > 0)
+			{
+				var item = new Node(this, textBox.Text);
+				listBox.Items.Add(item);
+				var outputWindow = (IVsOutputWindow)_parent.GetVsService(typeof(SVsOutputWindow));
+				var guidGeneralPane = VSConstants.GUID_OutWindowGeneralPane;
+				outputWindow.GetPane(ref guidGeneralPane, out var pane);
+				pane?.OutputStringThreadSafe($"Node created: {item}\r\n");
+				TrackSelection();
+				//CheckForErrors();
+			}
+		}
+
+		private SelectionContainer _mySelContainer;
+		private System.Collections.ArrayList _mySelItems;
+		private IVsWindowFrame _frame = null;
+
+		private void TrackSelection()
+		{
+			ThreadHelper.ThrowIfNotOnUIThread();
+			if (_frame == null)
+			{
+				if (_parent.GetVsService(typeof(SVsUIShell)) is IVsUIShell shell)
+				{
+					var guidPropertyBrowser = new Guid(ToolWindowGuids.PropertyBrowser);
+					shell.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fForceCreate, ref guidPropertyBrowser, out _frame);
+				}
+			}
+
+			_frame?.Show();
+			if (_mySelContainer == null)
+			{
+				_mySelContainer = new SelectionContainer();
+			}
+
+			_mySelItems = new System.Collections.ArrayList();
+
+			if (listBox.SelectedItem is Node selected)
+			{
+				_mySelItems.Add(selected);
+			}
+
+			_mySelContainer.SelectedObjects = _mySelItems;
+
+			if (_parent.GetVsService(typeof(STrackSelection)) is ITrackSelection track)
+			{
+				track.OnSelectChange(_mySelContainer);
+			}
+		}
+
+		private void ListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			TrackSelection();
+		}
+	}
+}

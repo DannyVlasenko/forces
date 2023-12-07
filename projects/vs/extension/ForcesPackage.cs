@@ -27,6 +27,7 @@ namespace Forces
 	[Guid(ForcesPackage.PackageGuidString)]
 	[ProvideMenuResource("Menus.ctmenu", 1)]
 	[ProvideToolWindow(typeof(SceneViewWindow))]
+	[ProvideOptionPage(typeof(Preferences), "Forces", "General", 101, 106, true)]
 	public sealed class ForcesPackage : AsyncPackage
 	{
 		/// <summary>
