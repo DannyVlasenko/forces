@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Forces.Engine;
 
 namespace Forces.Scene
 {
-	internal class Node
+	internal class Node : INode
 	{
 		private readonly SceneViewWindowControl _control;
 
@@ -15,7 +13,9 @@ namespace Forces.Scene
 		{
 			_control = control;
 			Name = itemName;
+			Children = new List<INode>();
 		}
+
 		[Description("Name")]
 		public string Name { get; set; }
 
@@ -26,5 +26,7 @@ namespace Forces.Scene
 		{
 			return Name;
 		}
+
+		public IList<INode> Children { get; private set; }
 	}
 }

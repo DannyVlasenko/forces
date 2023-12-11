@@ -51,11 +51,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Engine\Engine.cs" />
+    <Compile Include="Engine\INode.cs" />
+    <Compile Include="Engine\IScene.cs" />
     <Compile Include="Preferences.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ForcesPackage.cs" />
+    <Compile Include="Scene\Scene.cs" />
     <Compile Include="Windows\SceneViewWindow.cs" />
     <Compile Include="Windows\SceneViewWindowCommand.cs" />
     <Compile Include="Windows\SceneViewWindowControl.xaml.cs">

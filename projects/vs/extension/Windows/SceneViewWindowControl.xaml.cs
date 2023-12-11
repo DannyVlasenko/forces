@@ -41,7 +41,7 @@ namespace Forces
 			if (textBox.Text.Length > 0)
 			{
 				var item = new Node(this, textBox.Text);
-				listBox.Items.Add(item);
+				SceneTreeView.Items.Add(item);
 				var outputWindow = (IVsOutputWindow)_parent.GetVsService(typeof(SVsOutputWindow));
 				var guidGeneralPane = VSConstants.GUID_OutWindowGeneralPane;
 				outputWindow.GetPane(ref guidGeneralPane, out var pane);
@@ -75,7 +75,7 @@ namespace Forces
 
 			_mySelItems = new System.Collections.ArrayList();
 
-			if (listBox.SelectedItem is Node selected)
+			if (SceneTreeView.SelectedItem is Node selected)
 			{
 				_mySelItems.Add(selected);
 			}
@@ -88,7 +88,7 @@ namespace Forces
 			}
 		}
 
-		private void ListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void SceneTreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{
 			TrackSelection();
 		}
