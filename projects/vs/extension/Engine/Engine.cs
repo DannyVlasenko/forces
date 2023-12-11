@@ -10,7 +10,7 @@ namespace Forces.Engine
 	{
 		public Engine() { }
 
-		public void SetScene(IScene scene)
+		public void SetScene(Scene scene)
 		{
 
 		}

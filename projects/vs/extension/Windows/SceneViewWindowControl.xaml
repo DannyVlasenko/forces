@@ -4,16 +4,25 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             xmlns:engine="clr-namespace:Forces.Engine"
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              Name="MyToolWindow">
-    <Grid>
-		<Canvas HorizontalAlignment="Left" Width="306">
-			<TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="208"/>
-			<Button x:Name="button" Content="Add" HorizontalAlignment="Left" Margin="236,13,0,0" VerticalAlignment="Top" Width="48" Click="button1_Click"/>
-			<TreeView x:Name="SceneTreeView" HorizontalAlignment="Left" Height="222" Margin="10,56,0,0" VerticalAlignment="Top" Width="274" SelectedItemChanged="SceneTreeView_OnSelectedItemChanged"/>
-		</Canvas>
+	<Grid>
+		<TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="Node" VerticalAlignment="Top" Width="208"/>
+		<Button x:Name="button" Content="Add" HorizontalAlignment="Left" Margin="236,13,0,0" VerticalAlignment="Top" Width="48" Click="button1_Click"/>
+		<TreeView x:Name="SceneTreeView" 
+		          Height="262" 
+		          VerticalAlignment="Top" 
+		          SelectedItemChanged="SceneTreeView_OnSelectedItemChanged" 
+		          HorizontalAlignment="Center"  Margin="0,38,0,0" Width="300">
+			<TreeView.ItemTemplate>
+				<HierarchicalDataTemplate DataType="{x:Type engine:Node}" ItemsSource="{Binding Children}">
+					<TextBlock Text="{Binding Name}" />
+				</HierarchicalDataTemplate>
+			</TreeView.ItemTemplate>
+		</TreeView>
 	</Grid>
 </UserControl>

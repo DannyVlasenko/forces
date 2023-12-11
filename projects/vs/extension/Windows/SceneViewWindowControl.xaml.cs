@@ -2,12 +2,11 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
-using Forces.Scene;
-using System.Runtime.InteropServices;
+using Forces.Engine;
+using Forces.ViewModels;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace Forces
 {
@@ -38,9 +37,11 @@ namespace Forces
 		private void button1_Click(object sender, RoutedEventArgs e)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
-			if (textBox.Text.Length > 0)
+			if (textBox1.Text.Length > 0)
 			{
-				var item = new Node(this, textBox.Text);
+				var item = new Node(textBox1.Text);
+				item.Children.Add(new Node(textBox1.Text + "_child"));
+				item.Children[0].Children.Add(new Node(textBox1.Text + "_subchild"));
 				SceneTreeView.Items.Add(item);
 				var outputWindow = (IVsOutputWindow)_parent.GetVsService(typeof(SVsOutputWindow));
 				var guidGeneralPane = VSConstants.GUID_OutWindowGeneralPane;
@@ -77,7 +78,7 @@ namespace Forces
 
 			if (SceneTreeView.SelectedItem is Node selected)
 			{
-				_mySelItems.Add(selected);
+				_mySelItems.Add(new NodePropertiesModel(selected));
 			}
 
 			_mySelContainer.SelectedObjects = _mySelItems;
