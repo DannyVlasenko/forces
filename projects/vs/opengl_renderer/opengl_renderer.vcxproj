@@ -19,19 +19,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\engine\render\renderer.hpp" />
-    <ClInclude Include="..\..\..\src\engine\scene\mesh.hpp" />
-    <ClInclude Include="..\..\..\src\engine\scene\node.hpp" />
-    <ClInclude Include="..\..\..\src\engine\scene\scene.hpp" />
+    <ClCompile Include="..\..\..\src\opengl_renderer\opengl\glerrors.cpp" />
+    <ClCompile Include="..\..\..\src\opengl_renderer\opengl\mesh.cpp" />
+    <ClCompile Include="..\..\..\src\opengl_renderer\opengl\shader.cpp" />
+    <ClCompile Include="..\..\..\src\opengl_renderer\scene\camera.cpp" />
+    <ClCompile Include="..\..\..\src\opengl_renderer\scene\lighted_object.cpp" />
+    <ClCompile Include="..\..\..\src\opengl_renderer\scene\light_program.cpp" />
+    <ClCompile Include="..\..\..\src\opengl_renderer\scene\scene_object.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\engine\scene\mesh.cpp" />
+    <ClInclude Include="..\..\..\src\opengl_renderer\opengl\buffer.hpp" />
+    <ClInclude Include="..\..\..\src\opengl_renderer\opengl\glcall.hpp" />
+    <ClInclude Include="..\..\..\src\opengl_renderer\opengl\glerrors.hpp" />
+    <ClInclude Include="..\..\..\src\opengl_renderer\opengl\mesh.hpp" />
+    <ClInclude Include="..\..\..\src\opengl_renderer\opengl\shader.hpp" />
+    <ClInclude Include="..\..\..\src\opengl_renderer\opengl\vertex_array.hpp" />
+    <ClInclude Include="..\..\..\src\opengl_renderer\scene\camera.hpp" />
+    <ClInclude Include="..\..\..\src\opengl_renderer\scene\global_light.hpp" />
+    <ClInclude Include="..\..\..\src\opengl_renderer\scene\lighted_object.hpp" />
+    <ClInclude Include="..\..\..\src\opengl_renderer\scene\light_program.hpp" />
+    <ClInclude Include="..\..\..\src\opengl_renderer\scene\scene_object.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{390a4c03-0ac6-4a80-a903-f4146090f4c4}</ProjectGuid>
-    <RootNamespace>engine</RootNamespace>
+    <ProjectGuid>{1318738b-4537-4b5f-9bc3-70368289c0df}</ProjectGuid>
+    <RootNamespace>openglrenderer</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -119,11 +132,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -131,7 +141,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>../../../third_parties/glfw/lib/win;../../../third_parties/glew/lib/win;../../../third_parties/assimp/lib/win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../third_parties/glew/lib/win;../../../third_parties/assimp/lib/win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;assimp-vc143-mtd.lib;zlibstaticd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,11 +153,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -156,7 +164,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>../../../third_parties/glfw/lib/win;../../../third_parties/glew/lib/win;../../../third_parties/assimp/lib/win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../third_parties/glew/lib/win;../../../third_parties/assimp/lib/win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;assimp-vc143-mt.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -15,17 +15,8 @@
     <ClCompile Include="..\..\..\src\app\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\graphics\graphics.vcxproj">
-      <Project>{bdc30911-975b-4cc8-8acb-d0efd2b08bd8}</Project>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
     <ProjectReference Include="..\logic\logic.vcxproj">
       <Project>{84d6e686-442b-4a09-9df7-38f56eb6f01b}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\models\models.vcxproj">
-      <Project>{110502f7-2ff8-4097-971e-84ec38cca038}</Project>
     </ProjectReference>
     <ProjectReference Include="..\views\views.vcxproj">
       <Project>{76af81a2-3e84-4f0e-b30d-11304659f629}</Project>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Forces.Engine
@@ -9,6 +10,7 @@ namespace Forces.Engine
 		{
 			Name = itemName;
 			Children = new List<Node>();
+			Meshes = new List<WeakReference<Mesh>>();
 		}
 
 		public string Name { get; set; }
@@ -21,5 +23,6 @@ namespace Forces.Engine
 		}
 
 		public IList<Node> Children { get; private set; }
+		public IList<WeakReference<Mesh>> Meshes { get; private set; }
 	}
 }

@@ -12,9 +12,15 @@ namespace Forces.Engine
 
 		public void SetScene(Scene scene)
 		{
-
+			//create new scene
+			//fill nodes and meshes
+			//set as current scene
+			//destroy old scene
 		}
 
-		public void Render(){}
+		public void Render()
+		{
+
+		}
 	}
 }

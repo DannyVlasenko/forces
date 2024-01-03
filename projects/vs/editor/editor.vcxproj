@@ -26,6 +26,11 @@
     <ClInclude Include="..\..\..\src\editor\node.h" />
     <ClInclude Include="..\..\..\src\editor\scene.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\engine\engine.vcxproj">
+      <Project>{390a4c03-0ac6-4a80-a903-f4146090f4c4}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -121,7 +126,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;../../../third_parties/assimp/include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;../../../third_parties/assimp/include;../../../src/engine/scene</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,7 +147,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;../../../third_parties/assimp/include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;../../../third_parties/assimp/include;../../../src/engine/scene</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

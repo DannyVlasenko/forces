@@ -1,7 +1,10 @@
-﻿namespace Forces.Engine
+﻿using System.Collections.Generic;
+
+namespace Forces.Engine
 {
-	internal interface Scene
+	internal class Scene
 	{
-		Node RootNode { get; }
+		public Node RootNode { get; }
+		public IList<Mesh> Meshes { get; private set; }
 	}
 }
