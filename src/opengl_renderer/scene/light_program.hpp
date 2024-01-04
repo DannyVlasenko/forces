@@ -3,7 +3,7 @@
 
 #include "opengl/shader.hpp"
 
-namespace models
+namespace opengl
 {
     class LightProgram : public opengl::Program
     {

@@ -17,6 +17,20 @@ namespace forces
 			meshes_.insert(mesh);
 		}
 
+		const std::vector<Node>& getChildren() const
+		{
+			return children_;
+		}
+
+		const std::unordered_set<Mesh*>& getMeshes() const
+		{
+			return meshes_;
+		}
+
+		const glm::vec3& getTranslation() const
+		{
+			return translation_;
+		}
 
 	private:
 		std::vector<Node> children_;

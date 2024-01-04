@@ -2,7 +2,7 @@
 
 #include "glm.hpp"
 
-namespace models 
+namespace opengl 
 {
 	class GlobalLight
 	{

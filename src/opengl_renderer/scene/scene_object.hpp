@@ -4,7 +4,7 @@
 #include "opengl/mesh.hpp"
 #include "opengl/shader.hpp"
 
-namespace models
+namespace opengl
 {
 	class IDrawable
 	{

@@ -4,7 +4,7 @@
 #include "glm.hpp"
 #include "gtc/quaternion.hpp"
 
-namespace models
+namespace opengl
 {
 	class Camera
 	{

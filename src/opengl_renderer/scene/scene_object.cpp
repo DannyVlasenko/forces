@@ -2,7 +2,7 @@
 
 #include <ext/matrix_transform.hpp>
 
-namespace models
+namespace opengl
 {
     SceneObject::SceneObject(const opengl::Mesh<opengl::VertexNormal> &mesh, const opengl::Program& program):
         mMesh(mesh),

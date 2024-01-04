@@ -3,7 +3,7 @@
 #include "gtc/matrix_transform.hpp"
 #include "gtx/euler_angles.hpp"
 
-namespace models
+namespace opengl
 {
     glm::vec3 Camera::front() const noexcept
     {        

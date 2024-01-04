@@ -1,6 +1,6 @@
 #include "light_program.hpp"
 
-namespace models
+namespace opengl
 {
     namespace
     {

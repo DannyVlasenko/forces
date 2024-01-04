@@ -4,7 +4,7 @@
 #include "light_program.hpp"
 #include "scene_object.hpp"
 
-namespace models
+namespace opengl
 {
     class LightedObject : public SceneObject
     {

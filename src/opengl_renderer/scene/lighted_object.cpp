@@ -1,6 +1,6 @@
 #include "lighted_object.hpp"
 
-namespace models
+namespace opengl
 {
     LightedObject::LightedObject(const opengl::Mesh<opengl::VertexNormal>& mesh, const LightProgram& light_program):
         SceneObject(mesh, light_program),
