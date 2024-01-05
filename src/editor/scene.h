@@ -13,7 +13,7 @@ ForcesScene * create_scene();
 
 void delete_scene(ForcesScene *scene);
 
-ForcesNode * root_node(ForcesScene *scene);
+ForcesNode * scene_root_node(ForcesScene *scene);
 
 #ifdef __cplusplus
 }

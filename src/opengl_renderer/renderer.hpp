@@ -9,6 +9,7 @@ namespace opengl
 	class Renderer : public forces::Renderer
 	{
 	public:
+		Renderer();
 		void setCurrentRootNode(const forces::INode& root) override;
 		void render() override;
 

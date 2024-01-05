@@ -17,6 +17,7 @@ namespace Forces
 	{
 
 		private readonly SceneViewWindow _parent;
+		private readonly Scene _scene;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SceneViewWindowControl"/> class.
@@ -24,7 +25,9 @@ namespace Forces
 		public SceneViewWindowControl(SceneViewWindow parent)
 		{
 			_parent = parent;
+			_scene = new Scene();
 			this.InitializeComponent();
+			SceneTreeView.Items.Add(_scene.RootNode);
 		}
 
 		/// <summary>
@@ -39,16 +42,16 @@ namespace Forces
 			ThreadHelper.ThrowIfNotOnUIThread();
 			if (textBox1.Text.Length > 0)
 			{
-				var item = new Node(textBox1.Text);
-				item.Children.Add(new Node(textBox1.Text + "_child"));
-				item.Children[0].Children.Add(new Node(textBox1.Text + "_subchild"));
-				SceneTreeView.Items.Add(item);
-				var outputWindow = (IVsOutputWindow)_parent.GetVsService(typeof(SVsOutputWindow));
-				var guidGeneralPane = VSConstants.GUID_OutWindowGeneralPane;
-				outputWindow.GetPane(ref guidGeneralPane, out var pane);
-				pane?.OutputStringThreadSafe($"Node created: {item}\r\n");
-				TrackSelection();
-				//CheckForErrors();
+				//var item = new Node(textBox1.Text);
+				//item.Children.Add(new Node(textBox1.Text + "_child"));
+				//item.Children[0].Children.Add(new Node(textBox1.Text + "_subchild"));
+				//SceneTreeView.Items.Add(item);
+				//var outputWindow = (IVsOutputWindow)_parent.GetVsService(typeof(SVsOutputWindow));
+				//var guidGeneralPane = VSConstants.GUID_OutWindowGeneralPane;
+				//outputWindow.GetPane(ref guidGeneralPane, out var pane);
+				//pane?.OutputStringThreadSafe($"Node created: {item}\r\n");
+				//TrackSelection();
+				////CheckForErrors();
 			}
 		}
 

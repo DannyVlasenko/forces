@@ -41,6 +41,10 @@ namespace opengl
 		}
 	};
 
+	Renderer::Renderer():
+		pImpl_(std::make_unique<Impl>())
+	{}
+
 	void Renderer::setCurrentRootNode(const forces::INode& root)
 	{
 		pImpl_->objects_.clear();

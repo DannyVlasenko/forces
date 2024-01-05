@@ -2,7 +2,8 @@
 #include "scene.h"
 
 //engine
-#include "scene.hpp"
+#include "engine/scene/scene.hpp"
+
 
 ForcesScene* create_scene()
 {
@@ -16,7 +17,7 @@ void delete_scene(ForcesScene* scene)
 	delete sc;
 }
 
-ForcesNode* root_node(ForcesScene* scene)
+ForcesNode* scene_root_node(ForcesScene* scene)
 {
 	auto * sc = reinterpret_cast<forces::Scene*>(scene);
 	return reinterpret_cast<ForcesNode*>(&sc->rootNode());

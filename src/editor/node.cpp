@@ -6,11 +6,6 @@ ForcesNode* create_node(ForcesNode *parent)
 	return reinterpret_cast<ForcesNode*>(&reinterpret_cast<forces::Node*>(parent)->addChild(forces::Node{}));
 }
 
-void delete_node(ForcesNode* node)
-{
-	delete reinterpret_cast<forces::Node*>(node);
-}
-
 void node_add_mesh(ForcesNode* node, ForcesMesh *mesh)
 {
 	reinterpret_cast<forces::Node*>(node)->addMesh(reinterpret_cast<forces::Mesh*>(mesh));

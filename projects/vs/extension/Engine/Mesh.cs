@@ -9,19 +9,19 @@ namespace Forces.Engine
 {
 	internal class Mesh : IDisposable
 	{
-		private IntPtr _mesh;
+		public IntPtr Handle { get; private set; }
 
-		public string Path => Marshal.PtrToStringUni(mesh_get_path(_mesh));
+		public string Path => Marshal.PtrToStringUni(mesh_get_path(Handle));
 
 		public Mesh(string path)
 		{
-			_mesh = create_mesh(path);
+			Handle = create_mesh(path);
 		}
 
 		private void ReleaseUnmanagedResources()
 		{
-			delete_mesh(_mesh);
-			_mesh = IntPtr.Zero;
+			delete_mesh(Handle);
+			Handle = IntPtr.Zero;
 		}
 
 		public void Dispose()

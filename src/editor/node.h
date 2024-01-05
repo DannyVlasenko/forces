@@ -9,8 +9,6 @@ typedef struct ForcesNode ForcesNode;
 
 ForcesNode * create_node(ForcesNode *parent);
 
-void delete_node(ForcesNode *node);
-
 void node_add_mesh(ForcesNode *node, ForcesMesh *mesh);
 
 #ifdef __cplusplus

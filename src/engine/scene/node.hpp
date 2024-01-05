@@ -40,6 +40,8 @@ namespace forces
 	class Node : public INode
 	{
 	public:
+		Node() = default;
+
 		INode& addChild(INode &&child)
 		{
 			children_.push_back(std::move(child));

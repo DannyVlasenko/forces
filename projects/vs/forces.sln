@@ -10,6 +10,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "logic", "logic\logic.vcxproj", "{84D6E686-442B-4A09-9DF7-38F56EB6F01B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "extension", "extension\extension.csproj", "{39DF882A-D708-4733-981B-A813F038378A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3CA936FA-432F-422F-BD47-F8ABCD32F7E2} = {3CA936FA-432F-422F-BD47-F8ABCD32F7E2}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine", "engine\engine.vcxproj", "{390A4C03-0AC6-4A80-A903-F4146090F4C4}"
 EndProject
