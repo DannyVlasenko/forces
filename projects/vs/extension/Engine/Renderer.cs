@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 
 namespace Forces.Engine
 {
-	internal class Engine
+	internal class OpenGLRenderer
 	{
-		public Engine() { }
-
-		public void SetScene(Scene scene)
+		public OpenGLRenderer()
 		{
-			
+
 		}
 
-		public void Step()
+		void SetCurrentRootNode(Node root)
+		{
+
+		}
+
+		void Render()
 		{
 
 		}

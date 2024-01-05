@@ -6,18 +6,24 @@ using System.Threading.Tasks;
 
 namespace Forces.Engine
 {
-	internal class Engine
+	internal class Window
 	{
-		public Engine() { }
-
-		public void SetScene(Scene scene)
+		public void MakeContextCurrent()
 		{
-			
+
 		}
 
-		public void Step()
+		public void SwapBuffers()
 		{
 
+		}
+
+		public IntPtr Handle
+		{
+			get
+			{
+				return IntPtr.Zero;
+			}
 		}
 	}
 }

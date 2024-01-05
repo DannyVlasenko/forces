@@ -19,16 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\editor\mesh.cpp" />
     <ClCompile Include="..\..\..\src\editor\node.cpp" />
+    <ClCompile Include="..\..\..\src\editor\opengl_renderer.cpp" />
     <ClCompile Include="..\..\..\src\editor\scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\editor\mesh.h" />
     <ClInclude Include="..\..\..\src\editor\node.h" />
+    <ClInclude Include="..\..\..\src\editor\opengl_renderer.h" />
     <ClInclude Include="..\..\..\src\editor\scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\engine\engine.vcxproj">
       <Project>{390a4c03-0ac6-4a80-a903-f4146090f4c4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\glfwrap\glfwrap.vcxproj">
+      <Project>{1616b09a-244c-4fd9-acc5-d16abfe9331b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\opengl_renderer\opengl_renderer.vcxproj">
+      <Project>{1318738b-4537-4b5f-9bc3-70368289c0df}</Project>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -126,7 +136,8 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;../../../third_parties/assimp/include;../../../src/engine/scene</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;../../../third_parties/assimp/include;../../../src</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -147,7 +158,8 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;../../../third_parties/assimp/include;../../../src/engine/scene</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;../../../third_parties/assimp/include;../../../src</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

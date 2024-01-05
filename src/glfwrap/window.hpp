@@ -4,12 +4,13 @@
 #include <memory>
 #include <vec2.hpp>
 
+#include "engine/render/window.hpp"
 #include "GLFW/glfw3.h"
 
 
 namespace glfw
 {
-	class Window
+	class Window : public forces::Window
 	{
 	public:
 		Window(int width, int height, const char* title);
@@ -20,12 +21,12 @@ namespace glfw
 
 		void set_swap_interval(int screen_updates) const;
 
-		void make_context_current() const;
+		void makeContextCurrent() const override;
 
 		[[nodiscard]]
 		bool should_close() const;
 
-		void swap_buffers() const;
+		void swapBuffers() const override;
 
 		[[nodiscard]]
 		glm::vec2 size() const;

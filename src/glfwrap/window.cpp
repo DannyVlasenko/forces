@@ -24,11 +24,11 @@ namespace glfw
 
 	void Window::set_swap_interval(int screen_updates) const
 	{
-		make_context_current();
+		makeContextCurrent();
 		glfwSwapInterval(screen_updates);
 	}
 
-	void Window::make_context_current() const
+	void Window::makeContextCurrent() const
 	{
 		glfwMakeContextCurrent(mWindow.get());
 		LibraryError::checkLastError();
@@ -41,7 +41,7 @@ namespace glfw
 		return closeFlag;
 	}
 
-	void Window::swap_buffers() const
+	void Window::swapBuffers() const
 	{
 		glfwSwapBuffers(mWindow.get());
 		LibraryError::checkLastError();

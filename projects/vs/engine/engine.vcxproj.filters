@@ -13,6 +13,10 @@
     <ClInclude Include="..\..\..\src\engine\render\renderer.hpp">
       <Filter>render</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\engine\render\window.hpp">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\engine\engine.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="scene">

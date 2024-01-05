@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\engine\engine.hpp" />
     <ClInclude Include="..\..\..\src\engine\render\renderer.hpp" />
+    <ClInclude Include="..\..\..\src\engine\render\window.hpp" />
     <ClInclude Include="..\..\..\src\engine\scene\mesh.hpp" />
     <ClInclude Include="..\..\..\src\engine\scene\node.hpp" />
     <ClInclude Include="..\..\..\src\engine\scene\scene.hpp" />

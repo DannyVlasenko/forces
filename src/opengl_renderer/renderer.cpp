@@ -4,7 +4,8 @@
 #include "scene/lighted_object.hpp"
 
 //engine
-#include "engine/scene/scene.hpp"
+#include "engine/scene/node.hpp"
+#include "engine/scene/mesh.hpp"
 
 //stl
 #include <unordered_map>
@@ -18,7 +19,7 @@ namespace opengl
 		LightProgram lightProgram_;
 		Camera camera_;
 
-		void addNodeWithChildren(const forces::Node& node, glm::vec3 parentTranslation)
+		void addNodeWithChildren(const forces::INode& node, glm::vec3 parentTranslation)
 		{
 			const auto thisTranslation = node.getTranslation() + parentTranslation;
 			for (auto *nodeMesh : node.getMeshes())
@@ -40,9 +41,10 @@ namespace opengl
 		}
 	};
 
-	void Renderer::setCurrentScene(forces::Scene& scene)
+	void Renderer::setCurrentRootNode(const forces::INode& root)
 	{
-		pImpl_->addNodeWithChildren(scene.rootNode(), glm::vec3{ 0.f, 0.f, 0.f });
+		pImpl_->objects_.clear();
+		pImpl_->addNodeWithChildren(root, glm::vec3{ 0.f, 0.f, 0.f });
 	}
 
 	void Renderer::render()

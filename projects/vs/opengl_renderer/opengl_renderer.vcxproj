@@ -42,6 +42,11 @@
     <ClInclude Include="..\..\..\src\opengl_renderer\scene\light_program.hpp" />
     <ClInclude Include="..\..\..\src\opengl_renderer\scene\scene_object.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\engine\engine.vcxproj">
+      <Project>{390a4c03-0ac6-4a80-a903-f4146090f4c4}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

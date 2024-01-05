@@ -3,9 +3,13 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\editor\scene.cpp" />
     <ClCompile Include="..\..\..\src\editor\node.cpp" />
+    <ClCompile Include="..\..\..\src\editor\opengl_renderer.cpp" />
+    <ClCompile Include="..\..\..\src\editor\mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\editor\scene.h" />
     <ClInclude Include="..\..\..\src\editor\node.h" />
+    <ClInclude Include="..\..\..\src\editor\opengl_renderer.h" />
+    <ClInclude Include="..\..\..\src\editor\mesh.h" />
   </ItemGroup>
 </Project>
