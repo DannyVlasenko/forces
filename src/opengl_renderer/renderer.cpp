@@ -16,7 +16,7 @@ namespace opengl
 	{
 		std::unordered_map<forces::Mesh*, std::vector<Mesh<VertexNormal>>> meshes_;
 		std::vector<LightedObject> objects_;
-		LightProgram lightProgram_;
+		std::unique_ptr<LightProgram> lightProgram_;
 		Camera camera_;
 
 		void addNodeWithChildren(const forces::INode& node, glm::vec3 parentTranslation)
@@ -30,7 +30,7 @@ namespace opengl
 				}
 				for (const auto &mesh : meshes_.at(nodeMesh))
 				{
-					auto &obj = objects_.emplace_back(mesh, lightProgram_);
+					auto &obj = objects_.emplace_back(mesh, *lightProgram_);
 					obj.postion() = thisTranslation;
 				}
 			}
@@ -43,7 +43,13 @@ namespace opengl
 
 	Renderer::Renderer():
 		pImpl_(std::make_unique<Impl>())
-	{}
+	{
+		if (glewInit() != GLEW_OK)
+		{
+			throw std::runtime_error("GLEW init error.");
+		}
+		pImpl_->lightProgram_ = std::make_unique<LightProgram>();
+	}
 
 	void Renderer::setCurrentRootNode(const forces::INode& root)
 	{
@@ -56,6 +62,8 @@ namespace opengl
 		GLCall(glEnable(GL_MULTISAMPLE));
 		GLCall(glEnable(GL_CULL_FACE));
 		GLCall(glEnable(GL_DEPTH_TEST));
+		GLCall(glClearColor(0.1f, 0.3f, 0.6f, 1.0f));
+		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
 		for (const auto& obj : pImpl_->objects_)
 		{

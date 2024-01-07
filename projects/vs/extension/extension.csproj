@@ -103,6 +103,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\..\third_parties\glfw\lib\win\glfw3.dll">
+      <Link>Resources\glfw3.dll</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>.</VSIXSubPath>
+    </Content>
     <Content Include="Resources\PreviewWindowCommand.png" />
     <VSCTCompile Include="ForcesPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>

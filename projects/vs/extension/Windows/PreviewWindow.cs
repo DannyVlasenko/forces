@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.Shell;
-using System;
 using System.Runtime.InteropServices;
-using System.Windows.Controls;
+using Forces.Engine;
 
 namespace Forces.Windows
 {
@@ -19,13 +18,17 @@ namespace Forces.Windows
 	[Guid("5e8a8814-5f59-48fd-ade2-911513fcc6e2")]
 	public class PreviewWindow : ToolWindowPane
 	{
+		private readonly Window _window;
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PreviewWindow"/> class.
 		/// </summary>
 		public PreviewWindow() : base(null)
 		{
 			this.Caption = "Forces Preview";
-			this.Content = new UserControl();
+			_window = new Window();
+			this.Content = _window;
 		}
+
+
 	}
 }

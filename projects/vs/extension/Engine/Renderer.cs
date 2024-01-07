@@ -1,26 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Forces.Engine
 {
-	internal class OpenGLRenderer
+	internal class OpenGLRenderer : IDisposable
 	{
+		private IntPtr _renderer;
 		public OpenGLRenderer()
 		{
-
+			_renderer = create_opengl_renderer();
 		}
 
-		void SetCurrentRootNode(Node root)
+		public void SetCurrentRootNode(Node root)
 		{
 
 		}
 
-		void Render()
+		public void Render()
 		{
-
+			opengl_renderer_render(_renderer);
 		}
+
+		private void ReleaseUnmanagedResources()
+		{
+			delete_opengl_renderer(_renderer);
+			_renderer = IntPtr.Zero;
+		}
+
+		public void Dispose()
+		{
+			ReleaseUnmanagedResources();
+			GC.SuppressFinalize(this);
+		}
+
+		~OpenGLRenderer()
+		{
+			ReleaseUnmanagedResources();
+		}
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern IntPtr create_opengl_renderer();
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern void delete_opengl_renderer(IntPtr renderer);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern void opengl_renderer_render(IntPtr renderer);
 	}
 }
