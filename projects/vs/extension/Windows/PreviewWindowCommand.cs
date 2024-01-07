@@ -5,20 +5,19 @@ using System.ComponentModel.Design;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
-using Forces.Windows;
 using Task = System.Threading.Tasks.Task;
 
-namespace Forces
+namespace Forces.Windows
 {
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class SceneViewWindowCommand
+	internal sealed class PreviewWindowCommand
 	{
 		/// <summary>
 		/// Command ID.
 		/// </summary>
-		public const int CommandId = 0x0100;
+		public const int CommandId = 0x0103;
 
 		/// <summary>
 		/// Command menu group (command set GUID).
@@ -31,12 +30,12 @@ namespace Forces
 		private readonly AsyncPackage package;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SceneViewWindowCommand"/> class.
+		/// Initializes a new instance of the <see cref="PreviewWindowCommand"/> class.
 		/// Adds our command handlers for menu (commands must exist in the command table file)
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
 		/// <param name="commandService">Command service to add command to, not null.</param>
-		private SceneViewWindowCommand(AsyncPackage package, OleMenuCommandService commandService)
+		private PreviewWindowCommand(AsyncPackage package, OleMenuCommandService commandService)
 		{
 			this.package = package ?? throw new ArgumentNullException(nameof(package));
 			commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -49,7 +48,7 @@ namespace Forces
 		/// <summary>
 		/// Gets the instance of the command.
 		/// </summary>
-		public static SceneViewWindowCommand Instance
+		public static PreviewWindowCommand Instance
 		{
 			get;
 			private set;
@@ -77,19 +76,21 @@ namespace Forces
 			await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
 			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-			Instance = new SceneViewWindowCommand(package, commandService);
+			Instance = new PreviewWindowCommand(package, commandService);
 		}
 
 		/// <summary>
-		/// Shows the tool window when the menu item is clicked.
+		/// This function is the callback used to execute the command when the menu item is clicked.
+		/// See the constructor to see how the menu item is associated with this function using
+		/// OleMenuCommandService service and MenuCommand class.
 		/// </summary>
-		/// <param name="sender">The event sender.</param>
-		/// <param name="e">The event args.</param>
+		/// <param name="sender">Event sender.</param>
+		/// <param name="e">Event args.</param>
 		private void Execute(object sender, EventArgs e)
 		{
 			this.package.JoinableTaskFactory.RunAsync(async delegate
 			{
-				ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(SceneViewWindow), 0, true, this.package.DisposalToken);
+				ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(PreviewWindow), 0, true, this.package.DisposalToken);
 				if ((null == window) || (null == window.Frame))
 				{
 					throw new NotSupportedException("Cannot create tool window");

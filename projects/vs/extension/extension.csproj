@@ -64,6 +64,8 @@
     <Compile Include="ForcesPackage.cs" />
     <Compile Include="ViewModels\NodePropertiesModel.cs" />
     <Compile Include="ViewModels\SceneViewModel.cs" />
+    <Compile Include="Windows\PreviewWindow.cs" />
+    <Compile Include="Windows\PreviewWindowCommand.cs" />
     <Compile Include="Windows\SceneViewWindow.cs" />
     <Compile Include="Windows\SceneViewWindowCommand.cs" />
     <Compile Include="Windows\SceneViewWindowControl.xaml.cs">
@@ -80,7 +82,9 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -99,10 +103,17 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\PreviewWindowCommand.png" />
     <VSCTCompile Include="ForcesPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
     <Content Include="Resources\SceneViewWindowCommand.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\editor\editor.vcxproj">
+      <Project>{3ca936fa-432f-422f-bd47-f8abcd32f7e2}</Project>
+      <Name>editor</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

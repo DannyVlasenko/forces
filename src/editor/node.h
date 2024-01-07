@@ -7,8 +7,10 @@ extern "C" {
 
 typedef struct ForcesNode ForcesNode;
 
+__declspec(dllexport)
 ForcesNode * create_node(ForcesNode *parent);
 
+__declspec(dllexport)
 void node_add_mesh(ForcesNode *node, ForcesMesh *mesh);
 
 #ifdef __cplusplus

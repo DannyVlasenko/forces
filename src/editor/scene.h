@@ -9,10 +9,13 @@ extern "C" {
 
 typedef struct ForcesScene ForcesScene;
 
+__declspec(dllexport)
 ForcesScene * create_scene();
 
+__declspec(dllexport)
 void delete_scene(ForcesScene *scene);
 
+__declspec(dllexport)
 ForcesNode * scene_root_node(ForcesScene *scene);
 
 #ifdef __cplusplus

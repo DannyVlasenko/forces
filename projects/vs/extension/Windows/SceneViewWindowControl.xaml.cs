@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Forces.Engine;
 using Forces.ViewModels;
+using Forces.Windows;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;

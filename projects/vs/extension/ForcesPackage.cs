@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Forces.Windows;
 using Task = System.Threading.Tasks.Task;
 
 namespace Forces
@@ -28,6 +29,7 @@ namespace Forces
 	[ProvideMenuResource("Menus.ctmenu", 1)]
 	[ProvideToolWindow(typeof(SceneViewWindow))]
 	[ProvideOptionPage(typeof(Preferences), "Forces", "General", 101, 106, true)]
+	[ProvideToolWindow(typeof(PreviewWindow))]
 	public sealed class ForcesPackage : AsyncPackage
 	{
 		/// <summary>
@@ -50,6 +52,7 @@ namespace Forces
 			// Do any initialization that requires the UI thread after switching to the UI thread.
 			await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 		    await SceneViewWindowCommand.InitializeAsync(this);
+		    await PreviewWindowCommand.InitializeAsync(this);
 		}
 
 		#endregion

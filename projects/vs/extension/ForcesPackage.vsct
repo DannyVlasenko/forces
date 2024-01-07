@@ -24,7 +24,7 @@
 		  <Group guid="guidForcesPackageCmdSet" id="WindowsGroup" priority="0x200">
 			  <Parent guid="guidForcesPackageCmdSet" id="ForcesMenu"/>
 		  </Group>
-	  </Groups>
+    </Groups>
 	  <Buttons>
 		  <Button guid="guidForcesPackageCmdSet" id="SceneViewWindowCommandId" priority="0x120" type="Button">
 			  <Parent guid="guidForcesPackageCmdSet" id="WindowsGroup"/>
@@ -32,7 +32,13 @@
 				  <ButtonText>Scene View</ButtonText>
 			  </Strings>
 		  </Button>
-	  </Buttons>
+		  <Button guid="guidForcesPackageCmdSet" id="PreviewWindowCommandId" priority="0x121" type="Button">
+			  <Parent guid="guidForcesPackageCmdSet" id="WindowsGroup" />
+			  <Strings>
+				  <ButtonText>Preview</ButtonText>
+			  </Strings>
+		  </Button>
+    </Buttons>
 	  <Combos></Combos>
 	  <Bitmaps></Bitmaps>
   </Commands>
@@ -45,6 +51,7 @@
 
     <GuidSymbol name="guidForcesPackageCmdSet" value="{b91e8a5e-6164-440b-90a9-d9b08a4ce475}">
       <IDSymbol name="SceneViewWindowCommandId" value="0x0100" />
+      <IDSymbol name="PreviewWindowCommandId" value="0x0103" />
       <IDSymbol name="WindowsGroup" value="0x0101" />
     </GuidSymbol>
 
@@ -52,7 +59,7 @@
 		<IDSymbol name="ForcesGroup" value="0x1020"/>
 		<IDSymbol name="ForcesMenu" value="0x1021"/>
     </GuidSymbol>
-
+  
     <GuidSymbol name="guidImages" value="{94d076e8-7677-4775-a5a1-1c7bd8a6021f}" >
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />

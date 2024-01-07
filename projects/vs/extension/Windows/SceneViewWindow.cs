@@ -1,8 +1,8 @@
-﻿using Microsoft.VisualStudio.Shell;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.Shell;
 
-namespace Forces
+namespace Forces.Windows
 {
 	/// <summary>
 	/// This class implements the tool window exposed by this package and hosts a user control.
