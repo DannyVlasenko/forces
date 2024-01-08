@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Forces.ViewModels
 {
-	internal class SceneViewModel
+	public class SceneViewModel
 	{
 	}
 }

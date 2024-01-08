@@ -53,6 +53,7 @@ namespace Forces
 			await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 		    await SceneViewWindowCommand.InitializeAsync(this);
 		    await PreviewWindowCommand.InitializeAsync(this);
+		    await Forces.Windows.OptionsCommand.InitializeAsync(this);
 		}
 
 		#endregion

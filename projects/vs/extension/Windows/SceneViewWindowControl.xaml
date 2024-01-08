@@ -7,20 +7,20 @@
              xmlns:engine="clr-namespace:Forces.Engine"
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
-             mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300"
+             mc:Ignorable="d" d:DesignWidth="300"
              Name="MyToolWindow">
 	<Grid>
-		<TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="Node" VerticalAlignment="Top" Width="208"/>
-		<Button x:Name="button" Content="Add" HorizontalAlignment="Left" Margin="236,13,0,0" VerticalAlignment="Top" Width="48" Click="button1_Click"/>
+		<TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="Node" VerticalAlignment="Top" Width="208" Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"/>
+		<Button x:Name="button" Content="Add" HorizontalAlignment="Left" Margin="236,13,0,0" VerticalAlignment="Top" Width="48" Click="button1_Click"
+		        Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
+		        Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"/>
 		<TreeView x:Name="SceneTreeView" 
-		          Height="262" 
-		          VerticalAlignment="Top" 
-		          SelectedItemChanged="SceneTreeView_OnSelectedItemChanged" 
-		          HorizontalAlignment="Center"  Margin="0,38,0,0" Width="300">
+		          SelectedItemChanged="SceneTreeView_OnSelectedItemChanged"
+		          Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
+		          Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}" Margin="0,38,0,0">
 			<TreeView.ItemTemplate>
 				<HierarchicalDataTemplate DataType="{x:Type engine:Node}" ItemsSource="{Binding Children}">
-					<TextBlock Text="{Binding Name}" />
+					<TextBlock  Text="{Binding Name}"/>
 				</HierarchicalDataTemplate>
 			</TreeView.ItemTemplate>
 		</TreeView>

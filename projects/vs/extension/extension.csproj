@@ -64,6 +64,7 @@
     <Compile Include="ForcesPackage.cs" />
     <Compile Include="ViewModels\NodePropertiesModel.cs" />
     <Compile Include="ViewModels\SceneViewModel.cs" />
+    <Compile Include="Windows\OptionsCommand.cs" />
     <Compile Include="Windows\PreviewWindow.cs" />
     <Compile Include="Windows\PreviewWindowCommand.cs" />
     <Compile Include="Windows\SceneViewWindow.cs" />
@@ -113,11 +114,9 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <VSIXSubPath>.</VSIXSubPath>
     </Content>
-    <Content Include="Resources\PreviewWindowCommand.png" />
     <VSCTCompile Include="ForcesPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
-    <Content Include="Resources\SceneViewWindowCommand.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\editor\editor.vcxproj">

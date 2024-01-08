@@ -5,14 +5,22 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Interop;
+using Forces.Windows;
 
 namespace Forces.Engine
 {
 	internal class Window : HwndHost
 	{
-		public OpenGLRenderer Renderer { get; set; }
+		private readonly PreviewWindow _previewWindow;
+		private OpenGLRenderer Renderer { get; set; }
+
 		private IntPtr _hwnd;
 		private Scene _scene;
+
+		public Window(PreviewWindow previewWindow)
+		{
+			_previewWindow = previewWindow;
+		}
 
 		public void MakeContextCurrent()
 		{
@@ -27,7 +35,9 @@ namespace Forces.Engine
 		protected override HandleRef BuildWindowCore(HandleRef hwndParent)
 		{
 			glfwInit();
-			glfwWindowHint(0x0002100D, 8);
+
+			var preferences = (Preferences)(_previewWindow.Package as ForcesPackage)?.GetDialogPage(typeof(Preferences));
+			glfwWindowHint(0x0002100D, preferences?.PreviewMultiSampling ?? 1);
 			_hwnd = glfwCreateWindow(100, 100, "Forces Preview", IntPtr.Zero, IntPtr.Zero);
 			var win32Handle = glfwGetWin32Window(_hwnd);
 			const int GWL_STYLE = (-16);
