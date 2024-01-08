@@ -53,9 +53,9 @@ namespace opengl
 		glm::vec3 mPosition{ 0, 0, 0 };
 		glm::quat mRotation{ 1.0f, 0.0f, 0.0f, 0.0f };
 		float mFOV{ 60.0f };
-		glm::vec2 mViewport{ 800.0f , 600.0f };
+		glm::vec2 mViewport{ 1920.0f , 1080.0f };
 		float mNear{ 0.1f };
-		float mFar{ 10.0f };
+		float mFar{ 100.0f };
 	};
 }
 

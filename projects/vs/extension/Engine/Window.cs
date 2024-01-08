@@ -12,6 +12,7 @@ namespace Forces.Engine
 	{
 		public OpenGLRenderer Renderer { get; set; }
 		private IntPtr _hwnd;
+		private Scene _scene;
 
 		public void MakeContextCurrent()
 		{
@@ -35,6 +36,8 @@ namespace Forces.Engine
 			SetParent(win32Handle, hwndParent.Handle);
 			MakeContextCurrent();
 			Renderer = new OpenGLRenderer();
+			_scene = new Scene();
+			Renderer.SetCurrentRootNode(_scene.RootNode);
 			return new HandleRef(this, win32Handle);
 		}
 

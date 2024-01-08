@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Forces.Engine
@@ -12,7 +14,8 @@ namespace Forces.Engine
 		{
 			_handle = create_scene();
 			Meshes = new List<Mesh>();
-			Meshes.Add(new Mesh("sphere.obj"));
+			var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			Meshes.Add(new Mesh(Path.Combine(dir, "sphere.obj")));
 			RootNode.AddMesh(Meshes[0]);
 		}
 

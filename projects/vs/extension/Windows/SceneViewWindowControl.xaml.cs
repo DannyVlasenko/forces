@@ -26,9 +26,8 @@ namespace Forces
 		public SceneViewWindowControl(SceneViewWindow parent)
 		{
 			_parent = parent;
-			_scene = new Scene();
 			this.InitializeComponent();
-			SceneTreeView.Items.Add(_scene.RootNode);
+			//SceneTreeView.Items.Add(_scene.RootNode);
 		}
 
 		/// <summary>

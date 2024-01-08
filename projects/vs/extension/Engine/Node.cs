@@ -9,6 +9,8 @@ namespace Forces.Engine
 	{
 		private readonly IntPtr _node;
 
+		public IntPtr Handle => _node;
+
 		public Node(IntPtr node, string name)
 		{
 			_node = node;

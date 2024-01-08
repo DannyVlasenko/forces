@@ -32,6 +32,7 @@ namespace opengl
 				{
 					auto &obj = objects_.emplace_back(mesh, *lightProgram_);
 					obj.postion() = thisTranslation;
+					obj.color() = { 0.2f, 0.8f, 0.2f };
 				}
 			}
 			for(const auto &child : node.getChildren())
@@ -49,6 +50,13 @@ namespace opengl
 			throw std::runtime_error("GLEW init error.");
 		}
 		pImpl_->lightProgram_ = std::make_unique<LightProgram>();
+		pImpl_->camera_.position() = { 0.f, 0.f, -5.f };
+		pImpl_->camera_.look_at({0.f, 0.f, 0.f });
+		pImpl_->lightProgram_->setAmbientLightColor({ 0.2f, 0.2, 0.2f });
+		pImpl_->lightProgram_->setDirectedLightOrientation({ -1.f, -1.f, -1.f });
+		pImpl_->lightProgram_->setDirectedLightColor({ 0.6f, 0.6f, 0.6f });
+		pImpl_->lightProgram_->setPointLightColor({ 1.0f, 1.0f, 1.0f });
+		pImpl_->lightProgram_->setPointLightPosition({ 1.0f, 5.0f, 1.0f });
 	}
 
 	void Renderer::setCurrentRootNode(const forces::INode& root)
@@ -62,7 +70,8 @@ namespace opengl
 		GLCall(glEnable(GL_MULTISAMPLE));
 		GLCall(glEnable(GL_CULL_FACE));
 		GLCall(glEnable(GL_DEPTH_TEST));
-		GLCall(glClearColor(0.1f, 0.3f, 0.6f, 1.0f));
+		GLCall(glViewport(0, 0, pImpl_->camera_.viewport().x, pImpl_->camera_.viewport().y));
+		GLCall(glClearColor(0.3f, 0.3f, 0.3f, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
 		for (const auto& obj : pImpl_->objects_)

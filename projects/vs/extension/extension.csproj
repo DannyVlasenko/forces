@@ -73,6 +73,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\..\res\sphere.obj">
+      <Link>Resources\sphere.obj</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>.</VSIXSubPath>
+    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
