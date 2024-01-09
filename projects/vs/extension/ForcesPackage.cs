@@ -72,7 +72,7 @@ namespace Forces
 
 		protected override WindowPane InstantiateToolWindow(Type toolWindowType)
 		{
-			if (toolWindowType == typeof(PreviewWindow))
+			if (toolWindowType == typeof(PreviewWindow) || toolWindowType == typeof(SceneViewWindow))
 			{
 				return base.InstantiateToolWindow(toolWindowType, _sceneModel);
 			}

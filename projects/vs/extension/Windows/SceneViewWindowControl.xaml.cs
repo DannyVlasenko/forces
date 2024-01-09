@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 using Forces.Engine;
+using Forces.Models;
 using Forces.ViewModels;
 using Forces.Windows;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -18,16 +19,32 @@ namespace Forces
 	{
 
 		private readonly SceneViewWindow _parent;
-		private readonly Scene _scene;
+		private readonly SelectedSceneModel _sceneModel;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SceneViewWindowControl"/> class.
 		/// </summary>
-		public SceneViewWindowControl(SceneViewWindow parent)
+		public SceneViewWindowControl(SceneViewWindow parent, SelectedSceneModel sceneModel)
 		{
 			_parent = parent;
+			_sceneModel = sceneModel;
 			this.InitializeComponent();
-			//SceneTreeView.Items.Add(_scene.RootNode);
+			_sceneModel.SelectedSceneChanged += _sceneModel_SelectedSceneChanged;
+			if (_sceneModel.SelectedScene?.RootNode != null)
+			{
+				SceneTreeView.Items.Add(_sceneModel.SelectedScene.RootNode);
+				TrackSelection();
+			}
+		}
+
+		private void _sceneModel_SelectedSceneChanged(object sender, Scene e)
+		{
+			SceneTreeView.Items.Clear();
+			if (_sceneModel.SelectedScene?.RootNode != null)
+			{
+				SceneTreeView.Items.Add(_sceneModel.SelectedScene.RootNode);
+				TrackSelection();
+			}
 		}
 
 		/// <summary>
@@ -81,7 +98,7 @@ namespace Forces
 
 			if (SceneTreeView.SelectedItem is Node selected)
 			{
-				_mySelItems.Add(new NodePropertiesModel(selected));
+				_mySelItems.Add(new NodePropertiesModel(selected, _sceneModel));
 			}
 
 			_mySelContainer.SelectedObjects = _mySelItems;

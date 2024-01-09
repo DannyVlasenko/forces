@@ -1,15 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Forces.Engine
 {
+	[StructLayout(LayoutKind.Sequential)]
+	public struct Vec3
+	{
+		public float X;
+		public float Y;
+		public float Z;
+	};
+
 	public class Node
 	{
 		private readonly IntPtr _node;
 
 		public IntPtr Handle => _node;
+
+		public Vec3 Translation
+		{
+			get => node_get_translation(_node);
+			set => node_set_translation(_node, value);
+		}
 
 		public Node(IntPtr node, string name)
 		{
@@ -36,8 +50,13 @@ namespace Forces.Engine
 		{
 			get
 			{
-				var children = new List<Node>();
-				return children.AsReadOnly();
+				var count = node_children_count(_node);
+				var children = new IntPtr[count];
+				var returned = node_get_children(_node, children, children.Length);
+				return children
+					.Take(returned)
+					.Select(x=>new Node(x, "child"))
+					.ToList();
 			}
 		}
 
@@ -46,5 +65,17 @@ namespace Forces.Engine
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern void node_add_mesh(IntPtr node, IntPtr mesh);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern Vec3 node_get_translation(IntPtr node);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern void node_set_translation(IntPtr node, Vec3 translation);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern int node_children_count(IntPtr node);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern int node_get_children(IntPtr node, IntPtr[] outChildren, int outChildrenCount);
 	}
 }

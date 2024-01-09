@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Forces.Models;
 using Microsoft.VisualStudio.Shell;
 
 namespace Forces.Windows
@@ -21,14 +22,14 @@ namespace Forces.Windows
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SceneViewWindow"/> class.
 		/// </summary>
-		public SceneViewWindow() : base(null)
+		public SceneViewWindow(SelectedSceneModel model) : base(null)
 		{
 			this.Caption = "SceneViewWindow";
 
 			// This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
 			// we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
 			// the object returned by the Content property.
-			this.Content = new SceneViewWindowControl(this);
+			this.Content = new SceneViewWindowControl(this, model);
 		}
 		internal object GetVsService(Type service)
 		{

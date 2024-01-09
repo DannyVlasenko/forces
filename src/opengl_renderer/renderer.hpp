@@ -10,7 +10,7 @@ namespace opengl
 	{
 	public:
 		Renderer();
-		void setCurrentRootNode(const forces::INode& root) override;
+		void setCurrentRootNode(const forces::Node& root) override;
 		void render() override;
 
 	private:

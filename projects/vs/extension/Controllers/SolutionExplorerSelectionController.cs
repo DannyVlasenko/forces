@@ -33,7 +33,7 @@ namespace Forces.Controllers
 				if (selected.Length == 1 && Path.GetExtension(selected[0].Name) == ".fsc")
 				{
 					//Load scene from file
-					_sceneModel.SelectedScene = new Scene();
+					_sceneModel.UpdateScene(new Scene(), Path.GetFileNameWithoutExtension(selected[0].Name));
 				}
 			}
 		}

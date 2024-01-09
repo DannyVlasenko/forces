@@ -6,23 +6,23 @@ using EnvDTE;
 using EnvDTE80;
 using Forces.Engine;
 using Microsoft.VisualStudio.Shell;
+using Newtonsoft.Json.Linq;
 
 namespace Forces.Models
 {
 	public class SelectedSceneModel
 	{
-		private Scene _selectedScene;
-
-		public Scene SelectedScene
-		{
-			get => _selectedScene;
-			set
-			{
-				_selectedScene = value; 
-				SelectedSceneChanged?.Invoke(this, _selectedScene);
-			}
-		}
+		public Scene SelectedScene { get; private set; }
+		public string SceneName { get; private set; }
 
 		public event EventHandler<Scene> SelectedSceneChanged;
+
+		public void UpdateScene(Scene scene, string name)
+		{
+			SelectedScene = scene;
+			SceneName = name;
+			SelectedSceneChanged?.Invoke(this, SelectedScene);
+			
+		}
 	}
 }

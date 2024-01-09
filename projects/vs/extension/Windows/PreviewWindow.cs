@@ -24,10 +24,12 @@ namespace Forces.Windows
 		private readonly Window _window;
 		private OpenGLRenderer _renderer;
 
+		private string Title => "Forces Preview - " + ((_sceneModel?.SceneName?.Length ?? 0) == 0 ? "No Scene Selected" : _sceneModel.SceneName);
+
 		public PreviewWindow(SelectedSceneModel sceneModel) : base(null)
 		{
 			_sceneModel = sceneModel;
-			this.Caption = "Forces Preview";
+			this.Caption = Title;
 			_window = new Window(this);
 			_window.ContextInitialized += _window_ContextInitialized;
 			_window.Paint += _window_Paint;
@@ -37,7 +39,11 @@ namespace Forces.Windows
 
 		private void _sceneModel_SelectedSceneChanged(object sender, Scene e)
 		{
-			_renderer.SetCurrentRootNode(e.RootNode);
+			this.Caption = Title;
+			if (e?.RootNode != null)
+			{
+				_renderer.SetCurrentRootNode(e.RootNode);
+			}
 		}
 
 		private void _window_ContextInitialized(object sender, System.EventArgs e)

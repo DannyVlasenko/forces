@@ -2,13 +2,13 @@
 
 namespace forces
 {
-	class INode;
+	class Node;
 
 	class Renderer
 	{
 	public:
 		virtual ~Renderer() = default;
-		virtual void setCurrentRootNode(const INode& root) = 0;
+		virtual void setCurrentRootNode(const Node& root) = 0;
 		virtual void render() = 0;
 	};
 }

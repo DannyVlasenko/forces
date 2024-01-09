@@ -19,10 +19,10 @@ namespace opengl
 		std::unique_ptr<LightProgram> lightProgram_;
 		Camera camera_;
 
-		void addNodeWithChildren(const forces::INode& node, glm::vec3 parentTranslation)
+		void addNodeWithChildren(const forces::Node& node, glm::vec3 parentTranslation)
 		{
-			const auto thisTranslation = node.getTranslation() + parentTranslation;
-			for (auto *nodeMesh : node.getMeshes())
+			const auto thisTranslation = node.translation() + parentTranslation;
+			for (auto *nodeMesh : node.meshes())
 			{
 				if (!meshes_.contains(nodeMesh))
 				{
@@ -35,7 +35,7 @@ namespace opengl
 					obj.color() = { 0.2f, 0.8f, 0.2f };
 				}
 			}
-			for(const auto &child : node.getChildren())
+			for(const auto &child : node.children())
 			{
 				addNodeWithChildren(child, thisTranslation);
 			}
@@ -59,7 +59,7 @@ namespace opengl
 		pImpl_->lightProgram_->setPointLightPosition({ 1.0f, 5.0f, 1.0f });
 	}
 
-	void Renderer::setCurrentRootNode(const forces::INode& root)
+	void Renderer::setCurrentRootNode(const forces::Node& root)
 	{
 		pImpl_->objects_.clear();
 		pImpl_->addNodeWithChildren(root, glm::vec3{ 0.f, 0.f, 0.f });

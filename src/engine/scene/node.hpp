@@ -9,40 +9,46 @@
 
 namespace forces
 {
-	class INode
+	class Node
 	{
 	public:
 		[[nodiscard]]
-		const std::vector<INode>& getChildren() const noexcept
+		const std::vector<Node>& children() const noexcept
 		{
 			return children_;
 		}
+
 		[[nodiscard]]
-		const std::unordered_set<Mesh*>& getMeshes() const noexcept
+		std::vector<Node>& children() noexcept
+		{
+			return children_;
+		}
+
+		[[nodiscard]]
+		const std::unordered_set<Mesh*>& meshes() const noexcept
 		{
 			return meshes_;
 		}
+
 		[[nodiscard]]
-		const glm::vec3& getTranslation() const noexcept
+		std::unordered_set<Mesh*>& meshes() noexcept
+		{
+			return meshes_;
+		}
+
+		[[nodiscard]]
+		const glm::vec3& translation() const noexcept
 		{
 			return translation_;
 		}
 
-	protected:
-		std::vector<INode> children_;
-		std::unordered_set<Mesh*> meshes_;
-		glm::vec3 translation_{ 0.f, 0.f, 0.f };
-		glm::vec3 scale_{ 1.f, 1.f, 1.f };
+		[[nodiscard]]
+		glm::vec3& translation() noexcept
+		{
+			return translation_;
+		}
 
-		INode() = default;
-	};
-
-	class Node : public INode
-	{
-	public:
-		Node() = default;
-
-		INode& addChild(INode &&child)
+		Node& addChild(Node &&child)
 		{
 			children_.push_back(std::move(child));
 			return children_.back();
@@ -52,5 +58,11 @@ namespace forces
 		{
 			meshes_.insert(mesh);
 		}
+
+	private:
+		std::vector<Node> children_;
+		std::unordered_set<Mesh*> meshes_;
+		glm::vec3 translation_{ 0.f, 0.f, 0.f };
+		glm::vec3 scale_{ 1.f, 1.f, 1.f };
 	};
 }

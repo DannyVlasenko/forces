@@ -1,5 +1,6 @@
 #ifndef FORCES_NODE_H
 #define FORCES_NODE_H
+
 #include "mesh.h"
 #ifdef __cplusplus
 extern "C" {
@@ -12,6 +13,25 @@ ForcesNode * create_node(ForcesNode *parent);
 
 __declspec(dllexport)
 void node_add_mesh(ForcesNode *node, ForcesMesh *mesh);
+
+__declspec(dllexport)
+int node_children_count(ForcesNode *node);
+
+__declspec(dllexport)
+int node_get_children(ForcesNode *node, ForcesNode* outChildren[], int outChildrenCount);
+
+struct vec3
+{
+	float x;
+	float y;
+	float z;
+};
+
+__declspec(dllexport)
+vec3 node_get_translation(ForcesNode *node);
+
+__declspec(dllexport)
+void node_set_translation(ForcesNode *node, vec3 translation);
 
 #ifdef __cplusplus
 }
