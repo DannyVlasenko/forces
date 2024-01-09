@@ -20,6 +20,7 @@ namespace Forces
 
 		private readonly SceneViewWindow _parent;
 		private readonly SelectedSceneModel _sceneModel;
+		private Scene _currentScene;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SceneViewWindowControl"/> class.
@@ -32,6 +33,7 @@ namespace Forces
 			_sceneModel.SelectedSceneChanged += _sceneModel_SelectedSceneChanged;
 			if (_sceneModel.SelectedScene?.RootNode != null)
 			{
+				_currentScene = _sceneModel.SelectedScene;
 				SceneTreeView.Items.Add(_sceneModel.SelectedScene.RootNode);
 				TrackSelection();
 			}
@@ -39,9 +41,15 @@ namespace Forces
 
 		private void _sceneModel_SelectedSceneChanged(object sender, Scene e)
 		{
+			if (_currentScene == e)
+			{
+				return;
+			}
+
 			SceneTreeView.Items.Clear();
 			if (_sceneModel.SelectedScene?.RootNode != null)
 			{
+				_currentScene = _sceneModel.SelectedScene;
 				SceneTreeView.Items.Add(_sceneModel.SelectedScene.RootNode);
 				TrackSelection();
 			}

@@ -42,7 +42,10 @@ namespace Forces.Windows
 			this.Caption = Title;
 			if (e?.RootNode != null)
 			{
+				_window.MakeContextCurrent();
 				_renderer.SetCurrentRootNode(e.RootNode);
+				_renderer?.Render();
+				_window.SwapBuffers();
 			}
 		}
 
