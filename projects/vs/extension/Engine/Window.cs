@@ -12,10 +12,10 @@ namespace Forces.Engine
 	internal class Window : HwndHost
 	{
 		private readonly PreviewWindow _previewWindow;
-		private OpenGLRenderer Renderer { get; set; }
-
 		private IntPtr _hwnd;
-		private Scene _scene;
+
+		public event EventHandler ContextInitialized;
+		public event EventHandler Paint;
 
 		public Window(PreviewWindow previewWindow)
 		{
@@ -45,9 +45,7 @@ namespace Forces.Engine
 			SetWindowLong(win32Handle, GWL_STYLE, WS_CHILD);
 			SetParent(win32Handle, hwndParent.Handle);
 			MakeContextCurrent();
-			Renderer = new OpenGLRenderer();
-			_scene = new Scene();
-			Renderer.SetCurrentRootNode(_scene.RootNode);
+			ContextInitialized?.Invoke(this, null);
 			return new HandleRef(this, win32Handle);
 		}
 
@@ -63,8 +61,7 @@ namespace Forces.Engine
 		{
 			if (msg == 15)
 			{
-				Renderer?.Render();
-				SwapBuffers();
+				Paint?.Invoke(this, null);
 			}
 			return base.WndProc(hwnd, msg, wParam, lParam, ref handled);
 		}

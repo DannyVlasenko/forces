@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Forces.Engine
 {
-	internal class Scene : IDisposable
+	public class Scene : IDisposable
 	{
 		private IntPtr _handle;
 
@@ -16,7 +16,8 @@ namespace Forces.Engine
 			Meshes = new List<Mesh>();
 			var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			Meshes.Add(new Mesh(Path.Combine(dir, "sphere.obj")));
-			RootNode.AddMesh(Meshes[0]);
+			var sphereNode = new Node(RootNode, "Sphere1");
+			sphereNode.AddMesh(Meshes[0]);
 		}
 
 		public Node RootNode => new Node(scene_root_node(_handle), "RootNode");

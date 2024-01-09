@@ -4,6 +4,12 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Forces.Windows;
 using Task = System.Threading.Tasks.Task;
+using System.Threading.Tasks;
+using EnvDTE;
+using EnvDTE80;
+using Forces.Controllers;
+using Forces.Models;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Forces
 {
@@ -39,6 +45,14 @@ namespace Forces
 
 		#region Package Members
 
+		private readonly SelectedSceneModel _sceneModel = new SelectedSceneModel();
+		private readonly SolutionExplorerSelectionController _selectionController;
+
+		public ForcesPackage()
+		{
+			_selectionController = new SolutionExplorerSelectionController(_sceneModel);
+		}
+
 		/// <summary>
 		/// Initialization of the package; this method is called right after the package is sited, so this is the place
 		/// where you can put all the initialization code that rely on services provided by VisualStudio.
@@ -53,7 +67,17 @@ namespace Forces
 			await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 		    await SceneViewWindowCommand.InitializeAsync(this);
 		    await PreviewWindowCommand.InitializeAsync(this);
-		    await Forces.Windows.OptionsCommand.InitializeAsync(this);
+		    await OptionsCommand.InitializeAsync(this);
+		}
+
+		protected override WindowPane InstantiateToolWindow(Type toolWindowType)
+		{
+			if (toolWindowType == typeof(PreviewWindow))
+			{
+				return base.InstantiateToolWindow(toolWindowType, _sceneModel);
+			}
+
+			return base.InstantiateToolWindow(toolWindowType);
 		}
 
 		#endregion

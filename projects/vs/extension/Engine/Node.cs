@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Forces.Engine
 {
-	internal class Node
+	public class Node
 	{
 		private readonly IntPtr _node;
 

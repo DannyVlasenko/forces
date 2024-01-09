@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Forces.Engine
 {
-	internal class Mesh : IDisposable
+	public class Mesh : IDisposable
 	{
 		public IntPtr Handle { get; private set; }
 

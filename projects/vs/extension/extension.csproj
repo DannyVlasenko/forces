@@ -51,12 +51,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Controllers\SolutionExplorerSelectionController.cs" />
     <Compile Include="Engine\Engine.cs" />
     <Compile Include="Engine\Mesh.cs" />
     <Compile Include="Engine\Node.cs" />
     <Compile Include="Engine\Renderer.cs" />
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\Window.cs" />
+    <Compile Include="Models\SelectedSceneModel.cs" />
     <Compile Include="Preferences.cs">
       <SubType>Component</SubType>
     </Compile>
