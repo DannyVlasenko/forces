@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using Forces.Engine;
 using Forces.Models;
 using Forces.ViewModels;
+using Microsoft.VisualStudio.Utilities;
 
 namespace Forces.Windows
 {
@@ -29,21 +30,34 @@ namespace Forces.Windows
 		public PreviewWindow(SelectedSceneModel sceneModel) : base(null)
 		{
 			_sceneModel = sceneModel;
-			this.Caption = Title;
 			_window = new Window(this);
 			_window.ContextInitialized += _window_ContextInitialized;
 			_window.Paint += _window_Paint;
 			this.Content = _window;
+			this.Caption = Title;
 			_sceneModel.SelectedSceneChanged += _sceneModel_SelectedSceneChanged;
+			_sceneModel.CameraChanged += _sceneModel_CameraChanged;
+		}
+
+		private void _sceneModel_CameraChanged(object sender, Camera e)
+		{
+			if (e != null)
+			{
+				_window.MakeContextCurrent();
+				_renderer.SetCamera(_sceneModel.SelectedScene.PreviewCamera);
+				_renderer?.Render();
+				_window.SwapBuffers();
+			}
 		}
 
 		private void _sceneModel_SelectedSceneChanged(object sender, Scene e)
 		{
 			this.Caption = Title;
-			if (e?.RootNode != null)
+			if (e?.RootNode != null && e.PreviewCamera != null)
 			{
 				_window.MakeContextCurrent();
 				_renderer.SetCurrentRootNode(e.RootNode);
+				_renderer.SetCamera(_sceneModel.SelectedScene.PreviewCamera);
 				_renderer?.Render();
 				_window.SwapBuffers();
 			}
@@ -56,11 +70,24 @@ namespace Forces.Windows
 			{
 				_renderer.SetCurrentRootNode(_sceneModel.SelectedScene.RootNode);
 			}
+			if (_sceneModel?.SelectedScene?.PreviewCamera != null)
+			{
+				_renderer.SetCamera(_sceneModel.SelectedScene.PreviewCamera);
+			}
 		}
 
 		private void _window_Paint(object sender, System.EventArgs e)
 		{
 			_window.MakeContextCurrent();
+			if (_sceneModel?.SelectedScene?.PreviewCamera != null)
+			{
+
+				_sceneModel.SelectedScene.PreviewCamera.Viewport = new Vec2()
+				{
+					X = (float)(_window.RenderSize.Width * _window.GetDpiXScale()),
+					Y = (float)(_window.RenderSize.Height * _window.GetDpiYScale())
+				};
+			}
 			_renderer?.Render();
 			_window.SwapBuffers();
 		}

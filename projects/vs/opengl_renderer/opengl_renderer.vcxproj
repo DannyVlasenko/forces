@@ -23,7 +23,6 @@
     <ClCompile Include="..\..\..\src\opengl_renderer\opengl\mesh.cpp" />
     <ClCompile Include="..\..\..\src\opengl_renderer\opengl\shader.cpp" />
     <ClCompile Include="..\..\..\src\opengl_renderer\renderer.cpp" />
-    <ClCompile Include="..\..\..\src\opengl_renderer\scene\camera.cpp" />
     <ClCompile Include="..\..\..\src\opengl_renderer\scene\lighted_object.cpp" />
     <ClCompile Include="..\..\..\src\opengl_renderer\scene\light_program.cpp" />
     <ClCompile Include="..\..\..\src\opengl_renderer\scene\scene_object.cpp" />
@@ -36,7 +35,6 @@
     <ClInclude Include="..\..\..\src\opengl_renderer\opengl\shader.hpp" />
     <ClInclude Include="..\..\..\src\opengl_renderer\opengl\vertex_array.hpp" />
     <ClInclude Include="..\..\..\src\opengl_renderer\renderer.hpp" />
-    <ClInclude Include="..\..\..\src\opengl_renderer\scene\camera.hpp" />
     <ClInclude Include="..\..\..\src\opengl_renderer\scene\global_light.hpp" />
     <ClInclude Include="..\..\..\src\opengl_renderer\scene\lighted_object.hpp" />
     <ClInclude Include="..\..\..\src\opengl_renderer\scene\light_program.hpp" />

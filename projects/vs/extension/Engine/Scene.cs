@@ -18,11 +18,13 @@ namespace Forces.Engine
 			Meshes.Add(new Mesh(Path.Combine(dir, "sphere.obj")));
 			var sphereNode = new Node(RootNode, "Sphere1");
 			sphereNode.AddMesh(Meshes[0]);
+			PreviewCamera = new Camera();
 		}
 
 		public Node RootNode => new Node(scene_root_node(_handle), "RootNode");
 
 		public IList<Mesh> Meshes { get; private set; }
+		public Camera PreviewCamera { get; set; }
 
 		private void ReleaseUnmanagedResources()
 		{

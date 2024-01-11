@@ -16,6 +16,7 @@ namespace Forces.Models
 		public string SceneName { get; private set; }
 
 		public event EventHandler<Scene> SelectedSceneChanged;
+		public event EventHandler<Camera> CameraChanged;
 
 		public void UpdateScene(Scene scene, string name)
 		{
@@ -23,6 +24,12 @@ namespace Forces.Models
 			SceneName = name;
 			SelectedSceneChanged?.Invoke(this, SelectedScene);
 			
+		}
+
+		public void UpdatePreviewCamera(Camera camera)
+		{
+			SelectedScene.PreviewCamera = camera;
+			CameraChanged?.Invoke(this, camera);
 		}
 	}
 }

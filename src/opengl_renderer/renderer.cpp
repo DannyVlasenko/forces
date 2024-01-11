@@ -1,6 +1,5 @@
 //opengl_renderer
 #include "renderer.hpp"
-#include "scene/camera.hpp"
 #include "scene/lighted_object.hpp"
 
 //engine
@@ -17,7 +16,7 @@ namespace opengl
 		std::unordered_map<forces::Mesh*, std::vector<Mesh<VertexNormal>>> meshes_;
 		std::vector<LightedObject> objects_;
 		std::unique_ptr<LightProgram> lightProgram_;
-		Camera camera_;
+		forces::Camera* camera_;
 
 		void addNodeWithChildren(const forces::Node& node, glm::vec3 parentTranslation)
 		{
@@ -49,9 +48,7 @@ namespace opengl
 		{
 			throw std::runtime_error("GLEW init error.");
 		}
-		pImpl_->lightProgram_ = std::make_unique<LightProgram>();
-		pImpl_->camera_.position() = { 0.f, 0.f, -5.f };
-		pImpl_->camera_.look_at({0.f, 0.f, 0.f });
+		pImpl_->lightProgram_ = std::make_unique<LightProgram>();		
 		pImpl_->lightProgram_->setAmbientLightColor({ 0.2f, 0.2, 0.2f });
 		pImpl_->lightProgram_->setDirectedLightOrientation({ -1.f, -1.f, -1.f });
 		pImpl_->lightProgram_->setDirectedLightColor({ 0.6f, 0.6f, 0.6f });
@@ -70,13 +67,23 @@ namespace opengl
 		GLCall(glEnable(GL_MULTISAMPLE));
 		GLCall(glEnable(GL_CULL_FACE));
 		GLCall(glEnable(GL_DEPTH_TEST));
-		GLCall(glViewport(0, 0, pImpl_->camera_.viewport().x, pImpl_->camera_.viewport().y));
 		GLCall(glClearColor(0.3f, 0.3f, 0.3f, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
+		if (pImpl_->camera_ == nullptr)
+		{
+			return;
+		}
+
+		GLCall(glViewport(0, 0, pImpl_->camera_->viewport().x, pImpl_->camera_->viewport().y));
 		for (const auto& obj : pImpl_->objects_)
 		{
-			obj.draw(pImpl_->camera_.view_projection());
+			obj.draw(pImpl_->camera_->view_projection());
 		}
+	}
+
+	void Renderer::setCamera(forces::Camera* camera) noexcept
+	{
+		pImpl_->camera_ = camera;
 	}
 }

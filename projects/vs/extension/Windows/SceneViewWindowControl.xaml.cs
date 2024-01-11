@@ -34,7 +34,8 @@ namespace Forces
 			if (_sceneModel.SelectedScene?.RootNode != null)
 			{
 				_currentScene = _sceneModel.SelectedScene;
-				SceneTreeView.Items.Add(_sceneModel.SelectedScene.RootNode);
+				SceneTreeView.Items.Add(new ViewModels.SceneViewNode(_sceneModel.SelectedScene.RootNode));
+				SceneTreeView.Items.Add(new ViewModels.SceneViewCamera(_sceneModel.SelectedScene.PreviewCamera));
 				TrackSelection();
 			}
 		}
@@ -50,7 +51,8 @@ namespace Forces
 			if (_sceneModel.SelectedScene?.RootNode != null)
 			{
 				_currentScene = _sceneModel.SelectedScene;
-				SceneTreeView.Items.Add(_sceneModel.SelectedScene.RootNode);
+				SceneTreeView.Items.Add(new ViewModels.SceneViewNode(_sceneModel.SelectedScene.RootNode));
+				SceneTreeView.Items.Add(new ViewModels.SceneViewCamera(_sceneModel.SelectedScene.PreviewCamera));
 				TrackSelection();
 			}
 		}
@@ -104,9 +106,14 @@ namespace Forces
 
 			_mySelItems = new System.Collections.ArrayList();
 
-			if (SceneTreeView.SelectedItem is Node selected)
+			if (SceneTreeView.SelectedItem is SceneViewNode node)
 			{
-				_mySelItems.Add(new NodePropertiesModel(selected, _sceneModel));
+				_mySelItems.Add(new NodePropertiesModel(node.Node, _sceneModel));
+			}
+
+			if (SceneTreeView.SelectedItem is SceneViewCamera camera)
+			{
+				_mySelItems.Add(new CameraPropertiesModel(camera.Camera, _sceneModel));
 			}
 
 			_mySelContainer.SelectedObjects = _mySelItems;

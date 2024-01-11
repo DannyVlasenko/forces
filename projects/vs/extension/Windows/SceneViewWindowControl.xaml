@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
-             xmlns:engine="clr-namespace:Forces.Engine"
+             xmlns:viewModels="clr-namespace:Forces.ViewModels"
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d" d:DesignWidth="300"
@@ -19,7 +19,7 @@
 		          Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
 		          Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}" Margin="0,38,0,0">
 			<TreeView.ItemTemplate>
-				<HierarchicalDataTemplate DataType="{x:Type engine:Node}" ItemsSource="{Binding Children}">
+				<HierarchicalDataTemplate DataType="{x:Type viewModels:ISceneViewNode}" ItemsSource="{Binding Children}">
 					<TextBlock  Text="{Binding Name}"/>
 				</HierarchicalDataTemplate>
 			</TreeView.ItemTemplate>

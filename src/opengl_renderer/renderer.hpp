@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "engine/render/renderer.hpp"
+#include "engine/scene/camera.hpp"
 
 namespace opengl
 {
@@ -12,6 +13,7 @@ namespace opengl
 		Renderer();
 		void setCurrentRootNode(const forces::Node& root) override;
 		void render() override;
+		void setCamera(forces::Camera* camera) noexcept override;
 
 	private:
 		struct Impl;

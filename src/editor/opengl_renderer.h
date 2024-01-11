@@ -1,6 +1,7 @@
 #ifndef FORCES_OPENGL_RENDERER_H
 #define FORCES_OPENGL_RENDERER_H
 
+#include "camera.h"
 #include "node.h"
 
 #ifdef __cplusplus
@@ -17,6 +18,9 @@ void delete_opengl_renderer(ForcesOpenGLRenderer *renderer);
 
 __declspec(dllexport)
 void opengl_renderer_set_root_node(ForcesOpenGLRenderer *renderer, ForcesNode *root);
+
+__declspec(dllexport)
+void opengl_renderer_set_camera(ForcesOpenGLRenderer *renderer, ForcesCamera *camera);
 
 __declspec(dllexport)
 void opengl_renderer_render(ForcesOpenGLRenderer *renderer);

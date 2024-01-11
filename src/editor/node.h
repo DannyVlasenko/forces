@@ -1,6 +1,7 @@
 #ifndef FORCES_NODE_H
 #define FORCES_NODE_H
 
+#include "glm_wrap.h"
 #include "mesh.h"
 #ifdef __cplusplus
 extern "C" {
@@ -19,13 +20,6 @@ int node_children_count(ForcesNode *node);
 
 __declspec(dllexport)
 int node_get_children(ForcesNode *node, ForcesNode* outChildren[], int outChildrenCount);
-
-struct vec3
-{
-	float x;
-	float y;
-	float z;
-};
 
 __declspec(dllexport)
 vec3 node_get_translation(ForcesNode *node);

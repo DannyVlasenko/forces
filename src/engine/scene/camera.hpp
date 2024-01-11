@@ -4,7 +4,7 @@
 #include "glm.hpp"
 #include "gtc/quaternion.hpp"
 
-namespace opengl
+namespace forces
 {
 	class Camera
 	{
@@ -57,6 +57,12 @@ namespace opengl
 		float mNear{ 0.1f };
 		float mFar{ 100.0f };
 	};
+
+	void yaw(Camera& camera, float grad) noexcept;
+
+	void pitch(Camera& camera, float grad) noexcept;
+
+	void roll(Camera& camera, float grad) noexcept;
 }
 
 #endif // MODELS_CAMERA_HPP

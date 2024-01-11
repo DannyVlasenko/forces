@@ -17,6 +17,9 @@
       <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\engine\engine.hpp" />
+    <ClInclude Include="..\..\..\src\engine\scene\camera.hpp">
+      <Filter>scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="scene">
@@ -28,6 +31,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\engine\scene\mesh.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\engine\scene\camera.cpp">
       <Filter>scene</Filter>
     </ClCompile>
   </ItemGroup>

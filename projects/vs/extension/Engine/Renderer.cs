@@ -15,6 +15,10 @@ namespace Forces.Engine
 		{
 			opengl_renderer_set_root_node(_renderer, root.Handle);
 		}
+		public void SetCamera(Camera camera)
+		{
+			opengl_renderer_set_camera(_renderer, camera.Handle);
+		}
 
 		public void Render()
 		{
@@ -49,5 +53,8 @@ namespace Forces.Engine
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern void opengl_renderer_set_root_node(IntPtr renderer, IntPtr node);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern void opengl_renderer_set_camera(IntPtr renderer, IntPtr camera);
 	}
 }

@@ -9,9 +9,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\opengl_renderer\scene\camera.cpp">
-      <Filter>scene</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\opengl_renderer\scene\light_program.cpp">
       <Filter>scene</Filter>
     </ClCompile>
@@ -33,9 +30,6 @@
     <ClCompile Include="..\..\..\src\opengl_renderer\renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\opengl_renderer\scene\camera.hpp">
-      <Filter>scene</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\opengl_renderer\scene\global_light.hpp">
       <Filter>scene</Filter>
     </ClInclude>

@@ -1,5 +1,6 @@
 #include "opengl_renderer.h"
 
+#include "engine/scene/camera.hpp"
 #include "engine/scene/node.hpp"
 #include "opengl_renderer/renderer.hpp"
 
@@ -21,4 +22,9 @@ void opengl_renderer_set_root_node(ForcesOpenGLRenderer* renderer, ForcesNode* r
 void opengl_renderer_render(ForcesOpenGLRenderer* renderer)
 {
 	reinterpret_cast<opengl::Renderer*>(renderer)->render();
+}
+
+void opengl_renderer_set_camera(ForcesOpenGLRenderer* renderer, ForcesCamera* camera)
+{
+	reinterpret_cast<opengl::Renderer*>(renderer)->setCamera(reinterpret_cast<forces::Camera *>(camera));
 }
