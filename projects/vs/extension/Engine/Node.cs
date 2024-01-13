@@ -7,31 +7,37 @@ namespace Forces.Engine
 {
 	public class Node
 	{
-		private readonly IntPtr _node;
+		private readonly Scene _scene;
 
-		public IntPtr Handle => _node;
+		public IntPtr Handle { get; }
 
 		public Vec3 Translation
 		{
-			get => node_get_translation(_node);
-			set => node_set_translation(_node, value);
+			get => node_get_translation(Handle);
+			set
+			{
+				node_set_translation(Handle, value);
+				_scene.NotifyNodeChanged(this);
+			}
 		}
 
-		public Node(IntPtr node, string name)
+		public Node(IntPtr node, string name, Scene scene)
 		{
-			_node = node;
+			Handle = node;
+			_scene = scene;
 			Name = name;
 		}
 
 		public Node(Node parent, string itemName)
 		{
-			_node = create_node(parent._node);
+			Handle = create_node(parent.Handle);
 			Name = itemName;
+			_scene = parent._scene;
 		}
 
 		public void AddMesh(Mesh mesh)
 		{
-			node_add_mesh(_node, mesh.Handle);
+			node_add_mesh(Handle, mesh.Handle);
 		}
 
 		public string Name { get; set; }
@@ -42,12 +48,12 @@ namespace Forces.Engine
 		{
 			get
 			{
-				var count = node_children_count(_node);
+				var count = node_children_count(Handle);
 				var children = new IntPtr[count];
-				var returned = node_get_children(_node, children, children.Length);
+				var returned = node_get_children(Handle, children, children.Length);
 				return children
 					.Take(returned)
-					.Select(x=>new Node(x, "child"))
+					.Select(x=>new Node(x, "child", _scene))
 					.ToList();
 			}
 		}

@@ -10,7 +10,6 @@ namespace Forces.ViewModels
 	public struct TranslationProperty
 	{
 		public Node Node;
-		public SelectedSceneModel SceneModel;
 		public float X
 		{
 			get => Node.Translation.X;
@@ -19,7 +18,6 @@ namespace Forces.ViewModels
 				var old = Node.Translation;
 				old.X = value;
 				Node.Translation = old;
-				SceneModel.UpdateScene(SceneModel.SelectedScene, SceneModel.SceneName);
 			}
 		}
 		public float Y
@@ -30,7 +28,6 @@ namespace Forces.ViewModels
 				var old = Node.Translation;
 				old.Y = value;
 				Node.Translation = old;
-				SceneModel.UpdateScene(SceneModel.SelectedScene, SceneModel.SceneName);
 			}
 		}
 		public float Z
@@ -41,7 +38,6 @@ namespace Forces.ViewModels
 				var old = Node.Translation;
 				old.Z = value;
 				Node.Translation = old;
-				SceneModel.UpdateScene(SceneModel.SelectedScene, SceneModel.SceneName);
 			}
 		}
 
@@ -53,19 +49,17 @@ namespace Forces.ViewModels
 	public class NodePropertiesModel
 	{
 		private readonly Node _sceneViewNode;
-		private readonly SelectedSceneModel _sceneModel;
 
-		public NodePropertiesModel(Node sceneViewNode, SelectedSceneModel sceneModel)
+		public NodePropertiesModel(Node sceneViewNode)
 		{
 			_sceneViewNode = sceneViewNode;
-			_sceneModel = sceneModel;
 		}
 
 		public string Name => _sceneViewNode.Name;
 
 		public bool IsVisible => _sceneViewNode.IsVisible;
 
-		public TranslationProperty Translation => new TranslationProperty{Node = _sceneViewNode, SceneModel = _sceneModel};
+		public TranslationProperty Translation => new TranslationProperty{Node = _sceneViewNode};
 
 		public override string ToString() => Name;
 	}
@@ -76,7 +70,6 @@ namespace Forces.ViewModels
 	public struct PositionProperty
 	{
 		public Camera Camera;
-		public SelectedSceneModel SceneModel;
 		public float X
 		{
 			get => Camera.Position.X;
@@ -85,7 +78,6 @@ namespace Forces.ViewModels
 				var old = Camera.Position;
 				old.X = value;
 				Camera.Position = old;
-				SceneModel.UpdatePreviewCamera(Camera);
 			}
 		}
 		public float Y
@@ -96,7 +88,6 @@ namespace Forces.ViewModels
 				var old = Camera.Position;
 				old.Y = value;
 				Camera.Position = old;
-				SceneModel.UpdatePreviewCamera(Camera);
 			}
 		}
 		public float Z
@@ -107,7 +98,6 @@ namespace Forces.ViewModels
 				var old = Camera.Position;
 				old.Z = value;
 				Camera.Position = old;
-				SceneModel.UpdatePreviewCamera(Camera);
 			}
 		}
 
@@ -120,12 +110,10 @@ namespace Forces.ViewModels
 	public class CameraPropertiesModel
 	{
 		private readonly Camera _camera;
-		private readonly SelectedSceneModel _sceneModel;
 
-		public CameraPropertiesModel(Camera camera, SelectedSceneModel sceneModel)
+		public CameraPropertiesModel(Camera camera)
 		{
 			_camera = camera;
-			_sceneModel = sceneModel;
 		}
 
 		public string Name => "Camera";
@@ -135,24 +123,16 @@ namespace Forces.ViewModels
 		public float Near
 		{
 			get => _camera.Near;
-			set
-			{
-				_camera.Near = value; 
-				_sceneModel.UpdatePreviewCamera(_camera);
-			}
+			set => _camera.Near = value;
 		}
 
 		public float Far
 		{
 			get => _camera.Far;
-			set
-			{
-				_camera.Far = value; 
-				_sceneModel.UpdatePreviewCamera(_camera);
-			}
+			set => _camera.Far = value;
 		}
 
-		public PositionProperty Position => new PositionProperty(){Camera = _camera, SceneModel = _sceneModel};
+		public PositionProperty Position => new PositionProperty(){ Camera = _camera };
 
 		public override string ToString() => Name;
 	}

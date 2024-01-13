@@ -21,10 +21,18 @@ namespace Forces.Engine
 			PreviewCamera = new Camera();
 		}
 
-		public Node RootNode => new Node(scene_root_node(_handle), "RootNode");
+		public event EventHandler<Node> NodeChanged;
+
+		public Node RootNode => new Node(scene_root_node(_handle), "RootNode", this);
 
 		public IList<Mesh> Meshes { get; private set; }
+
 		public Camera PreviewCamera { get; set; }
+
+		public void NotifyNodeChanged(Node node)
+		{
+			NodeChanged?.Invoke(this, node);
+		}
 
 		private void ReleaseUnmanagedResources()
 		{

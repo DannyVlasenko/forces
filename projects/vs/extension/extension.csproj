@@ -51,6 +51,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Controllers\PropertyEditorSelectionController.cs" />
     <Compile Include="Controllers\SolutionExplorerSelectionController.cs" />
     <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\Engine.cs" />
@@ -60,7 +61,7 @@
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\Vec.cs" />
     <Compile Include="Engine\Window.cs" />
-    <Compile Include="Models\SelectedSceneModel.cs" />
+    <Compile Include="Models\SelectionModel.cs" />
     <Compile Include="Preferences.cs">
       <SubType>Component</SubType>
     </Compile>
