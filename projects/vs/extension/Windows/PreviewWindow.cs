@@ -10,39 +10,41 @@ namespace Forces.Windows
 	[Guid("5e8a8814-5f59-48fd-ade2-911513fcc6e2")]
 	public sealed class PreviewWindow : ToolWindowPane
 	{
-		private readonly SelectionModel _selectionModel;
 		private readonly Window _window;
+		private readonly PreviewWindowViewModel _viewModel;
 		private OpenGLRenderer _renderer;
 
-		private string Title => "Forces Preview - " + ((_selectionModel?.SceneName?.Length ?? 0) == 0 ? "No Scene Selected" : _selectionModel.SceneName);
-
-		public PreviewWindow(SelectionModel selectionModel) : base(null)
+		public PreviewWindow(PreviewWindowViewModel viewModel) : base(null)
 		{
-			_selectionModel = selectionModel;
 			_window = new Window(this);
 			_window.ContextInitialized += _window_ContextInitialized;
 			_window.Paint += _window_Paint;
+			_window.SizeChanged += _window_SizeChanged;
+			_window.Loaded += _window_Loaded;
 			Content = _window;
-			Caption = Title;
-			_selectionModel.SelectedSceneChanged += SelectionModel_SceneChanged;
-			_selectionModel.CameraChanged += SelectionModel_CameraChanged;
+
+			_viewModel = viewModel;
+			_viewModel.RenderRootNodeChanged += _viewModel_RenderRootNodeChanged;
+			_viewModel.CameraChanged += _viewModel_CameraChanged;
+			Caption = _viewModel.WindowTitle;
+			_viewModel.WindowTitleChanged += (sender, title) => Caption = title;
 		}
 
-		private void SelectionModel_CameraChanged(object sender, Camera e)
+		private void _viewModel_RenderRootNodeChanged(object sender, Node rootNode)
 		{
-			if (e == null) return;
+			Caption = _viewModel?.WindowTitle;
+			if (rootNode == null) return;
 			_window.MakeContextCurrent();
-			_renderer.SetCamera(e);
+			_renderer.SetCurrentRootNode(rootNode);
 			_renderer?.Render();
 			_window.SwapBuffers();
 		}
 
-		private void SelectionModel_SceneChanged(object sender, Scene e)
+		private void _viewModel_CameraChanged(object sender, Camera camera)
 		{
-			Caption = Title;
-			if (e?.RootNode == null) return;
+			if (camera == null) return;
 			_window.MakeContextCurrent();
-			_renderer.SetCurrentRootNode(e.RootNode);
+			_renderer.SetCamera(camera);
 			_renderer?.Render();
 			_window.SwapBuffers();
 		}
@@ -50,30 +52,44 @@ namespace Forces.Windows
 		private void _window_ContextInitialized(object sender, System.EventArgs e)
 		{
 			_renderer = new OpenGLRenderer();
-			if (_selectionModel?.SelectedScene?.RootNode != null)
+			if (_viewModel?.RenderRootNode != null)
 			{
-				_renderer.SetCurrentRootNode(_selectionModel.SelectedScene.RootNode);
+				_renderer.SetCurrentRootNode(_viewModel?.RenderRootNode);
 			}
-			if (_selectionModel?.SelectedScene?.PreviewCamera != null)
+			if (_viewModel?.Camera != null)
 			{
-				_renderer.SetCamera(_selectionModel.SelectedScene.PreviewCamera);
+				_renderer.SetCamera(_viewModel.Camera);
 			}
 		}
 
 		private void _window_Paint(object sender, System.EventArgs e)
 		{
 			_window.MakeContextCurrent();
-			if (_selectionModel?.SelectedScene?.PreviewCamera != null)
-			{
-
-				_selectionModel.SelectedScene.PreviewCamera.Viewport = new Vec2()
-				{
-					X = (float)(_window.RenderSize.Width * _window.GetDpiXScale()),
-					Y = (float)(_window.RenderSize.Height * _window.GetDpiYScale())
-				};
-			}
 			_renderer?.Render();
 			_window.SwapBuffers();
+		}
+		
+		private void _window_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+		{
+			SetCameraViewport();
+		}
+		private void _window_Loaded(object sender, System.Windows.RoutedEventArgs e)
+		{
+			SetCameraViewport();
+		}
+
+		private void SetCameraViewport()
+		{
+			if (_viewModel.Camera == null)
+			{
+				return;
+			}
+
+			_viewModel.Camera.Viewport = new Vec2()
+			{
+				X = (float)(_window.RenderSize.Width * _window.GetDpiXScale()),
+				Y = (float)(_window.RenderSize.Height * _window.GetDpiYScale())
+			};
 		}
 	}
 }

@@ -14,24 +14,15 @@ namespace Forces.Controllers
 
 	public class PropertyEditorSelectionController
 	{
-		private readonly SelectionModel _selectionModel;
 		private readonly IVsServiceProvider _serviceProvider;
 		private IVsWindowFrame _frame;
 
-		public PropertyEditorSelectionController(SelectionModel selectionModel, IVsServiceProvider serviceProvider)
+		public PropertyEditorSelectionController(IVsServiceProvider serviceProvider)
 		{
-			_selectionModel = selectionModel;
 			_serviceProvider = serviceProvider;
-			_selectionModel.SelectedSceneViewNodeChanged += _selectionModel_SelectedSceneViewNodeChanged;
-			OnSelectedNodeChanged(_selectionModel.SelectedSceneViewNode);
 		}
 
-		private void _selectionModel_SelectedSceneViewNodeChanged(object sender, ViewModels.ISceneViewNode e)
-		{
-			OnSelectedNodeChanged(e);
-		}
-
-		private void OnSelectedNodeChanged(ISceneViewNode sceneViewNode)
+		public void OnSelectedNodeChanged(ISceneViewNode sceneViewNode)
 		{
 			if (sceneViewNode is SceneViewNode svn)
 			{
