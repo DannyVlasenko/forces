@@ -132,6 +132,12 @@ namespace Forces.ViewModels
 			set => _camera.Far = value;
 		}
 
+		public float FOV
+		{
+			get => _camera.FOV;
+			set => _camera.FOV = value;
+		}
+
 		public PositionProperty Position => new PositionProperty(){ Camera = _camera };
 
 		public override string ToString() => Name;

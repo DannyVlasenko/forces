@@ -57,6 +57,16 @@ namespace Forces.Engine
 			}
 		}
 
+		public float FOV
+		{
+			get => camera_get_fov(Handle);
+			set
+			{
+				camera_set_fov(Handle, value);
+				OnPropertyChanged();
+			}
+		}
+
 		private void ReleaseUnmanagedResources()
 		{
 			delete_camera(Handle);
@@ -103,5 +113,11 @@ namespace Forces.Engine
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern void camera_set_far(IntPtr node, float far);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern float camera_get_fov(IntPtr node);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern void camera_set_fov(IntPtr node, float fov);
 	}
 }
