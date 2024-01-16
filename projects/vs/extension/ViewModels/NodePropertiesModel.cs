@@ -55,7 +55,11 @@ namespace Forces.ViewModels
 			_sceneViewNode = sceneViewNode;
 		}
 
-		public string Name => _sceneViewNode.Name;
+		public string Name
+		{
+			get => _sceneViewNode.Name;
+			set => _sceneViewNode.Name = value;
+		}
 
 		public bool IsVisible => _sceneViewNode.IsVisible;
 

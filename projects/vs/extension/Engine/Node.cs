@@ -21,17 +21,15 @@ namespace Forces.Engine
 			}
 		}
 
-		public Node(IntPtr node, string name, Scene scene)
+		public Node(IntPtr node, Scene scene)
 		{
 			Handle = node;
 			Scene = scene;
-			Name = name;
 		}
 
-		public Node(Node parent, string itemName)
+		public Node(Node parent, string nodeName)
 		{
-			Handle = create_node(parent.Handle);
-			Name = itemName;
+			Handle = create_node(parent.Handle, nodeName);
 			Scene = parent.Scene;
 		}
 
@@ -41,7 +39,15 @@ namespace Forces.Engine
 			Scene.NotifyNodeChanged(this);
 		}
 
-		public string Name { get; set; }
+		public string Name
+		{
+			get => Marshal.PtrToStringUni(node_get_name(Handle));
+			set
+			{
+				node_set_name(Handle, value);
+				Scene.NotifyNodeChanged(this);
+			}
+		}
 
 		public bool IsVisible { get; set; }
 
@@ -54,13 +60,13 @@ namespace Forces.Engine
 				var returned = node_get_children(Handle, children, children.Length);
 				return children
 					.Take(returned)
-					.Select(x=>new Node(x, "child", Scene))
+					.Select(x=>new Node(x, Scene))
 					.ToList();
 			}
 		}
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern IntPtr create_node(IntPtr parent);
+		private static extern IntPtr create_node(IntPtr parent, string name);
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern void node_add_mesh(IntPtr node, IntPtr mesh);
@@ -70,6 +76,12 @@ namespace Forces.Engine
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern void node_set_translation(IntPtr node, Vec3 translation);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern IntPtr node_get_name(IntPtr node);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern void node_set_name(IntPtr node, string name);
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern int node_children_count(IntPtr node);

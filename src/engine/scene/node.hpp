@@ -12,6 +12,10 @@ namespace forces
 	class Node
 	{
 	public:
+		explicit Node(const wchar_t *name):
+			name_(name)
+		{}
+
 		[[nodiscard]]
 		const std::vector<Node>& children() const noexcept
 		{
@@ -59,7 +63,20 @@ namespace forces
 			meshes_.insert(mesh);
 		}
 
+		[[nodiscard]]
+		std::wstring& name() noexcept
+		{
+			return name_;
+		}
+
+		[[nodiscard]]
+		const std::wstring& name() const noexcept
+		{
+			return name_;
+		}
+
 	private:
+		std::wstring name_;
 		std::vector<Node> children_;
 		std::unordered_set<Mesh*> meshes_;
 		glm::vec3 translation_{ 0.f, 0.f, 0.f };

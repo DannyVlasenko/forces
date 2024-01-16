@@ -28,7 +28,12 @@ namespace Forces.ViewModels
 			});
 		}
 
-		public string Name => Node.Name;
+		public string Name
+		{
+			get => Node.Name;
+			set => Node.Name = value;
+		}
+
 		public IEnumerable<ISceneViewNode> Children => Node.Children.Select(x => new SceneViewNode(x));
 		public ICommand CreateNodeCommand { get; }
 	}

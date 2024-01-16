@@ -1,7 +1,4 @@
 #pragma once
-#include <vector>
-
-#include "mesh.hpp"
 #include "node.hpp"
 
 namespace forces
@@ -20,6 +17,6 @@ namespace forces
 		}
 		
 	private:
-		Node rootNode_;
+		Node rootNode_{L"Root"};
 	};
 }

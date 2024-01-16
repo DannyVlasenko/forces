@@ -21,7 +21,7 @@ namespace Forces.Engine
 
 		public event EventHandler<Node> NodeChanged;
 
-		public Node RootNode => new Node(scene_root_node(_handle), "RootNode", this);
+		public Node RootNode => new Node(scene_root_node(_handle), this);
 
 		public IList<Mesh> Meshes { get; private set; }
 

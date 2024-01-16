@@ -1,10 +1,6 @@
 ﻿using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Design;
-using System.Globalization;
-using System.Threading;
-using System.Threading.Tasks;
 using Forces.Windows;
 using Task = System.Threading.Tasks.Task;
 
@@ -58,7 +54,7 @@ namespace Forces
 		/// <summary>
 		/// Gets the service provider from the owner package.
 		/// </summary>
-		private Microsoft.VisualStudio.Shell.IAsyncServiceProvider ServiceProvider
+		private IAsyncServiceProvider ServiceProvider
 		{
 			get
 			{

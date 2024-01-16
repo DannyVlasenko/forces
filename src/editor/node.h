@@ -10,7 +10,7 @@ extern "C" {
 typedef struct ForcesNode ForcesNode;
 
 __declspec(dllexport)
-ForcesNode * create_node(ForcesNode *parent);
+ForcesNode * create_node(ForcesNode *parent, const wchar_t *name);
 
 __declspec(dllexport)
 void node_add_mesh(ForcesNode *node, ForcesMesh *mesh);
@@ -26,6 +26,12 @@ vec3 node_get_translation(ForcesNode *node);
 
 __declspec(dllexport)
 void node_set_translation(ForcesNode *node, vec3 translation);
+
+__declspec(dllexport)
+const wchar_t * node_get_name(ForcesNode *node);
+
+__declspec(dllexport)
+void node_set_name(ForcesNode *node, const wchar_t *name);
 
 #ifdef __cplusplus
 }
