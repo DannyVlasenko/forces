@@ -38,7 +38,13 @@
 			</TreeView.ItemContainerStyle>
 			<TreeView.ItemTemplate>
 				<HierarchicalDataTemplate DataType="{x:Type viewModels:ISceneViewNode}" ItemsSource="{Binding Children}">
-					<Label Content="{Binding Name}"/>
+					<Label Content="{Binding Name}">
+						<Label.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Create node" Command="{Binding CreateNodeCommand}"/>
+							</ContextMenu>
+						</Label.ContextMenu>
+					</Label>
 				</HierarchicalDataTemplate>
 			</TreeView.ItemTemplate>
 		</TreeView>

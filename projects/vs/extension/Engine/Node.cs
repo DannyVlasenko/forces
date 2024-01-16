@@ -7,7 +7,7 @@ namespace Forces.Engine
 {
 	public class Node
 	{
-		private readonly Scene _scene;
+		public Scene Scene { get; }
 
 		public IntPtr Handle { get; }
 
@@ -17,14 +17,14 @@ namespace Forces.Engine
 			set
 			{
 				node_set_translation(Handle, value);
-				_scene.NotifyNodeChanged(this);
+				Scene.NotifyNodeChanged(this);
 			}
 		}
 
 		public Node(IntPtr node, string name, Scene scene)
 		{
 			Handle = node;
-			_scene = scene;
+			Scene = scene;
 			Name = name;
 		}
 
@@ -32,12 +32,13 @@ namespace Forces.Engine
 		{
 			Handle = create_node(parent.Handle);
 			Name = itemName;
-			_scene = parent._scene;
+			Scene = parent.Scene;
 		}
 
 		public void AddMesh(Mesh mesh)
 		{
 			node_add_mesh(Handle, mesh.Handle);
+			Scene.NotifyNodeChanged(this);
 		}
 
 		public string Name { get; set; }
@@ -53,7 +54,7 @@ namespace Forces.Engine
 				var returned = node_get_children(Handle, children, children.Length);
 				return children
 					.Take(returned)
-					.Select(x=>new Node(x, "child", _scene))
+					.Select(x=>new Node(x, "child", Scene))
 					.ToList();
 			}
 		}

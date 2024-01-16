@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using Forces.Engine;
+using Microsoft.VisualStudio.PlatformUI;
 
 namespace Forces.ViewModels
 {
@@ -8,6 +10,8 @@ namespace Forces.ViewModels
 	{
 		string Name { get; }
 		IEnumerable<ISceneViewNode> Children { get; }
+
+		ICommand CreateNodeCommand { get; }
 	}
 
 	public class SceneViewNode : ISceneViewNode
@@ -17,10 +21,16 @@ namespace Forces.ViewModels
 		public SceneViewNode(Node node)
 		{
 			Node = node;
+
+			CreateNodeCommand = new DelegateCommand(() => {
+				var sphereNode = new Node(Node, "Sphere1");
+				sphereNode.AddMesh(Node.Scene.Meshes[0]);
+			});
 		}
 
 		public string Name => Node.Name;
 		public IEnumerable<ISceneViewNode> Children => Node.Children.Select(x => new SceneViewNode(x));
+		public ICommand CreateNodeCommand { get; }
 	}
 
 	public class SceneViewCamera : ISceneViewNode
@@ -30,9 +40,11 @@ namespace Forces.ViewModels
 		public SceneViewCamera(Camera camera)
 		{
 			Camera = camera;
+			CreateNodeCommand = new DelegateCommand(() => {});
 		}
 
 		public string Name => "Camera";
 		public IEnumerable<ISceneViewNode> Children => Enumerable.Empty<ISceneViewNode>();
+		public ICommand CreateNodeCommand { get; }
 	}
 }

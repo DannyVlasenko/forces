@@ -9,18 +9,38 @@ namespace Forces.ViewModels
 	public sealed class SceneViewModel : INotifyPropertyChanged
 	{
 		private readonly SelectionModel _model;
+		private Scene _selectedScene;
 		private ISceneViewNode _selectedItem;
 
 		public SceneViewModel(SelectionModel model)
 		{
 			_model = model;
+			_selectedScene = _model.SelectedScene;
+			if (_selectedScene != null)
+			{
+				_selectedScene.NodeChanged += _selectedScene_NodeChanged;
+			}
 			_model.SelectedSceneChanged += _model_SelectedSceneChanged;
 			Nodes = new ObservableCollection<ISceneViewNode>();
 			UpdateTopLevelNodes();
 		}
 
+		private void _selectedScene_NodeChanged(object sender, Node e)
+		{
+			UpdateTopLevelNodes();
+		}
+
 		private void _model_SelectedSceneChanged(object sender, Scene e)
 		{
+			if (_selectedScene != null)
+			{
+				_selectedScene.NodeChanged -= _selectedScene_NodeChanged;
+			}
+			_selectedScene = e;
+			if (_selectedScene != null)
+			{
+				_selectedScene.NodeChanged += _selectedScene_NodeChanged;
+			}
 			UpdateTopLevelNodes();
 			OnPropertyChanged(nameof(SceneName));
 		}
