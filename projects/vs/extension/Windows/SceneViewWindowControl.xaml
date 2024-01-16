@@ -5,19 +5,40 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              xmlns:viewModels="clr-namespace:Forces.ViewModels"
+             xmlns:vsShell="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
-             mc:Ignorable="d" d:DesignWidth="300"
-             Name="SceneViewToolWindow">
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="50">
+	<UserControl.Resources>
+		<Style TargetType="Label">
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:EnvironmentColors.ToolWindowTextBrushKey}}"/>
+		</Style>
+		<Style TargetType="TreeView">
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:EnvironmentColors.ToolWindowTextBrushKey}}"/>
+			<Setter Property="Background" Value="{DynamicResource {x:Static vsShell:EnvironmentColors.ToolWindowBackgroundBrushKey}}"/>
+		</Style>
+		<Style TargetType="TextBox">
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:EnvironmentColors.ToolWindowTextBrushKey}}"/>
+			<Setter Property="Background" Value="{DynamicResource {x:Static vsShell:EnvironmentColors.ToolWindowBackgroundBrushKey}}"/>
+		</Style>
+	</UserControl.Resources>
 	<Grid>
-		<TextBox x:Name="SceneNameTextBox" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="Node" VerticalAlignment="Top" Width="208" Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"/>
-		<TreeView x:Name="SceneTreeView" 
-		          SelectedItemChanged="SceneTreeView_OnSelectedItemChanged"
-		          Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
-		          Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}" Margin="0,38,0,0">
+		<TextBox Height="20" 
+		         Margin="0,0,0,0"
+		         Text="{Binding Path=SceneName, Mode=OneWay}" 
+		         VerticalAlignment="Top"/>
+		<TreeView Margin="0,20,0,0" 
+		          BorderThickness="0"
+		          ItemsSource="{Binding Path=Nodes}"
+		          SelectedItemChanged="TreeView_OnSelectedItemChanged">
+			<TreeView.ItemContainerStyle>
+				<Style TargetType="{x:Type TreeViewItem}">
+					<Setter Property="Background" Value="Transparent"/>
+				</Style>
+			</TreeView.ItemContainerStyle>
 			<TreeView.ItemTemplate>
 				<HierarchicalDataTemplate DataType="{x:Type viewModels:ISceneViewNode}" ItemsSource="{Binding Children}">
-					<TextBlock  Text="{Binding Name}"/>
+					<Label Content="{Binding Name}"/>
 				</HierarchicalDataTemplate>
 			</TreeView.ItemTemplate>
 		</TreeView>

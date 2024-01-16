@@ -1,7 +1,6 @@
 ﻿using System;
 using Forces.Engine;
 using Forces.Models;
-using Microsoft.VisualStudio.Text;
 
 namespace Forces.ViewModels
 {

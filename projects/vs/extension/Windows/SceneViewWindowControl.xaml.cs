@@ -1,40 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using Forces.ViewModels;
 
 namespace Forces.Windows
 {
-	public partial class SceneViewWindowControl : UserControl
+	public sealed partial class SceneViewWindowControl : UserControl
 	{
-		public SceneViewWindowControl()
+		public SceneViewWindowControl(SceneViewModel viewModel)
 		{
-			this.InitializeComponent();
+			InitializeComponent();
+			DataContext = viewModel;
 		}
 
-		public IEnumerable<ISceneViewNode> Items => SceneTreeView.Items.OfType<ISceneViewNode>();
-
-		public ISceneViewNode SelectedItem => SceneTreeView.SelectedItem as ISceneViewNode;
-
-		public void AddItem(ISceneViewNode item)
+		private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{
-			SceneTreeView.Items.Add(item);
-		}
-
-		public event EventHandler<ISceneViewNode> SelectedItemChanged; 
-		private void SceneTreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-		{
-			if (SelectedItem != null)
+			if (e.NewValue is ISceneViewNode node)
 			{
-				SelectedItemChanged?.Invoke(this, SelectedItem);
+				((SceneViewModel)DataContext).SelectedNode = node;
 			}
-		}
-
-		public void ClearItems()
-		{
-			SceneTreeView.Items.Clear();
 		}
 	}
 }

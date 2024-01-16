@@ -33,6 +33,7 @@ namespace Forces.Models
 
 		public void SelectSceneViewNode(ISceneViewNode selectedNode)
 		{
+			if (ReferenceEquals(SelectedSceneViewNode, selectedNode)) return;
 			SelectedSceneViewNode = selectedNode;
 			SelectedSceneViewNodeChanged?.Invoke(this, SelectedSceneViewNode);
 		}

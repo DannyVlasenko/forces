@@ -6,7 +6,6 @@ using Forces.Windows;
 using Forces.Controllers;
 using Forces.Models;
 using Forces.ViewModels;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
 
 namespace Forces

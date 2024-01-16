@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 
 namespace Forces.Engine
 {
-	public class Camera : IDisposable, INotifyPropertyChanged
+	public sealed class Camera : IDisposable, INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		private void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
