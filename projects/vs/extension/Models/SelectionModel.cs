@@ -16,10 +16,10 @@ namespace Forces.Models
 		public event EventHandler<Camera> SelectedCameraChanged;
 		public event EventHandler<ISceneViewNode> SelectedSceneViewNodeChanged;
 
-		public void SelectScene(string filePath)
+		public void SelectScene(Scene scene, string name)
 		{
-			SelectedScene = new Scene();
-			SceneName = Path.GetFileNameWithoutExtension(filePath);
+			SelectedScene = scene;
+			SceneName = name;
 			SelectedCamera = SelectedScene.PreviewCamera;
 			SelectedSceneChanged?.Invoke(this, SelectedScene);
 			SelectedCameraChanged?.Invoke(this, SelectedScene.PreviewCamera);

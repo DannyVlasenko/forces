@@ -16,11 +16,6 @@ namespace Forces.Engine
 			Meshes = new List<Mesh>();
 			var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			Meshes.Add(new Mesh(Path.Combine(dir, "sphere.obj")));
-			var sphereNode = new Node(RootNode, "Sphere1")
-			{
-				Translation = new Vec3() { X = 0, Y = 0, Z = 3 }
-			};
-			sphereNode.AddMesh(Meshes[0]);
 			PreviewCamera = new Camera();
 		}
 
