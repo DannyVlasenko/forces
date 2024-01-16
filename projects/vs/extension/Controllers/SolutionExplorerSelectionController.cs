@@ -21,8 +21,18 @@ namespace Forces.Controllers
 			_sceneModel = sceneModel;
 			_events = _dte2?.Events as Events2;
 			_selectionEvents = _events?.SelectionEvents;
+			_events.WindowVisibilityEvents.WindowShowing += WindowVisibilityEvents_WindowShowing;
 			Debug.Assert(_selectionEvents != null, nameof(_selectionEvents) + " != null");
 			_selectionEvents.OnChange += _selectionEvents_OnChange;
+		}
+
+		private void WindowVisibilityEvents_WindowShowing(Window window)
+		{
+			ThreadHelper.ThrowIfNotOnUIThread();
+			if (Path.GetExtension(window.Document.FullName) == ".fsc")
+			{
+				window.Close();
+			}
 		}
 
 		private void _selectionEvents_OnChange()
