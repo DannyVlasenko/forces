@@ -16,7 +16,6 @@ namespace Forces.Controllers
 	{
 		private readonly SelectionModel _model;
 		private readonly IVsServiceProvider _serviceProvider;
-		private IVsWindowFrame _frame;
 
 		public PropertyEditorSelectionController(SelectionModel model, IVsServiceProvider serviceProvider)
 		{
@@ -46,17 +45,6 @@ namespace Forces.Controllers
 		private void TrackSelection(object selection)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
-			if (_frame == null)
-			{
-				var shell = _serviceProvider.GetUIShellService();
-				if (shell != null)
-				{
-					var guidPropertyBrowser = new Guid(ToolWindowGuids.PropertyBrowser);
-					shell.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fForceCreate, ref guidPropertyBrowser, out _frame);
-				}
-			}
-
-			_frame?.Show();
 			var mySelContainer = new SelectionContainer()
 			{
 				SelectedObjects = new System.Collections.ArrayList()

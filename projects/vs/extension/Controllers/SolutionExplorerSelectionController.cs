@@ -31,6 +31,7 @@ namespace Forces.Controllers
 		private void WindowVisibilityEvents_WindowShowing(Window window)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
+			if (window?.Document == null) { return; }
 			if (Path.GetExtension(window.Document.FullName) == ".fsc")
 			{
 				window.Close();

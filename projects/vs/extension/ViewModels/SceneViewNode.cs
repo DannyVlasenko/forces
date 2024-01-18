@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using Forces.Engine;
@@ -6,10 +8,11 @@ using Microsoft.VisualStudio.PlatformUI;
 
 namespace Forces.ViewModels
 {
-	public interface ISceneViewNode
+	public interface ISceneViewNode : INotifyPropertyChanged
 	{
 		string Name { get; }
-		IEnumerable<ISceneViewNode> Children { get; }
+		
+		ObservableCollection<ISceneViewNode> Children { get; }
 
 		ICommand CreateNodeCommand { get; }
 	}
