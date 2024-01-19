@@ -6,9 +6,9 @@ namespace Forces.Models
 	public abstract class Node : ModelObjectWithNotifications
 	{
 		private string _name;
-		private Vector3 _translation = new Vector3(0.0f);
-		private Vector3 _scale = new Vector3(1.0f);
-		private Vector3 _rotation = new Vector3(0.0f);
+		private Vector3 _translation = Vector3.Zero;
+		private Vector3 _scale = Vector3.One;
+		private Quaternion _rotation = Quaternion.Identity;
 
 		protected Node(string name)
 		{
@@ -33,7 +33,7 @@ namespace Forces.Models
 			set => SetField(ref _scale, value);
 		}
 
-		public Vector3 Rotation
+		public Quaternion Rotation
 		{
 			get => _rotation;
 			set => SetField(ref _rotation, value);

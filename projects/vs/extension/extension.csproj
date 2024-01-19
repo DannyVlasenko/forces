@@ -66,6 +66,7 @@
     <Compile Include="Models\CameraNode.cs" />
     <Compile Include="Models\DirectedLight.cs" />
     <Compile Include="Models\EmptyNode.cs" />
+    <Compile Include="Models\IDirectedLightsModel.cs" />
     <Compile Include="Models\Light.cs" />
     <Compile Include="Models\LightNode.cs" />
     <Compile Include="Models\Material.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Models\ModelObjectWithNotifications.cs" />
     <Compile Include="Models\Node.cs" />
     <Compile Include="Models\PointLight.cs" />
+    <Compile Include="Models\PreviewCamera.cs" />
     <Compile Include="Models\Scene.cs" />
     <Compile Include="Models\SceneFileModel.cs" />
     <Compile Include="Models\SelectionModel.cs" />

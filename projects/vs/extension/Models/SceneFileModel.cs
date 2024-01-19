@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Forces.Engine;
+using System.IO;
 
 namespace Forces.Models
 {
@@ -11,8 +11,8 @@ namespace Forces.Models
 			if (!_loadedScenes.ContainsKey(path))
 			{
 				//Load from file
-				//Subscribe scene changed
-				_loadedScenes.Add(path, new Scene());
+				//Subscribe scene file changed
+				_loadedScenes.Add(path, new Scene(Path.GetFileNameWithoutExtension(path)));
 			}
 
 			return _loadedScenes[path];

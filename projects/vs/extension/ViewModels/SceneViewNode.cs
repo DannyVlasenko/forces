@@ -1,58 +1,71 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
+using System.Drawing;
+using System.Numerics;
+using System.Reactive;
 using System.Windows.Input;
-using Forces.Engine;
-using Microsoft.VisualStudio.PlatformUI;
+using DynamicData;
+using DynamicData.Alias;
+using DynamicData.Binding;
+using ReactiveUI;
+using Forces.Models;
+using System.Reactive.Linq;
 
 namespace Forces.ViewModels
 {
-	public interface ISceneViewNode : INotifyPropertyChanged
+	public abstract class SceneViewNodeViewModel : ReactiveObject
 	{
-		string Name { get; }
-		
-		ObservableCollection<ISceneViewNode> Children { get; }
-
-		ICommand CreateNodeCommand { get; }
+		public IObservable<string> Name { get; protected set; }
+		public IObservableList<SceneViewNodeViewModel> Children { get; protected set; }
+		public ReactiveCommand<Unit, Unit> CreateChildCommand { get; protected set; }
 	}
 
-	public class SceneViewNode : ISceneViewNode
+	public class NodeViewModel : SceneViewNodeViewModel
 	{
-		public Node Node { get; }
-
-		public SceneViewNode(Node node)
+		public NodeViewModel(Node model)
 		{
-			Node = node;
-
-			CreateNodeCommand = new DelegateCommand(() => {
-				var sphereNode = new Node(Node, "Sphere1");
-				sphereNode.AddMesh(Node.Scene.Meshes[0]);
-			});
+			Name = model
+				.WhenAnyValue(x => x.Name);
+			Children = model
+				.Children
+				.ToObservableChangeSet()
+				.Select(x=> new NodeViewModel(x) as SceneViewNodeViewModel)
+				.AsObservableList();
+			CreateChildCommand = ReactiveCommand.Create(() => model.Children.Add(new MeshNode("Mesh_1")));
 		}
 
-		public string Name
+		public NodeViewModel(IDirectedLightsModel directedLightModel)
 		{
-			get => Node.Name;
-			set => Node.Name = value;
+			Name = Observable.Return("Directed Lights");
+			Children = directedLightModel
+				.DirectedLights
+				.ToObservableChangeSet()
+				.Select(x => new LeafViewModel(x) as SceneViewNodeViewModel)
+				.AsObservableList();
+			CreateChildCommand = 
+				ReactiveCommand.Create(() => 
+						directedLightModel
+							.DirectedLights
+							.Add(new DirectedLight(Color.White, Vector3.UnitZ, "DirectedLight_1"))
+					);
 		}
-
-		public IEnumerable<ISceneViewNode> Children => Node.Children.Select(x => new SceneViewNode(x));
-		public ICommand CreateNodeCommand { get; }
 	}
 
-	public class SceneViewCamera : ISceneViewNode
+	public class LeafViewModel : SceneViewNodeViewModel
 	{
-		public Camera Camera { get; }
-
-		public SceneViewCamera(Camera camera)
+		public LeafViewModel(DirectedLight directedLightModel)
 		{
-			Camera = camera;
-			CreateNodeCommand = new DelegateCommand(() => {});
+			Name = directedLightModel
+				.WhenAnyValue(x => x.Name);
+			Children = new SourceList<SceneViewNodeViewModel>();
+			CreateChildCommand = ReactiveCommand.Create(() => { });
 		}
-
-		public string Name => "Camera";
-		public IEnumerable<ISceneViewNode> Children => Enumerable.Empty<ISceneViewNode>();
-		public ICommand CreateNodeCommand { get; }
+		public LeafViewModel(AmbientLight ambientLightModel)
+		{
+			Name = Observable.Return("Ambient Light");
+			Children = new SourceList<SceneViewNodeViewModel>();
+			CreateChildCommand = ReactiveCommand.Create(() => { });
+		}
 	}
 }
