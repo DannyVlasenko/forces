@@ -2,10 +2,10 @@
 {
 	public class SelectionModel : ModelObjectWithNotifications
 	{
-		private Node _selectedSceneViewNode;
+		private ModelObjectWithNotifications _selectedSceneViewNode;
 		private Scene _selectedScene;
 
-		public Node SelectedSceneViewNode
+		public ModelObjectWithNotifications SelectedSceneViewNode
 		{
 			get => _selectedSceneViewNode;
 			set => SetField(ref _selectedSceneViewNode, value);

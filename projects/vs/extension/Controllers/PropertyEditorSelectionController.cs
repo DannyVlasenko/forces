@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Reactive.Linq;
 using Forces.Models;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
 using Forces.ViewModels;
+using ReactiveUI;
 
 namespace Forces.Controllers
 {
@@ -20,8 +22,25 @@ namespace Forces.Controllers
 		public PropertyEditorSelectionController(SelectionModel model, IVsServiceProvider serviceProvider)
 		{
 			_model = model;
-			_model.SelectedSceneViewNodeChanged += _model_SelectedSceneViewNodeChanged;
 			_serviceProvider = serviceProvider;
+			ThreadHelper.ThrowIfNotOnUIThread();
+			var shell = _serviceProvider.GetUIShellService();
+			if (shell != null)
+			{
+				var guidPropertyBrowser = new Guid(ToolWindowGuids.PropertyBrowser);
+				shell.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fForceCreate, ref guidPropertyBrowser, out var frame);
+				frame?.Show();
+			}
+			model
+				.WhenAnyValue(x => x.SelectedSceneViewNode)
+				.Where(x => x is Node)
+				.Select(x => new NodePropertiesModel(x as Node))
+				.Subscribe(TrackSelection);
+			model
+				.WhenAnyValue(x => x.SelectedSceneViewNode)
+				.Where(x => x is PreviewCamera)
+				.Select(x => new CameraPropertiesModel(x as PreviewCamera))
+				.Subscribe(TrackSelection);
 		}
 
 		private void _model_SelectedSceneViewNodeChanged(object sender, ISceneViewNode e)

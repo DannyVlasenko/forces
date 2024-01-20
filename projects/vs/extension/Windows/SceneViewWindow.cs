@@ -1,8 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using Forces.Controllers;
-using Forces.Engine;
 using Forces.Models;
-using Forces.ViewModels;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
@@ -16,7 +14,7 @@ namespace Forces.Windows
 		public SceneViewWindow(SelectionModel model) : base(null)
 		{
 			_propertyEditorSelectionController = new PropertyEditorSelectionController(model, this);
-			Content = new SceneViewWindowControl(new SceneViewModel(model)); 
+			Content = new SceneViewWindowControl(model); 
 			Caption = "Forces Scene";
 		}
 

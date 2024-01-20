@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using DynamicData;
-using Forces.Engine;
 using Forces.Models;
 using ReactiveUI;
 
@@ -9,13 +7,33 @@ namespace Forces.ViewModels
 {
 	public sealed class SceneViewModel : ReactiveObject
 	{
-		public IObservable<string> Name { get; set; }
-		public ObservableCollection<SceneViewNodeViewModel> Nodes { get; }
+		private readonly IDisposable _sceneNameSubscription;
+		private readonly IDisposable _nodesSubscription;
+
+		private string _sceneName;
+
+		public string SceneName
+		{
+			get => _sceneName;
+			set => this.RaiseAndSetIfChanged(ref _sceneName, value);
+		}
+
+		public ObservableCollection<SceneViewNodeViewModel> Nodes { get; } = new ObservableCollection<SceneViewNodeViewModel>();
 
 		public SceneViewModel(SelectionModel model)
 		{
-			Name = model.WhenAnyValue(x => x.SelectedScene.Name);
-			Nodes = model.SelectedScene.
+			_sceneNameSubscription = model
+				.WhenAnyValue(x => x.SelectedScene.Name)
+				.Subscribe(name=>SceneName = name);
+			_nodesSubscription = model
+				.WhenAnyValue(x => x.SelectedScene)
+				.Subscribe(scene =>
+				{
+					Nodes.Clear();
+					Nodes.Add(new NodeViewModel(scene.RootNode));
+					Nodes.Add(new NodeViewModel(scene));
+					Nodes.Add(new LeafViewModel(scene.AmbientLight));
+				});
 		}
 	}
 }
