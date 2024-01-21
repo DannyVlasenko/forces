@@ -84,8 +84,11 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ForcesPackage.cs" />
+    <Compile Include="Utilities\Math.cs" />
     <Compile Include="ViewModels\NodePropertiesModel.cs" />
     <Compile Include="ViewModels\PreviewWindowViewModel.cs" />
+    <Compile Include="ViewModels\PropertyEditor\NodePropertyEditorViewModel.cs" />
+    <Compile Include="ViewModels\PropertyEditor\Vector3Property.cs" />
     <Compile Include="ViewModels\SceneViewModel.cs" />
     <Compile Include="ViewModels\SceneViewNode.cs" />
     <Compile Include="Windows\OptionsCommand.cs" />

@@ -60,54 +60,11 @@ namespace Forces.ViewModels
 			set => _sceneViewNode.Name = value;
 		}
 
-		public bool IsVisible => _sceneViewNode.IsVisible;
+		public bool IsVisible => true;
 
 		public TranslationProperty Translation => new TranslationProperty{Node = _sceneViewNode};
 
 		public override string ToString() => Name;
-	}
-
-
-	[TypeConverter(typeof(ExpandableObjectConverter))]
-	[Serializable]
-	public struct PositionProperty
-	{
-		public Camera Camera;
-		public float X
-		{
-			get => Camera.Position.X;
-			set
-			{
-				var old = Camera.Position;
-				old.X = value;
-				Camera.Position = old;
-			}
-		}
-		public float Y
-		{
-			get => Camera.Position.Y;
-			set
-			{
-				var old = Camera.Position;
-				old.Y = value;
-				Camera.Position = old;
-			}
-		}
-		public float Z
-		{
-			get => Camera.Position.Z;
-			set
-			{
-				var old = Camera.Position;
-				old.Z = value;
-				Camera.Position = old;
-			}
-		}
-
-		public override string ToString()
-		{
-			return $"X:{X};Y:{Y};Z:{Z}";
-		}
 	}
 
 	public class CameraPropertiesModel
