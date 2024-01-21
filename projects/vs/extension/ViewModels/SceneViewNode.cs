@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Numerics;
 using System.Reactive;
-using System.Windows.Input;
 using DynamicData;
 using DynamicData.Alias;
 using DynamicData.Binding;
 using ReactiveUI;
 using Forces.Models;
-using System.Reactive.Linq;
+using Forces.Models.SceneTree;
 
 namespace Forces.ViewModels
 {
@@ -68,7 +64,7 @@ namespace Forces.ViewModels
 		{
 			_nameSubscription = directedLightModel
 				.WhenAnyValue(x => x.Name)
-				.Subscribe(name => Name = name);
+				.Subscribe(name => Name = name);//ToProperty
 			Children = new SourceList<SceneViewNodeViewModel>();
 			CreateChildCommand = ReactiveCommand.Create(() => { });
 		}

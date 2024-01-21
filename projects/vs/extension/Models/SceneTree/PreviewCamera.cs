@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Forces.Models
+namespace Forces.Models.SceneTree
 {
 	public class PreviewCamera : Camera
 	{

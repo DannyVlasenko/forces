@@ -1,36 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Forces.Engine
 {
 	public class Scene : IDisposable
 	{
-		private IntPtr _handle;
+		private IntPtr _handle = create_scene();
 
-		public Scene()
-		{
-			_handle = create_scene();
-			Meshes = new List<Mesh>();
-			var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			Meshes.Add(new Mesh(Path.Combine(dir, "sphere.obj")));
-			PreviewCamera = new Camera();
-		}
-
-		public event EventHandler<Node> NodeChanged;
-
-		public Node RootNode => new Node(scene_root_node(_handle), this);
-
-		public IList<Mesh> Meshes { get; private set; }
-
-		public Camera PreviewCamera { get; set; }
-
-		public void NotifyNodeChanged(Node node)
-		{
-			NodeChanged?.Invoke(this, node);
-		}
+		public Node RootNode => new Node(scene_root_node(_handle));
 
 		private void ReleaseUnmanagedResources()
 		{

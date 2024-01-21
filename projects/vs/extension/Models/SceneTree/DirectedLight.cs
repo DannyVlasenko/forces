@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Numerics;
 
-namespace Forces.Models
+namespace Forces.Models.SceneTree
 {
 	public class DirectedLight : Light
 	{

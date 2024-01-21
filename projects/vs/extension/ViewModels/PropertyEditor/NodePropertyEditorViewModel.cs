@@ -1,13 +1,14 @@
 ﻿using Forces.Models;
+using Forces.Models.SceneTree;
 using Forces.Utilities;
 
 namespace Forces.ViewModels.PropertyEditor
 {
-	public class NodePropertyEditorViewModel
+	public abstract class NodePropertyEditorViewModel
 	{
 		private readonly Node _node;
 
-		public NodePropertyEditorViewModel(Node node)
+		protected NodePropertyEditorViewModel(Node node)
 		{
 			_node = node;
 		}

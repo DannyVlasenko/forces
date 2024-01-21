@@ -1,4 +1,4 @@
-﻿namespace Forces.Models
+﻿namespace Forces.Models.SceneTree
 {
 	public class Mesh : ModelObjectWithNotifications
 	{

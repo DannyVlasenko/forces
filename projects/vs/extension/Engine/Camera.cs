@@ -1,70 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Forces.Engine
 {
-	public sealed class Camera : IDisposable, INotifyPropertyChanged
+	public sealed class Camera : IDisposable
 	{
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
-
 		public IntPtr Handle { get; private set; } = create_camera();
 
 		public Vec3 Position
 		{
 			get => camera_get_position(Handle);
-			set
-			{
-				camera_set_position(Handle, value); 
-				OnPropertyChanged();
-			}
+			set => camera_set_position(Handle, value);
 		}
 
 		public Vec2 Viewport
 		{
 			get => camera_get_viewport(Handle);
-			set
-			{
-				camera_set_viewport(Handle, value); 
-				OnPropertyChanged();
-			}
+			set => camera_set_viewport(Handle, value);
 		}
 
 		public float Near
 		{
 			get => camera_get_near(Handle);
-			set
-			{
-				camera_set_near(Handle, value);
-				OnPropertyChanged();
-			}
+			set => camera_set_near(Handle, value);
 		}
 
 		public float Far
 		{
 			get => camera_get_far(Handle);
-			set
-			{
-				camera_set_far(Handle, value);
-				OnPropertyChanged();
-			}
+			set => camera_set_far(Handle, value);
 		}
 
 		public float FOV
 		{
 			get => camera_get_fov(Handle);
-			set
-			{
-				camera_set_fov(Handle, value);
-				OnPropertyChanged();
-			}
+			set => camera_set_fov(Handle, value);
 		}
 
 		private void ReleaseUnmanagedResources()

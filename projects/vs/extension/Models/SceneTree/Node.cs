@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Numerics;
 
-namespace Forces.Models
+namespace Forces.Models.SceneTree
 {
 	public abstract class Node : ModelObjectWithNotifications
 	{

@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace Forces.Models
+namespace Forces.Models.SceneTree
 {
 	public class Scene : ModelObjectWithNotifications, IDirectedLightsModel
 	{

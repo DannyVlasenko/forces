@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Forces.Models
+namespace Forces.Models.SceneTree
 {
 	public class AmbientLight : Light
 	{

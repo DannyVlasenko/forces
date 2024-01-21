@@ -1,7 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using System;
+﻿using System;
+using System.Collections.ObjectModel;
 
-namespace Forces.Models
+namespace Forces.Models.SceneTree
 {
 	public class MeshNode : Node
 	{

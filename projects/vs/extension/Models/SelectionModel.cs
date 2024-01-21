@@ -1,4 +1,6 @@
-﻿namespace Forces.Models
+﻿using Forces.Models.SceneTree;
+
+namespace Forces.Models
 {
 	public class SelectionModel : ModelObjectWithNotifications
 	{

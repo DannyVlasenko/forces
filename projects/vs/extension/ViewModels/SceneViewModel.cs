@@ -24,7 +24,7 @@ namespace Forces.ViewModels
 		{
 			_sceneNameSubscription = model
 				.WhenAnyValue(x => x.SelectedScene.Name)
-				.Subscribe(name=>SceneName = name);
+				.Subscribe(name=>SceneName = name);//ToProperty
 			_nodesSubscription = model
 				.WhenAnyValue(x => x.SelectedScene)
 				.Subscribe(scene =>

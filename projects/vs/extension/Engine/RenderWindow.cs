@@ -1,35 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Interop;
 using Forces.Windows;
 
 namespace Forces.Engine
 {
-	internal class Window : HwndHost
+	internal class RenderWindow : HwndHost
 	{
 		private readonly PreviewWindow _previewWindow;
-		private IntPtr _hwnd;
+		private IntPtr _windowHandle;
 
 		public event EventHandler ContextInitialized;
 		public event EventHandler Paint;
 
-		public Window(PreviewWindow previewWindow)
+		public RenderWindow(PreviewWindow previewWindow)
 		{
 			_previewWindow = previewWindow;
 		}
 
 		public void MakeContextCurrent()
 		{
-			glfwMakeContextCurrent(_hwnd);
+			glfwMakeContextCurrent(_windowHandle);
 		}
 
 		public void SwapBuffers()
 		{
-			glfwSwapBuffers(_hwnd);
+			glfwSwapBuffers(_windowHandle);
 		}
 
 		protected override HandleRef BuildWindowCore(HandleRef hwndParent)
@@ -38,8 +34,8 @@ namespace Forces.Engine
 
 			var preferences = (Preferences)(_previewWindow.Package as ForcesPackage)?.GetDialogPage(typeof(Preferences));
 			glfwWindowHint(0x0002100D, preferences?.PreviewMultiSampling ?? 1);
-			_hwnd = glfwCreateWindow(100, 100, "Forces Preview", IntPtr.Zero, IntPtr.Zero);
-			var win32Handle = glfwGetWin32Window(_hwnd);
+			_windowHandle = glfwCreateWindow(100, 100, "Forces Preview", IntPtr.Zero, IntPtr.Zero);
+			var win32Handle = glfwGetWin32Window(_windowHandle);
 			const int GWL_STYLE = (-16);
 			const int WS_CHILD = 0x40000000;
 			SetWindowLong(win32Handle, GWL_STYLE, WS_CHILD);
@@ -52,8 +48,8 @@ namespace Forces.Engine
 		protected override void DestroyWindowCore(HandleRef hwnd)
 		{
 			if (!ReferenceEquals(hwnd.Wrapper, this)) return;
-			glfwDestroyWindow(_hwnd);
-			_hwnd = IntPtr.Zero;
+			glfwDestroyWindow(_windowHandle);
+			_windowHandle = IntPtr.Zero;
 			glfwTerminate();
 		}
 
@@ -97,6 +93,6 @@ namespace Forces.Engine
 		private static extern IntPtr SetParent(IntPtr child, IntPtr parent);
 
 		[DllImport("user32.dll")]
-		private static extern UInt32 SetWindowLong(IntPtr hWnd, int nIndex, UInt32 dwNewLong);
+		private static extern uint SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
 	}
 }

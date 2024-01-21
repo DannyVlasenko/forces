@@ -1,10 +1,9 @@
-﻿using Microsoft.VisualStudio.Shell;
-using System;
+﻿using System;
 using System.ComponentModel.Design;
-using Forces.Windows;
+using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
 
-namespace Forces
+namespace Forces.Windows
 {
 	/// <summary>
 	/// Command handler

@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Forces.Models
+namespace Forces.Models.SceneTree
 {
 	public interface IDirectedLightsModel
 	{

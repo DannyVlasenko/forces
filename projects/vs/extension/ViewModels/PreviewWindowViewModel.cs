@@ -1,5 +1,6 @@
 ﻿using System;
 using Forces.Models;
+using Forces.Models.SceneTree;
 
 namespace Forces.ViewModels
 {
