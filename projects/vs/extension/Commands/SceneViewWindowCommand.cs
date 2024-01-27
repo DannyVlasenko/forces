@@ -1,23 +1,20 @@
-﻿using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using System;
+﻿using System;
 using System.ComponentModel.Design;
-using System.Globalization;
-using System.Threading;
-using System.Threading.Tasks;
+using Forces.Windows;
+using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
 
-namespace Forces.Windows
+namespace Forces.Commands
 {
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class OptionsCommand
+	internal sealed class SceneViewWindowCommand
 	{
 		/// <summary>
 		/// Command ID.
 		/// </summary>
-		public const int CommandId = 0x0104;
+		public const int CommandId = 0x0100;
 
 		/// <summary>
 		/// Command menu group (command set GUID).
@@ -30,12 +27,12 @@ namespace Forces.Windows
 		private readonly AsyncPackage package;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="OptionsCommand"/> class.
+		/// Initializes a new instance of the <see cref="SceneViewWindowCommand"/> class.
 		/// Adds our command handlers for menu (commands must exist in the command table file)
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
 		/// <param name="commandService">Command service to add command to, not null.</param>
-		private OptionsCommand(AsyncPackage package, OleMenuCommandService commandService)
+		private SceneViewWindowCommand(AsyncPackage package, OleMenuCommandService commandService)
 		{
 			this.package = package ?? throw new ArgumentNullException(nameof(package));
 			commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -48,7 +45,7 @@ namespace Forces.Windows
 		/// <summary>
 		/// Gets the instance of the command.
 		/// </summary>
-		public static OptionsCommand Instance
+		public static SceneViewWindowCommand Instance
 		{
 			get;
 			private set;
@@ -57,7 +54,7 @@ namespace Forces.Windows
 		/// <summary>
 		/// Gets the service provider from the owner package.
 		/// </summary>
-		private Microsoft.VisualStudio.Shell.IAsyncServiceProvider ServiceProvider
+		private IAsyncServiceProvider ServiceProvider
 		{
 			get
 			{
@@ -71,26 +68,29 @@ namespace Forces.Windows
 		/// <param name="package">Owner package, not null.</param>
 		public static async Task InitializeAsync(AsyncPackage package)
 		{
-			// Switch to the main thread - the call to AddCommand in OptionsCommand's constructor requires
+			// Switch to the main thread - the call to AddCommand in SceneViewWindowCommand's constructor requires
 			// the UI thread.
 			await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
-			OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-			Instance = new OptionsCommand(package, commandService);
+			OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
+			Instance = new SceneViewWindowCommand(package, commandService);
 		}
 
 		/// <summary>
-		/// This function is the callback used to execute the command when the menu item is clicked.
-		/// See the constructor to see how the menu item is associated with this function using
-		/// OleMenuCommandService service and MenuCommand class.
+		/// Shows the tool window when the menu item is clicked.
 		/// </summary>
-		/// <param name="sender">Event sender.</param>
-		/// <param name="e">Event args.</param>
+		/// <param name="sender">The event sender.</param>
+		/// <param name="e">The event args.</param>
 		private void Execute(object sender, EventArgs e)
 		{
-			ThreadHelper.ThrowIfNotOnUIThread();
-			Type optionsPageType = typeof(Preferences);
-			Instance.package.ShowOptionPage(optionsPageType);
+			this.package.JoinableTaskFactory.RunAsync(async delegate
+			{
+				ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(SceneViewWindow), 0, true, this.package.DisposalToken);
+				if ((null == window) || (null == window.Frame))
+				{
+					throw new NotSupportedException("Cannot create tool window");
+				}
+			});
 		}
 	}
 }

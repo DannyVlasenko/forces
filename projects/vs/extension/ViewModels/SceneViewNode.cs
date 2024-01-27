@@ -6,7 +6,6 @@ using DynamicData;
 using DynamicData.Alias;
 using DynamicData.Binding;
 using ReactiveUI;
-using Forces.Models;
 using Forces.Models.SceneTree;
 
 namespace Forces.ViewModels

@@ -61,7 +61,7 @@
     <Compile Include="Engine\Renderer.cs" />
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\Vec.cs" />
-    <Compile Include="Engine\RenderWindow.cs" />
+    <Compile Include="Windows\RenderWindow.cs" />
     <Compile Include="Models\RenderModel.cs" />
     <Compile Include="Models\SceneTree\AmbientLight.cs" />
     <Compile Include="Models\SceneTree\Camera.cs" />
@@ -87,7 +87,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ForcesPackage.cs" />
     <Compile Include="Utilities\Math.cs" />
-    <Compile Include="ViewModels\PreviewWindowViewModel.cs" />
     <Compile Include="ViewModels\PropertyEditor\AmbientLightPropertyEditorViewModel.cs" />
     <Compile Include="ViewModels\PropertyEditor\CameraNodePropertyEditorViewModel.cs" />
     <Compile Include="ViewModels\PropertyEditor\DirectedLightPropertyEditorViewModel.cs" />
@@ -99,11 +98,11 @@
     <Compile Include="ViewModels\PropertyEditor\Vector3Property.cs" />
     <Compile Include="ViewModels\SceneViewModel.cs" />
     <Compile Include="ViewModels\SceneViewNode.cs" />
-    <Compile Include="Windows\OptionsCommand.cs" />
+    <Compile Include="Commands\OptionsCommand.cs" />
     <Compile Include="Windows\PreviewWindow.cs" />
-    <Compile Include="Windows\PreviewWindowCommand.cs" />
+    <Compile Include="Commands\PreviewWindowCommand.cs" />
     <Compile Include="Windows\SceneViewWindow.cs" />
-    <Compile Include="Windows\SceneViewWindowCommand.cs" />
+    <Compile Include="Commands\SceneViewWindowCommand.cs" />
     <Compile Include="Windows\SceneViewWindowControl.xaml.cs">
       <DependentUpon>SceneViewWindowControl.xaml</DependentUpon>
     </Compile>
@@ -134,16 +133,21 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.32112.339" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.7.2192" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.8.37222" ExcludeAssets="runtime">
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.8.2365">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator">
       <Version>1.3.1</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI">
-      <Version>19.5.39</Version>
+      <Version>19.5.41</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
-      <Version>19.5.39</Version>
+      <Version>19.5.41</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

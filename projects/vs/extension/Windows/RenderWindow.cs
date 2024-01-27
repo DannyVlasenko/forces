@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
-using Forces.Windows;
 
-namespace Forces.Engine
+namespace Forces.Windows
 {
-	internal class RenderWindow : HwndHost
+	public class RenderWindow : HwndHost
 	{
-		private readonly PreviewWindow _previewWindow;
+		private readonly int _multisampling;
 		private IntPtr _windowHandle;
 
 		public event EventHandler ContextInitialized;
 		public event EventHandler Paint;
 
-		public RenderWindow(PreviewWindow previewWindow)
+		public RenderWindow(int multisampling)
 		{
-			_previewWindow = previewWindow;
+			_multisampling = multisampling;
 		}
 
 		public void MakeContextCurrent()
@@ -31,9 +30,7 @@ namespace Forces.Engine
 		protected override HandleRef BuildWindowCore(HandleRef hwndParent)
 		{
 			glfwInit();
-
-			var preferences = (Preferences)(_previewWindow.Package as ForcesPackage)?.GetDialogPage(typeof(Preferences));
-			glfwWindowHint(0x0002100D, preferences?.PreviewMultiSampling ?? 1);
+			glfwWindowHint(0x0002100D, _multisampling);
 			_windowHandle = glfwCreateWindow(100, 100, "Forces Preview", IntPtr.Zero, IntPtr.Zero);
 			var win32Handle = glfwGetWin32Window(_windowHandle);
 			const int GWL_STYLE = (-16);
