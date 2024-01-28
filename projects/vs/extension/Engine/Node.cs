@@ -25,9 +25,9 @@ namespace Forces.Engine
 			Handle = create_node(parent.Handle, nodeName);
 		}
 
-		public void AddMesh(Mesh mesh)
+		public void SetMesh(Mesh mesh)
 		{
-			node_add_mesh(Handle, mesh.Handle);
+			node_set_mesh(Handle, mesh.Handle);
 		}
 
 		public string Name
@@ -56,7 +56,7 @@ namespace Forces.Engine
 		private static extern IntPtr create_node(IntPtr parent, string name);
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern void node_add_mesh(IntPtr node, IntPtr mesh);
+		private static extern void node_set_mesh(IntPtr node, IntPtr mesh);
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern Vec3 node_get_translation(IntPtr node);

@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System;
 using System.Numerics;
-using Forces.Models;
 
 namespace Forces.ViewModels.PropertyEditor
 {

@@ -29,18 +29,6 @@ namespace forces
 		}
 
 		[[nodiscard]]
-		const std::unordered_set<Mesh*>& meshes() const noexcept
-		{
-			return meshes_;
-		}
-
-		[[nodiscard]]
-		std::unordered_set<Mesh*>& meshes() noexcept
-		{
-			return meshes_;
-		}
-
-		[[nodiscard]]
 		const glm::vec3& translation() const noexcept
 		{
 			return translation_;
@@ -58,9 +46,15 @@ namespace forces
 			return children_.back();
 		}
 
-		void addMesh(Mesh* mesh)
+		void setMesh(Mesh* mesh) noexcept
 		{
-			meshes_.insert(mesh);
+			mesh_ = mesh;
+		}
+
+		[[nodiscard]]
+		Mesh * getMesh() const noexcept
+		{
+			return mesh_;
 		}
 
 		[[nodiscard]]
@@ -78,7 +72,7 @@ namespace forces
 	private:
 		std::wstring name_;
 		std::vector<Node> children_;
-		std::unordered_set<Mesh*> meshes_;
+		Mesh* mesh_;
 		glm::vec3 translation_{ 0.f, 0.f, 0.f };
 		glm::vec3 scale_{ 1.f, 1.f, 1.f };
 	};

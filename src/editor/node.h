@@ -13,7 +13,7 @@ __declspec(dllexport)
 ForcesNode * create_node(ForcesNode *parent, const wchar_t *name);
 
 __declspec(dllexport)
-void node_add_mesh(ForcesNode *node, ForcesMesh *mesh);
+void node_set_mesh(ForcesNode *node, ForcesMesh *mesh);
 
 __declspec(dllexport)
 int node_children_count(ForcesNode *node);

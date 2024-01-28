@@ -1,6 +1,4 @@
 ﻿using System.Drawing;
-using Forces.Models;
-using System.Windows.Media.Media3D;
 using Forces.Models.SceneTree;
 
 namespace Forces.ViewModels.PropertyEditor

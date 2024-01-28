@@ -18,5 +18,10 @@ namespace Forces.Models
 			get => _rootNode;
 			set => SetField(ref _rootNode, value);
 		}
+
+		public void TriggerRootNodeChanged()
+		{
+			OnPropertyChanged(nameof(RootNode));
+		}
 	}
 }

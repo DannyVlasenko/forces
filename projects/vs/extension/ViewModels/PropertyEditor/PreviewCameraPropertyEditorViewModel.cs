@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using Forces.Models;
-using Forces.Models.SceneTree;
+﻿using Forces.Models.SceneTree;
 using Forces.Utilities;
 
 namespace Forces.ViewModels.PropertyEditor

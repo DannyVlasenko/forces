@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using Forces.Models;
 using Forces.Models.SceneTree;
 
 namespace Forces.ViewModels.PropertyEditor

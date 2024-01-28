@@ -6,9 +6,9 @@ ForcesNode* create_node(ForcesNode *parent, const wchar_t* name)
 	return reinterpret_cast<ForcesNode*>(&reinterpret_cast<forces::Node*>(parent)->addChild(forces::Node{ name }));
 }
 
-void node_add_mesh(ForcesNode* node, ForcesMesh *mesh)
+void node_set_mesh(ForcesNode* node, ForcesMesh *mesh)
 {
-	reinterpret_cast<forces::Node*>(node)->addMesh(reinterpret_cast<forces::Mesh*>(mesh));
+	reinterpret_cast<forces::Node*>(node)->setMesh(reinterpret_cast<forces::Mesh*>(mesh));
 }
 
 int node_children_count(ForcesNode* node)
