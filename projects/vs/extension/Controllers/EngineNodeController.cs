@@ -26,7 +26,11 @@ namespace Forces.Controllers
 		public EngineNodeController(SceneNode sceneNode, EngineNode engineNode, RenderModel renderModel, MeshModel meshModel)
 		{
 			_nameSubscription = sceneNode.WhenAnyValue(x => x.Name).Subscribe(x => engineNode.Name = x);
-			_translationSubscription = sceneNode.WhenAnyValue(x => x.Translation).Subscribe(x => engineNode.Translation = x);
+			_translationSubscription = sceneNode.WhenAnyValue(x => x.Translation).Subscribe(x =>
+			{
+				engineNode.Translation = x;
+				renderModel.TriggerRootNodeChanged();
+			});
 			//_scaleSubscription = sceneNode.WhenAnyValue(x => x.Scale).Subscribe(x => engineNode.Scale = x);
 			//_rotationSubscription = sceneNode.WhenAnyValue(x => x.Rotation).Subscribe(x => engineNode.Rotation = x);
 

@@ -21,6 +21,14 @@ namespace Forces.Controllers
 					_scene = new Scene();
 					_rootNodeController = new EngineNodeController(x?.RootNode ?? new EmptyNode(String.Empty), _scene.RootNode, renderModel, _meshModel);
 					renderModel.RootNode = _scene.RootNode;
+					if (x == null) return;
+					renderModel.PreviewCamera = new Engine.Camera()
+					{
+						FOV = x.PreviewCamera.FOV,
+						Far = x.PreviewCamera.Far,
+						Near = x.PreviewCamera.Near,
+						Position = x.PreviewCamera.Translation,
+					};
 				});
 
 			selectionModel

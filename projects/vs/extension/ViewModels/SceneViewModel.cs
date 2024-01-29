@@ -20,21 +20,21 @@ namespace Forces.ViewModels
 
 		public ObservableCollection<SceneViewNodeViewModel> Nodes { get; } = new ObservableCollection<SceneViewNodeViewModel>();
 
-		public SceneViewModel(SelectionModel model)
+		public SceneViewModel(SelectionModel selectionModel)
 		{
-			_sceneNameSubscription = model
+			_sceneNameSubscription = selectionModel
 				.WhenAnyValue(x => x.SelectedScene.Name)
 				.Subscribe(name=>SceneName = name);//ToProperty
-			_nodesSubscription = model
+			_nodesSubscription = selectionModel
 				.WhenAnyValue(x => x.SelectedScene)
 				.Subscribe(scene =>
 				{
 					Nodes.Clear();
 					if (scene != null)
 					{
-						Nodes.Add(new NodeViewModel(scene.RootNode));
-						Nodes.Add(new NodeViewModel(scene));
-						Nodes.Add(new LeafViewModel(scene.AmbientLight));
+						Nodes.Add(new NodeViewModel(scene.RootNode, selectionModel));
+						Nodes.Add(new NodeViewModel(scene, selectionModel));
+						Nodes.Add(new LeafViewModel(scene.AmbientLight, selectionModel));
 					}
 				});
 		}

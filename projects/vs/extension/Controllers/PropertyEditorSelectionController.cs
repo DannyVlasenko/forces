@@ -27,8 +27,6 @@ namespace Forces.Controllers
 				.Select(CreateViewModelForModel)
 				.WhereNotNull()
 				.Subscribe(TrackSelection);
-
-			ShowPropertyEditor();
 		}
 
 		private void ShowPropertyEditor()
@@ -67,6 +65,7 @@ namespace Forces.Controllers
 		private void TrackSelection(object selection)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
+			ShowPropertyEditor();
 			var mySelContainer = new SelectionContainer()
 			{
 				SelectedObjects = new System.Collections.ArrayList()

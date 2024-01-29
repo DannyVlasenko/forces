@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
 using System.Reactive;
+using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Alias;
 using DynamicData.Binding;
 using ReactiveUI;
 using Forces.Models.SceneTree;
+using Forces.Models;
 
 namespace Forces.ViewModels
 {
@@ -19,14 +22,28 @@ namespace Forces.ViewModels
 			get =>_name;
 			set => this.RaiseAndSetIfChanged(ref _name, value);
 		}
-		public IObservableList<SceneViewNodeViewModel> Children { get; protected set; }
+		public IObservable<IReadOnlyCollection<SceneViewNodeViewModel>> Children { get; protected set; }
 		public ReactiveCommand<Unit, Unit> CreateChildCommand { get; protected set; }
+
+		bool _isExpanded;
+		public bool IsExpanded
+		{
+			get => _isExpanded;
+			set => this.RaiseAndSetIfChanged(ref _isExpanded, value);
+		}
+
+		bool _isSelected;
+		public bool IsSelected
+		{
+			get => _isSelected;
+			set => this.RaiseAndSetIfChanged(ref _isSelected, value);
+		}
 	}
 
 	public class NodeViewModel : SceneViewNodeViewModel
 	{
 		private readonly IDisposable _nameSubscription;
-		public NodeViewModel(Node model)
+		public NodeViewModel(Node model, SelectionModel selectionModel)
 		{
 			_nameSubscription = model
 				.WhenAnyValue(x => x.Name)
@@ -34,22 +51,25 @@ namespace Forces.ViewModels
 			Children = model
 				.Children
 				.ToObservableChangeSet()
-				.Select(x=> new NodeViewModel(x) as SceneViewNodeViewModel)
-				.AsObservableList();
+				.Select(x=> new NodeViewModel(x, selectionModel) as SceneViewNodeViewModel)
+				.ToCollection();
 			CreateChildCommand = ReactiveCommand.Create(() =>
 			{
 				model.Children.Add(new MeshNode("Mesh_1"));
 			});
+			this.WhenAnyValue(x => x.IsSelected)
+				.Where(x => x)
+				.Subscribe(_ => selectionModel.SelectedSceneViewNode = model);
 		}
 
-		public NodeViewModel(IDirectedLightsModel directedLightModel)
+		public NodeViewModel(IDirectedLightsModel directedLightModel, SelectionModel selectionModel)
 		{
 			Name = "Directed Lights";
 			Children = directedLightModel
 				.DirectedLights
 				.ToObservableChangeSet()
-				.Select(x => new LeafViewModel(x) as SceneViewNodeViewModel)
-				.AsObservableList();
+				.Select(x => new LeafViewModel(x, selectionModel) as SceneViewNodeViewModel)
+				.ToCollection();
 			CreateChildCommand = 
 				ReactiveCommand.Create(() =>
 				{
@@ -63,19 +83,25 @@ namespace Forces.ViewModels
 	public class LeafViewModel : SceneViewNodeViewModel
 	{
 		private readonly IDisposable _nameSubscription;
-		public LeafViewModel(DirectedLight directedLightModel)
+		public LeafViewModel(DirectedLight directedLightModel, SelectionModel selectionModel)
 		{
 			_nameSubscription = directedLightModel
 				.WhenAnyValue(x => x.Name)
 				.Subscribe(name => Name = name);//ToProperty
-			Children = new SourceList<SceneViewNodeViewModel>();
+			//Children = new SourceList<SceneViewNodeViewModel>();
 			CreateChildCommand = ReactiveCommand.Create(() => { });
+			this.WhenAnyValue(x => x.IsSelected)
+				.Where(x => x)
+				.Subscribe(_ => selectionModel.SelectedSceneViewNode = directedLightModel);
 		}
-		public LeafViewModel(AmbientLight ambientLightModel)
+		public LeafViewModel(AmbientLight ambientLightModel, SelectionModel selectionModel)
 		{
 			Name = "Ambient Light";
-			Children = new SourceList<SceneViewNodeViewModel>();
+			//Children = new SourceList<SceneViewNodeViewModel>();
 			CreateChildCommand = ReactiveCommand.Create(() => { });
+			this.WhenAnyValue(x => x.IsSelected)
+				.Where(x => x)
+				.Subscribe(_ => selectionModel.SelectedSceneViewNode = ambientLightModel);
 		}
 	}
 }

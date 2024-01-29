@@ -72,7 +72,7 @@ namespace forces
 	private:
 		std::wstring name_;
 		std::vector<Node> children_;
-		Mesh* mesh_;
+		Mesh* mesh_{ nullptr };
 		glm::vec3 translation_{ 0.f, 0.f, 0.f };
 		glm::vec3 scale_{ 1.f, 1.f, 1.f };
 	};

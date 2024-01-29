@@ -20,7 +20,7 @@ namespace Forces.Models.SceneTree
 
 		public Node RootNode { get; } = new EmptyNode("Root");
 
-		public PreviewCamera PreviewCamera { get; } = new PreviewCamera();
+		public PreviewCamera PreviewCamera { get; } = new PreviewCamera(){Near = 0.1f, Far = 10.0f, FOV = 60.0f};
 
 		public AmbientLight AmbientLight { get; } = new AmbientLight(Color.White);
 
