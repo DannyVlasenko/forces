@@ -44,7 +44,7 @@ namespace Forces
 		{
 			if (toolWindowType == typeof(PreviewWindow))
 			{
-				return base.InstantiateToolWindow(toolWindowType, _renderModel, _selectionModel);
+				return base.InstantiateToolWindow(toolWindowType, new WindowContext(_selectionModel, _renderModel));
 			}
 
 			if (toolWindowType == typeof(SceneViewWindow))

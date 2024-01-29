@@ -36,6 +36,9 @@
     <ClCompile Include="..\..\..\third_parties\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\..\..\third_parties\imgui\imgui_widgets.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

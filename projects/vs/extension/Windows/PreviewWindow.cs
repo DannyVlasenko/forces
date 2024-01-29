@@ -5,17 +5,34 @@ using Forces.Models;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Utilities;
 using System.Runtime.InteropServices;
-using ReactiveMarbles.ObservableEvents;
+using System.Windows;
 using ReactiveUI;
 
 namespace Forces.Windows
 {
+	public class WindowContext
+	{
+		public WindowContext(SelectionModel selectionModel, RenderModel renderModel)
+		{
+			SelectionModel = selectionModel;
+			RenderModel = renderModel;
+		}
+
+		public SelectionModel SelectionModel { get; }
+		public RenderModel RenderModel { get; }
+	}
+
 	[Guid("5e8a8814-5f59-48fd-ade2-911513fcc6e2")]
 	public sealed class PreviewWindow : ToolWindowPane
 	{
 		private OpenGLRenderer _renderer;
+		private readonly IDisposable _rootNodeSubscription;
 
-		public PreviewWindow(SelectionModel selectionModel, RenderModel renderModel) : base(null)
+		public PreviewWindow(WindowContext context):
+			this(context.SelectionModel, context.RenderModel)
+		{}
+		public PreviewWindow(SelectionModel selectionModel, RenderModel renderModel) : 
+			base(null)
 		{
 			selectionModel
 				.WhenAnyValue(x => x.SelectedScene.Name)
@@ -27,24 +44,27 @@ namespace Forces.Windows
 			var preferences = (Preferences)(Package as ForcesPackage)?.GetDialogPage(typeof(Preferences));
 			var multisampling = preferences?.PreviewMultiSampling ?? 1;
 			var window = new RenderWindow(multisampling);
-			window
-				.Events().ContextInitialized
+			Observable.FromEventPattern<EventHandler, EventArgs>(
+					h => window.ContextInitialized += h, 
+					h => window.ContextInitialized -= h)
 				.Take(1)
 				.Subscribe(_ =>
 				{
 					window.MakeContextCurrent();
 					_renderer = new OpenGLRenderer();
 				});
-			window
-				.Events().Paint
+			Observable.FromEventPattern<EventHandler, EventArgs>(
+					h => window.Paint += h,
+					h => window.Paint -= h)
 				.Subscribe(_ =>
 				{
 					window.MakeContextCurrent();
 					_renderer?.Render();
 					window.SwapBuffers();
 				});
-			window.Events().SizeChanged
-				.Merge(window.Events().Loaded.Take(1))
+			Observable.FromEventPattern<SizeChangedEventHandler, SizeChangedEventArgs>(
+					h => window.SizeChanged += h,
+					h => window.SizeChanged -= h)
 				.Subscribe(_ =>
 				{
 					if (renderModel.PreviewCamera == null)
@@ -58,15 +78,46 @@ namespace Forces.Windows
 						Y = (float)(window.RenderSize.Height * window.GetDpiYScale())
 					};
 				});
-			renderModel
+			Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
+					h => window.Loaded += h,
+					h => window.Loaded -= h)
+				.Take(1)
+				.Subscribe(_ =>
+				{
+					if (renderModel.PreviewCamera == null)
+					{
+						return;
+					}
+
+					renderModel.PreviewCamera.Viewport = new Vec2()
+					{
+						X = (float)(window.RenderSize.Width * window.GetDpiXScale()),
+						Y = (float)(window.RenderSize.Height * window.GetDpiYScale())
+					};
+				});
+			/*renderModel
 				.WhenAnyValue(x => x.RootNode)
 				.WhereNotNull()
 				.Subscribe(node =>
 				{
 					window.MakeContextCurrent();
 					_renderer?.SetCurrentRootNode(node);
+					_renderer?.Render();
 					window.SwapBuffers();
-				});
+				});*/
+			renderModel.PropertyChanged += (s, e) =>
+			{
+				if (e.PropertyName == "RootNode")
+				{
+					if (renderModel.RootNode != null)
+					{
+						window.MakeContextCurrent();
+						_renderer?.SetCurrentRootNode(renderModel.RootNode);
+						_renderer?.Render();
+						window.SwapBuffers();
+					}
+				}
+			};
 			renderModel
 				.WhenAnyValue(x => x.PreviewCamera)
 				.WhereNotNull()

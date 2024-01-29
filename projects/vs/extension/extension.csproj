@@ -25,6 +25,7 @@
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
     <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
     <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
     <CopyOutputSymbolsToOutputDirectory>true</CopyOutputSymbolsToOutputDirectory>
     <StartAction>Program</StartAction>
@@ -62,6 +63,7 @@
     <Compile Include="Engine\Renderer.cs" />
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\Vec.cs" />
+    <Compile Include="Models\MeshModel.cs" />
     <Compile Include="Windows\RenderWindow.cs" />
     <Compile Include="Models\RenderModel.cs" />
     <Compile Include="Models\SceneTree\AmbientLight.cs" />

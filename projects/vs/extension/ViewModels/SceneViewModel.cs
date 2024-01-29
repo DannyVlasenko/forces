@@ -30,9 +30,12 @@ namespace Forces.ViewModels
 				.Subscribe(scene =>
 				{
 					Nodes.Clear();
-					Nodes.Add(new NodeViewModel(scene.RootNode));
-					Nodes.Add(new NodeViewModel(scene));
-					Nodes.Add(new LeafViewModel(scene.AmbientLight));
+					if (scene != null)
+					{
+						Nodes.Add(new NodeViewModel(scene.RootNode));
+						Nodes.Add(new NodeViewModel(scene));
+						Nodes.Add(new LeafViewModel(scene.AmbientLight));
+					}
 				});
 		}
 	}

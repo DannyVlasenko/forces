@@ -15,4 +15,7 @@
     <ClInclude Include="..\..\..\src\editor\camera.h" />
     <ClInclude Include="..\..\..\src\editor\glm_wrap.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
 </Project>

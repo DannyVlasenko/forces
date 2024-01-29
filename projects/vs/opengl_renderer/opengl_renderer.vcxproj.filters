@@ -62,4 +62,7 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\opengl_renderer\renderer.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
 </Project>

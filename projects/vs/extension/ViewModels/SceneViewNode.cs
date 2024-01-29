@@ -36,7 +36,10 @@ namespace Forces.ViewModels
 				.ToObservableChangeSet()
 				.Select(x=> new NodeViewModel(x) as SceneViewNodeViewModel)
 				.AsObservableList();
-			CreateChildCommand = ReactiveCommand.Create(() => model.Children.Add(new MeshNode("Mesh_1")));
+			CreateChildCommand = ReactiveCommand.Create(() =>
+			{
+				model.Children.Add(new MeshNode("Mesh_1"));
+			});
 		}
 
 		public NodeViewModel(IDirectedLightsModel directedLightModel)
@@ -48,11 +51,12 @@ namespace Forces.ViewModels
 				.Select(x => new LeafViewModel(x) as SceneViewNodeViewModel)
 				.AsObservableList();
 			CreateChildCommand = 
-				ReactiveCommand.Create(() => 
-						directedLightModel
-							.DirectedLights
-							.Add(new DirectedLight(Color.White, Vector3.UnitZ, "DirectedLight_1"))
-					);
+				ReactiveCommand.Create(() =>
+				{
+					directedLightModel
+						.DirectedLights
+						.Add(new DirectedLight(Color.White, Vector3.UnitZ, "DirectedLight_1"));
+				});
 		}
 	}
 

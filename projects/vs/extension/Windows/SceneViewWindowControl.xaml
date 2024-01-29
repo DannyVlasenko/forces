@@ -45,7 +45,7 @@
 					<Label Content="{Binding Name}">
 						<Label.ContextMenu>
 							<ContextMenu>
-								<MenuItem Header="Add" Name="AddMenuItem"/>
+								<MenuItem Header="Add" Name="AddMenuItem" Command="{Binding CreateChildCommand}"/>
 							</ContextMenu>
 						</Label.ContextMenu>
 					</Label>

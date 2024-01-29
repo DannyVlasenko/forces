@@ -21,6 +21,9 @@
     <ClCompile Include="..\..\..\src\logic\view_models\camera_view_model.cpp" />
     <ClCompile Include="..\..\..\src\logic\view_models\global_light_view_model.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

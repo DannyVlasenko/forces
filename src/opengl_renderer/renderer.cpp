@@ -22,15 +22,18 @@ namespace opengl
 		{
 			const auto thisTranslation = node.translation() + parentTranslation;
 			auto* nodeMesh = node.getMesh();
-			if (!meshes_.contains(nodeMesh))
+			if (nodeMesh != nullptr) 
 			{
-				meshes_.insert_or_assign(nodeMesh, load_from_file(nodeMesh->path()));
-			}
-			for (const auto &mesh : meshes_.at(nodeMesh))
-			{
-				auto &obj = objects_.emplace_back(mesh, *lightProgram_);
-				obj.postion() = thisTranslation;
-				obj.color() = { 0.2f, 0.8f, 0.2f };
+				if (!meshes_.contains(nodeMesh))
+				{
+					meshes_.insert_or_assign(nodeMesh, load_from_file(nodeMesh->path()));
+				}
+				for (const auto& mesh : meshes_.at(nodeMesh))
+				{
+					auto& obj = objects_.emplace_back(mesh, *lightProgram_);
+					obj.postion() = thisTranslation;
+					obj.color() = { 0.2f, 0.8f, 0.2f };
+				}
 			}
 			for(const auto &child : node.children())
 			{

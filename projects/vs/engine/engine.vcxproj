@@ -31,6 +31,9 @@
     <ClCompile Include="..\..\..\src\engine\scene\camera.cpp" />
     <ClCompile Include="..\..\..\src\engine\scene\mesh.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

@@ -47,7 +47,7 @@ namespace Forces.Controllers
 				if (selected.Length == 1 && Path.GetExtension(selected[0].Name) == ".fsc")
 				{
 					var scene = _sceneFileModel.SceneForFile(selected[0].Name);
-					_selectionModel.SelectScene(scene, Path.GetFileNameWithoutExtension(selected[0].Name));
+					_selectionModel.SelectedScene = scene;
 				}
 			}
 		}
