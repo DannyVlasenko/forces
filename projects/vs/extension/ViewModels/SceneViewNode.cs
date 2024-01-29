@@ -22,7 +22,9 @@ namespace Forces.ViewModels
 			get =>_name;
 			set => this.RaiseAndSetIfChanged(ref _name, value);
 		}
-		public IObservable<IReadOnlyCollection<SceneViewNodeViewModel>> Children { get; protected set; }
+
+		public IObservableCollection<SceneViewNodeViewModel> Children { get; } =
+			new ObservableCollectionExtended<SceneViewNodeViewModel>();
 		public ReactiveCommand<Unit, Unit> CreateChildCommand { get; protected set; }
 
 		bool _isExpanded;
@@ -48,11 +50,12 @@ namespace Forces.ViewModels
 			_nameSubscription = model
 				.WhenAnyValue(x => x.Name)
 				.Subscribe(name => Name = name);
-			Children = model
+			model
 				.Children
 				.ToObservableChangeSet()
 				.Select(x=> new NodeViewModel(x, selectionModel) as SceneViewNodeViewModel)
-				.ToCollection();
+				.Bind(Children)
+				.Subscribe();
 			CreateChildCommand = ReactiveCommand.Create(() =>
 			{
 				model.Children.Add(new MeshNode("Mesh_1"));
@@ -65,11 +68,12 @@ namespace Forces.ViewModels
 		public NodeViewModel(IDirectedLightsModel directedLightModel, SelectionModel selectionModel)
 		{
 			Name = "Directed Lights";
-			Children = directedLightModel
+			directedLightModel
 				.DirectedLights
 				.ToObservableChangeSet()
 				.Select(x => new LeafViewModel(x, selectionModel) as SceneViewNodeViewModel)
-				.ToCollection();
+				.Bind(Children)
+				.Subscribe();
 			CreateChildCommand = 
 				ReactiveCommand.Create(() =>
 				{
