@@ -18,25 +18,18 @@ namespace Forces.Controllers
 	public class PropertyEditorSelectionController
 	{
 		private readonly IVsServiceProvider _serviceProvider;
+		private IVsUIShell _shell;
+		private IVsWindowFrame _frame;
 
 		public PropertyEditorSelectionController(SelectionModel model, IVsServiceProvider serviceProvider)
 		{
 			_serviceProvider = serviceProvider;
+			ThreadHelper.ThrowIfNotOnUIThread();
 			model
 				.WhenAnyValue(x => x.SelectedSceneViewNode)
 				.Select(CreateViewModelForModel)
 				.WhereNotNull()
 				.Subscribe(TrackSelection);
-		}
-
-		private void ShowPropertyEditor()
-		{
-			ThreadHelper.ThrowIfNotOnUIThread();
-			var shell = _serviceProvider.GetUIShellService();
-			if (shell == null) return;
-			var guidPropertyBrowser = new Guid(ToolWindowGuids.PropertyBrowser);
-			shell.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fForceCreate, ref guidPropertyBrowser, out var frame);
-			frame?.Show();
 		}
 
 		private object CreateViewModelForModel(ModelObjectWithNotifications model)
@@ -65,7 +58,6 @@ namespace Forces.Controllers
 		private void TrackSelection(object selection)
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
-			ShowPropertyEditor();
 			var mySelContainer = new SelectionContainer()
 			{
 				SelectedObjects = new System.Collections.ArrayList()
@@ -73,6 +65,24 @@ namespace Forces.Controllers
 					selection
 				}
 			};
+
+			if (_shell == null)
+			{
+				_shell = _serviceProvider.GetUIShellService();
+				if (_shell == null) return;
+				var guidPropertyBrowser = new Guid(ToolWindowGuids.PropertyBrowser);
+
+				if (_frame == null)
+				{
+					_shell.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fForceCreate, ref guidPropertyBrowser, out _frame);
+					_frame?.Show();
+				}
+			}
+
+			if (_frame != null && _frame.IsVisible() != 0)
+			{
+				_frame.Show();
+			}
 
 			var track = _serviceProvider.GetTrackSelectionService();
 			track?.OnSelectChange(mySelContainer);

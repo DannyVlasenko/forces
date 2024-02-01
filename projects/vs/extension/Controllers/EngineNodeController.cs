@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Reactive.Linq;
-using DynamicData;
 using DynamicData.Binding;
 using Forces.Models;
 using Forces.Models.SceneTree;
 using ReactiveUI;
 using SceneNode = Forces.Models.SceneTree.Node;
 using EngineNode = Forces.Engine.Node;
-using SceneMesh = Forces.Models.SceneTree.Mesh;
 using EngineMesh = Forces.Engine.Mesh;
 
 namespace Forces.Controllers

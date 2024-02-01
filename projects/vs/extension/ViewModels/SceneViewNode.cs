@@ -92,7 +92,6 @@ namespace Forces.ViewModels
 			_nameSubscription = directedLightModel
 				.WhenAnyValue(x => x.Name)
 				.Subscribe(name => Name = name);//ToProperty
-			//Children = new SourceList<SceneViewNodeViewModel>();
 			CreateChildCommand = ReactiveCommand.Create(() => { });
 			this.WhenAnyValue(x => x.IsSelected)
 				.Where(x => x)
@@ -101,7 +100,6 @@ namespace Forces.ViewModels
 		public LeafViewModel(AmbientLight ambientLightModel, SelectionModel selectionModel)
 		{
 			Name = "Ambient Light";
-			//Children = new SourceList<SceneViewNodeViewModel>();
 			CreateChildCommand = ReactiveCommand.Create(() => { });
 			this.WhenAnyValue(x => x.IsSelected)
 				.Where(x => x)
