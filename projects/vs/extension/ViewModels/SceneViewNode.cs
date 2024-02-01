@@ -12,6 +12,18 @@ using Forces.Models;
 
 namespace Forces.ViewModels
 {
+	public class NodeAction
+	{
+		public NodeAction(string actionName, ReactiveCommand<Unit, Unit> actionCommand)
+		{
+			ActionName = actionName;
+			ActionCommand = actionCommand;
+		}
+
+		public string ActionName { get; }
+		public ReactiveCommand<Unit, Unit> ActionCommand { get; }
+	}
+
 	public abstract class SceneViewNodeViewModel : ReactiveObject
 	{
 		private string _name;
@@ -24,7 +36,8 @@ namespace Forces.ViewModels
 
 		public IObservableCollection<SceneViewNodeViewModel> Children { get; } =
 			new ObservableCollectionExtended<SceneViewNodeViewModel>();
-		public ReactiveCommand<Unit, Unit> CreateChildCommand { get; protected set; }
+
+		public IObservableCollection<NodeAction> Actions { get; } = new ObservableCollectionExtended<NodeAction>();
 
 		bool _isExpanded;
 		public bool IsExpanded
@@ -55,10 +68,26 @@ namespace Forces.ViewModels
 				.Select(x=> new NodeViewModel(x, selectionModel) as SceneViewNodeViewModel)
 				.Bind(Children)
 				.Subscribe();
-			CreateChildCommand = ReactiveCommand.Create(() =>
-			{
-				model.Children.Add(new MeshNode("Mesh_1"));
-			});
+			Actions.Add(
+				new NodeAction("Add Mesh Node", ReactiveCommand.Create(() =>
+				{
+					model.Children.Add(new MeshNode("Mesh_1"));
+				})));
+			Actions.Add(
+				new NodeAction("Add Empty Node", ReactiveCommand.Create(() =>
+				{
+					model.Children.Add(new EmptyNode("Empty_1"));
+				})));
+			Actions.Add(
+				new NodeAction("Add Camera Node", ReactiveCommand.Create(() =>
+				{
+					model.Children.Add(new CameraNode("Camera_1"));
+				})));
+			Actions.Add(
+				new NodeAction("Add Light Node", ReactiveCommand.Create(() =>
+				{
+					model.Children.Add(new LightNode("Light_1"));
+				})));
 			this.WhenAnyValue(x => x.IsSelected)
 				.Where(x => x)
 				.Subscribe(_ => selectionModel.SelectedSceneViewNode = model);
@@ -73,13 +102,13 @@ namespace Forces.ViewModels
 				.Select(x => new LeafViewModel(x, selectionModel) as SceneViewNodeViewModel)
 				.Bind(Children)
 				.Subscribe();
-			CreateChildCommand = 
+			Actions.Add(new NodeAction("Add Directed Light",
 				ReactiveCommand.Create(() =>
 				{
 					directedLightModel
 						.DirectedLights
 						.Add(new DirectedLight(Color.White, Vector3.UnitZ, "DirectedLight_1"));
-				});
+				})));
 		}
 	}
 
@@ -91,7 +120,6 @@ namespace Forces.ViewModels
 			_nameSubscription = directedLightModel
 				.WhenAnyValue(x => x.Name)
 				.Subscribe(name => Name = name);//ToProperty
-			CreateChildCommand = ReactiveCommand.Create(() => { });
 			this.WhenAnyValue(x => x.IsSelected)
 				.Where(x => x)
 				.Subscribe(_ => selectionModel.SelectedSceneViewNode = directedLightModel);
@@ -99,7 +127,6 @@ namespace Forces.ViewModels
 		public LeafViewModel(AmbientLight ambientLightModel, SelectionModel selectionModel)
 		{
 			Name = "Ambient Light";
-			CreateChildCommand = ReactiveCommand.Create(() => { });
 			this.WhenAnyValue(x => x.IsSelected)
 				.Where(x => x)
 				.Subscribe(_ => selectionModel.SelectedSceneViewNode = ambientLightModel);

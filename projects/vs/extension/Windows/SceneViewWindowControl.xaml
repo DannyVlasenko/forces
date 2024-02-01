@@ -24,6 +24,18 @@
 			<Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:EnvironmentColors.ToolWindowTextBrushKey}}"/>
 			<Setter Property="Background" Value="{DynamicResource {x:Static vsShell:EnvironmentColors.ToolWindowBackgroundBrushKey}}"/>
 		</Style>
+		<Style TargetType="ContextMenu">
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:EnvironmentColors.ToolWindowTextBrushKey}}"/>
+			<Setter Property="Background" Value="{DynamicResource {x:Static vsShell:EnvironmentColors.ToolWindowBackgroundBrushKey}}"/>
+		</Style>
+		<Style TargetType="Menu">
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:EnvironmentColors.ToolWindowTextBrushKey}}"/>
+			<Setter Property="Background" Value="{DynamicResource {x:Static vsShell:EnvironmentColors.ToolWindowBackgroundBrushKey}}"/>
+		</Style>
+		<Style TargetType="MenuItem">
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:EnvironmentColors.ToolWindowTextBrushKey}}"/>
+			<Setter Property="Background" Value="{DynamicResource {x:Static vsShell:EnvironmentColors.ToolWindowBackgroundBrushKey}}"/>
+		</Style>
 	</UserControl.Resources>
 	<Grid>
 		<TextBox 
@@ -49,8 +61,12 @@
 				<HierarchicalDataTemplate DataType="{x:Type viewModels:SceneViewNodeViewModel}" ItemsSource="{Binding Children}">
 					<Label Content="{Binding Name}">
 						<Label.ContextMenu>
-							<ContextMenu>
-								<MenuItem Header="Add" Name="AddMenuItem" Command="{Binding CreateChildCommand}"/>
+							<ContextMenu ItemsSource="{Binding Actions}">
+								<ContextMenu.ItemTemplate>
+									<DataTemplate>
+										<MenuItem IsCheckable="False"   Header="{Binding ActionName}" Command="{Binding ActionCommand}"/>
+									</DataTemplate>
+								</ContextMenu.ItemTemplate>
 							</ContextMenu>
 						</Label.ContextMenu>
 					</Label>
