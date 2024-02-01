@@ -53,5 +53,10 @@ namespace Forces.Utilities
 
 			return angles;
 		}
+
+		public static float ToRadians(this float angle)
+		{
+			return (float)(angle * Math.PI / 180.0f);
+		}
 	}
 }

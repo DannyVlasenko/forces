@@ -7,8 +7,7 @@ namespace Forces.ViewModels
 {
 	public sealed class SceneViewModel : ReactiveObject
 	{
-		private readonly IDisposable _sceneNameSubscription;
-		private readonly IDisposable _nodesSubscription;
+		private IDisposable _sceneNameSubscription;
 
 		private string _sceneName;
 
@@ -22,21 +21,25 @@ namespace Forces.ViewModels
 
 		public SceneViewModel(SelectionModel selectionModel)
 		{
-			_sceneNameSubscription = selectionModel
+			selectionModel
 				.WhenAnyValue(x => x.SelectedScene.Name)
 				.Subscribe(name=>SceneName = name);//ToProperty
-			_nodesSubscription = selectionModel
+			selectionModel
 				.WhenAnyValue(x => x.SelectedScene)
 				.Subscribe(scene =>
 				{
+					_sceneNameSubscription?.Dispose();
 					Nodes.Clear();
 					if (scene != null)
 					{
+						_sceneNameSubscription = this.WhenAnyValue(x => x.SceneName)
+							.Subscribe(name => scene.Name = name);
 						Nodes.Add(new NodeViewModel(scene.RootNode, selectionModel));
 						Nodes.Add(new NodeViewModel(scene, selectionModel));
 						Nodes.Add(new LeafViewModel(scene.AmbientLight, selectionModel));
 					}
 				});
+			
 		}
 	}
 }

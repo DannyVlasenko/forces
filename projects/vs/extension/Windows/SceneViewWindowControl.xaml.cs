@@ -19,17 +19,9 @@ namespace Forces.Windows
 			{
 				this.OneWayBind(ViewModel, x => x.Nodes, x => x.SceneTreeView.ItemsSource)
 					.DisposeWith(disposable);
-				this.OneWayBind(ViewModel, x => x.SceneName, x => x.SceneNameTextBox.Text)
+				this.Bind(ViewModel, x => x.SceneName, x => x.SceneNameTextBox.Text)
 					.DisposeWith(disposable);
 			});
-		}
-
-		private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-		{
-			if (e.NewValue is NodeViewModel node)
-			{
-				//_model.SelectedSceneViewNode = node.Node;
-			}
 		}
 	}
 }

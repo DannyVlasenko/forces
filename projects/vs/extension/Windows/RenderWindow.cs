@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Interop;
 
 namespace Forces.Windows
@@ -15,6 +17,22 @@ namespace Forces.Windows
 		public RenderWindow(int multisampling)
 		{
 			_multisampling = multisampling;
+		}
+
+		public bool EnableRawCursor
+		{
+			set
+			{
+				if (glfwRawMouseMotionSupported() != 0)
+				{
+					glfwSetInputMode(_windowHandle, 0x00033005, value ? 1 : 0);
+				}
+			}
+		}
+
+		public bool DisableCursor
+		{
+			set => glfwSetInputMode(_windowHandle, 0x00033001, value ? 0x00034003 : 0x00034001);
 		}
 
 		public void MakeContextCurrent()
@@ -72,6 +90,9 @@ namespace Forces.Windows
 		private static extern void glfwPollEvents();
 
 		[DllImport("glfw3.dll")]
+		private static extern int glfwRawMouseMotionSupported();
+
+		[DllImport("glfw3.dll")]
 		private static extern IntPtr glfwCreateWindow(int width, int height, string title, IntPtr monitor, IntPtr share);
 
 		[DllImport("glfw3.dll")]
@@ -85,6 +106,9 @@ namespace Forces.Windows
 
 		[DllImport("glfw3.dll")]
 		private static extern IntPtr glfwGetWin32Window(IntPtr window);
+
+		[DllImport("glfw3.dll")]
+		private static extern void glfwSetInputMode(IntPtr window, int mode, int value);
 
 		[DllImport("user32.dll")]
 		private static extern IntPtr SetParent(IntPtr child, IntPtr parent);

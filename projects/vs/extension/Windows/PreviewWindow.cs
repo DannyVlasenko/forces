@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Utilities;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Input;
+using Forces.Controllers;
 using ReactiveUI;
 
 namespace Forces.Windows
@@ -26,7 +28,7 @@ namespace Forces.Windows
 	public sealed class PreviewWindow : ToolWindowPane
 	{
 		private OpenGLRenderer _renderer;
-		private readonly IDisposable _rootNodeSubscription;
+		private PreviewCameraMovementController _cameraMovementController;
 
 		public PreviewWindow(WindowContext context):
 			this(context.SelectionModel, context.RenderModel)
@@ -41,9 +43,17 @@ namespace Forces.Windows
 					Caption = "Forces Preview - " + (string.IsNullOrEmpty(name) ? "No Scene Selected" : name);
 				});
 
+
 			var preferences = (Preferences)(Package as ForcesPackage)?.GetDialogPage(typeof(Preferences));
 			var multisampling = preferences?.PreviewMultiSampling ?? 1;
 			var window = new RenderWindow(multisampling);
+			selectionModel.WhenAnyValue(x => x.SelectedScene.PreviewCamera)
+				.Subscribe(camera =>
+				{
+					_cameraMovementController?.Dispose();
+					_cameraMovementController = new PreviewCameraMovementController(window, camera);
+				});
+
 			Observable.FromEventPattern<EventHandler, EventArgs>(
 					h => window.ContextInitialized += h, 
 					h => window.ContextInitialized -= h)
@@ -95,16 +105,6 @@ namespace Forces.Windows
 						Y = (float)(window.RenderSize.Height * window.GetDpiYScale())
 					};
 				});
-			/*renderModel
-				.WhenAnyValue(x => x.RootNode)
-				.WhereNotNull()
-				.Subscribe(node =>
-				{
-					window.MakeContextCurrent();
-					_renderer?.SetCurrentRootNode(node);
-					_renderer?.Render();
-					window.SwapBuffers();
-				});*/
 			renderModel.PropertyChanged += (s, e) =>
 			{
 				if (e.PropertyName == "RootNode")
@@ -129,7 +129,8 @@ namespace Forces.Windows
 						X = (float)(window.RenderSize.Width * window.GetDpiXScale()),
 						Y = (float)(window.RenderSize.Height * window.GetDpiYScale())
 					};
-					_renderer?.SetCamera(camera);
+					_renderer?.SetCamera(camera); 
+					_renderer?.Render();
 					window.SwapBuffers();
 				});
 			Content = window;
