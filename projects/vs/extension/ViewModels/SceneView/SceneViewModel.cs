@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using Forces.Models;
 using ReactiveUI;
 
-namespace Forces.ViewModels
+namespace Forces.ViewModels.SceneView
 {
 	public sealed class SceneViewModel : ReactiveObject
 	{
@@ -23,7 +23,7 @@ namespace Forces.ViewModels
 		{
 			selectionModel
 				.WhenAnyValue(x => x.SelectedScene.Name)
-				.Subscribe(name=>SceneName = name);//ToProperty
+				.Subscribe(name=>SceneName = name);
 			selectionModel
 				.WhenAnyValue(x => x.SelectedScene)
 				.Subscribe(scene =>
@@ -32,10 +32,11 @@ namespace Forces.ViewModels
 					Nodes.Clear();
 					if (scene != null)
 					{
-						_sceneNameSubscription = this.WhenAnyValue(x => x.SceneName)
-							.Subscribe(name => scene.Name = name);
-						Nodes.Add(new NodeViewModel(scene.RootNode, selectionModel));
-						Nodes.Add(new NodeViewModel(scene, selectionModel));
+						_sceneNameSubscription = 
+							this.WhenAnyValue(x => x.SceneName)
+								.Subscribe(name => scene.Name = name);
+						Nodes.Add(new NonLeafNodeViewModel(scene.RootNode, selectionModel));
+						Nodes.Add(new NonLeafNodeViewModel(scene, selectionModel));
 						Nodes.Add(new LeafViewModel(scene.AmbientLight, selectionModel));
 					}
 				});

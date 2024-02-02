@@ -65,6 +65,10 @@
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\Vec.cs" />
     <Compile Include="Models\MeshModel.cs" />
+    <Compile Include="ViewModels\SceneView\LeafNodeViewModel.cs" />
+    <Compile Include="ViewModels\SceneView\NodeAction.cs" />
+    <Compile Include="ViewModels\SceneView\NonLeafNodeViewModel.cs" />
+    <Compile Include="ViewModels\SceneView\SceneViewNodeViewModel.cs" />
     <Compile Include="Windows\RenderWindow.cs" />
     <Compile Include="Models\RenderModel.cs" />
     <Compile Include="Models\SceneTree\AmbientLight.cs" />
@@ -100,8 +104,7 @@
     <Compile Include="ViewModels\PropertyEditor\NodePropertyEditorViewModel.cs" />
     <Compile Include="ViewModels\PropertyEditor\PreviewCameraPropertyEditorViewModel.cs" />
     <Compile Include="ViewModels\PropertyEditor\Vector3Property.cs" />
-    <Compile Include="ViewModels\SceneViewModel.cs" />
-    <Compile Include="ViewModels\SceneViewNode.cs" />
+    <Compile Include="ViewModels\SceneView\SceneViewModel.cs" />
     <Compile Include="Commands\OptionsCommand.cs" />
     <Compile Include="Windows\PreviewWindow.cs" />
     <Compile Include="Commands\PreviewWindowCommand.cs" />

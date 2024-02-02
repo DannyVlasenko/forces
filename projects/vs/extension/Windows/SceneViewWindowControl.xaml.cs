@@ -1,7 +1,6 @@
 ﻿using System.Reactive.Disposables;
-using System.Windows;
 using Forces.Models;
-using Forces.ViewModels;
+using Forces.ViewModels.SceneView;
 using ReactiveUI;
 
 namespace Forces.Windows
