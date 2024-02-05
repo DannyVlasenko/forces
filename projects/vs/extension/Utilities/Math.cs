@@ -7,19 +7,20 @@ namespace Forces.Utilities
 	{
 		public static Quaternion EulerXYZToQuaternion(this Vector3 eulerXYZ)
 		{
-			var cy = (float)Math.Cos(eulerXYZ.Z * 0.5);
-			var sy = (float)Math.Sin(eulerXYZ.Z * 0.5);
-			var cp = (float)Math.Cos(eulerXYZ.Y * 0.5);
-			var sp = (float)Math.Sin(eulerXYZ.Y * 0.5);
-			var cr = (float)Math.Cos(eulerXYZ.X * 0.5);
-			var sr = (float)Math.Sin(eulerXYZ.X * 0.5);
+			var cx = (float)Math.Cos(eulerXYZ.X * 0.5);
+			var cy = (float)Math.Cos(eulerXYZ.Y * 0.5);
+			var cz = (float)Math.Cos(eulerXYZ.Z * 0.5);
+
+			var sx = (float)Math.Sin(eulerXYZ.X * 0.5);
+			var sy = (float)Math.Sin(eulerXYZ.Y * 0.5);
+			var sz = (float)Math.Sin(eulerXYZ.Z * 0.5);
 
 			return new Quaternion
 			{
-				W = (cr * cp * cy + sr * sp * sy),
-				X = (sr * cp * cy - cr * sp * sy),
-				Y = (cr * sp * cy + sr * cp * sy),
-				Z = (cr * cp * sy - sr * sp * cy)
+				W = (cx * cy * cz + sx * sy * sz),
+				X = (sx * cy * cz - cx * sy * sz),
+				Y = (cx * sy * cz + sx * cy * sz),
+				Z = (cx * cy * sz - sx * sy * cz)
 			};
 		}
 	}

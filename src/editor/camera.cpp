@@ -83,3 +83,18 @@ void camera_set_viewport(ForcesCamera* camera, vec2 vp)
 	viewport.x = vp.x;
 	viewport.y = vp.y;
 }
+
+vec4 camera_get_rotation(ForcesCamera* camera)
+{
+	const auto& rotation = reinterpret_cast<forces::Camera*>(camera)->rotation();
+	return { rotation.w, rotation.x, rotation.y, rotation.z };
+}
+
+void camera_set_rotation(ForcesCamera* camera, vec4 rot)
+{
+	auto& rotation = reinterpret_cast<forces::Camera*>(camera)->rotation();
+	rotation.w = rot.w;
+	rotation.x = rot.x;
+	rotation.y = rot.y;
+	rotation.z = rot.z;
+}

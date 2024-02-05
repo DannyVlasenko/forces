@@ -38,6 +38,7 @@ namespace Forces.ViewModels.SceneView
 						Nodes.Add(new NonLeafNodeViewModel(scene.RootNode, selectionModel));
 						Nodes.Add(new NonLeafNodeViewModel(scene, selectionModel));
 						Nodes.Add(new LeafViewModel(scene.AmbientLight, selectionModel));
+						Nodes.Add(new LeafViewModel(scene.PreviewCamera, selectionModel));
 					}
 				});
 			

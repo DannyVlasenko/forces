@@ -18,6 +18,14 @@ struct vec3
 	float z;
 };
 
+struct vec4
+{
+	float w;
+	float x;
+	float y;
+	float z;
+};
+
 #ifdef __cplusplus
 }
 #endif

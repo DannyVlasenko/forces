@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Windows.Documents;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using Microsoft.Internal.VisualStudio.PlatformUI;
+using WindowsUtilities;
 
 namespace Forces.Windows
 {
@@ -13,6 +15,9 @@ namespace Forces.Windows
 
 		public event EventHandler ContextInitialized;
 		public event EventHandler Paint;
+		public new event EventHandler<Point> MouseMove;
+		public new event EventHandler<Point> MouseRightButtonDown;
+		public new event EventHandler<Point> MouseRightButtonUp;
 
 		public RenderWindow(int multisampling)
 		{
@@ -70,9 +75,42 @@ namespace Forces.Windows
 
 		protected override IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
 		{
-			if (msg == 15)
+			switch (msg)
 			{
-				Paint?.Invoke(this, null);
+				case (int)WindowsMessages.WM_NCHITTEST:
+				{
+					handled = true;
+					return new IntPtr(1);
+				}
+				case (int)WindowsMessages.WM_MOUSEMOVE:
+				{
+					handled = true;
+					var xPos = lParam.ToInt32() & 0xFFFF; 
+					var yPos = (lParam.ToInt32() >> 16) & 0xFFFF;
+					MouseMove?.Invoke(this, new Point(xPos, yPos));
+					break;
+				}
+				case (int)WindowsMessages.WM_RBUTTONDOWN:
+				{
+					handled = true;
+					var xPos = lParam.ToInt32() & 0xFFFF; 
+					var yPos = (lParam.ToInt32() >> 16) & 0xFFFF;
+					MouseRightButtonDown?.Invoke(this, new Point(xPos, yPos));
+					break;
+				}
+				case (int)WindowsMessages.WM_RBUTTONUP:
+				{
+					handled = true;
+					var xPos = lParam.ToInt32() & 0xFFFF; 
+					var yPos = (lParam.ToInt32() >> 16) & 0xFFFF;
+					MouseRightButtonUp?.Invoke(this, new Point(xPos, yPos));
+					break;
+				}
+				case (int)WindowsMessages.WM_PAINT:
+				{
+					Paint?.Invoke(this, null);
+					break;
+				}
 			}
 			return base.WndProc(hwnd, msg, wParam, lParam, ref handled);
 		}

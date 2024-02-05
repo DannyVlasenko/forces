@@ -65,6 +65,7 @@
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\Vec.cs" />
     <Compile Include="Models\MeshModel.cs" />
+    <Compile Include="Utilities\WindowsMessages.cs" />
     <Compile Include="ViewModels\SceneView\LeafNodeViewModel.cs" />
     <Compile Include="ViewModels\SceneView\NodeAction.cs" />
     <Compile Include="ViewModels\SceneView\NonLeafNodeViewModel.cs" />

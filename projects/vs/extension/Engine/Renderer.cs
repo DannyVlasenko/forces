@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Forces.Engine
 {
-	internal class OpenGLRenderer : IDisposable
+	public class OpenGLRenderer : IDisposable
 	{
 		private IntPtr _renderer = create_opengl_renderer();
 

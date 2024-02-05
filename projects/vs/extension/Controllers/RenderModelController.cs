@@ -33,7 +33,38 @@ namespace Forces.Controllers
 
 			selectionModel
 				.WhenAnyValue(x => x.SelectedScene.PreviewCamera.Translation)
-				.Subscribe(x => renderModel.PreviewCamera.Position = x);
+				.Subscribe(x =>
+				{
+					renderModel.PreviewCamera.Position = x;
+				});
+
+			selectionModel
+				.WhenAnyValue(x => x.SelectedScene.PreviewCamera.Rotation)
+				.Subscribe(x =>
+				{
+					renderModel.PreviewCamera.Rotation = x;
+				});
+
+			selectionModel
+				.WhenAnyValue(x => x.SelectedScene.PreviewCamera.Near)
+				.Subscribe(x =>
+				{
+					renderModel.PreviewCamera.Near = x;
+				});
+
+			selectionModel
+				.WhenAnyValue(x => x.SelectedScene.PreviewCamera.Far)
+				.Subscribe(x =>
+				{
+					renderModel.PreviewCamera.Far = x;
+				});
+
+			selectionModel
+				.WhenAnyValue(x => x.SelectedScene.PreviewCamera.FOV)
+				.Subscribe(x =>
+				{
+					renderModel.PreviewCamera.FOV = x;
+				});
 		}
 	}
 }

@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Utilities;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Input;
 using Forces.Controllers;
 using ReactiveUI;
 
@@ -52,6 +51,20 @@ namespace Forces.Windows
 				{
 					_cameraMovementController?.Dispose();
 					_cameraMovementController = new PreviewCameraMovementController(window, camera);
+				});
+			selectionModel.WhenAnyValue(x => x.SelectedScene.PreviewCamera.Rotation)
+				.Subscribe(camera =>
+				{
+					window.MakeContextCurrent();
+					_renderer?.Render();
+					window.SwapBuffers();
+				});
+			selectionModel.WhenAnyValue(x => x.SelectedScene.PreviewCamera.Translation)
+				.Subscribe(camera =>
+				{
+					window.MakeContextCurrent();
+					_renderer?.Render();
+					window.SwapBuffers();
 				});
 
 			Observable.FromEventPattern<EventHandler, EventArgs>(

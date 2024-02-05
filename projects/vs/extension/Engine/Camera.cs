@@ -12,6 +12,11 @@ namespace Forces.Engine
 			get => camera_get_position(Handle);
 			set => camera_set_position(Handle, value);
 		}
+		public Vec4 Rotation
+		{
+			get => camera_get_rotation(Handle);
+			set => camera_set_rotation(Handle, value);
+		}
 
 		public Vec2 Viewport
 		{
@@ -65,6 +70,12 @@ namespace Forces.Engine
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern void camera_set_position(IntPtr node, Vec3 position);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern Vec4 camera_get_rotation(IntPtr node);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern void camera_set_rotation(IntPtr node, Vec4 position);
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern Vec2 camera_get_viewport(IntPtr node);

@@ -19,16 +19,16 @@ namespace Forces.Controllers
 		{
 			_window = window;
 			_camera = camera;
-			_window.MouseDown += Window_MouseDown;
-			_window.MouseUp += Window_MouseUp;
+			_window.MouseRightButtonUp += _window_MouseRightButtonUp;
+			_window.MouseRightButtonDown += Window_MouseRightButtonDown;
 			_window.MouseMove += Window_MouseMove;
 			_window.KeyDown += Window_KeyDown;
 		}
 
 		public void Dispose()
 		{
-			_window.MouseDown -= Window_MouseDown;
-			_window.MouseUp -= Window_MouseUp;
+			_window.MouseRightButtonDown -= Window_MouseRightButtonDown;
+			_window.MouseRightButtonUp -= _window_MouseRightButtonUp;
 			_window.MouseMove -= Window_MouseMove;
 			_window.KeyDown -= Window_KeyDown;
 		}
@@ -37,11 +37,11 @@ namespace Forces.Controllers
 		{
 
 		}
-		private void Window_MouseMove(object sender, MouseEventArgs e)
+		private void Window_MouseMove(object sender, Point e)
 		{
 			if (_mouseMiddlePressed)
 			{
-				var cursorPos = e.GetPosition(_window);
+				var cursorPos = e;
 				var sens = 0.2f;
 				var cursorMovement = cursorPos - _lastCursorPos;
 				Pitch(_camera, (float)(cursorMovement.Y * sens));
@@ -50,31 +50,26 @@ namespace Forces.Controllers
 			}
 		}
 
-		private void Window_MouseUp(object sender, MouseButtonEventArgs e)
+		private void Window_MouseRightButtonDown(object sender, Point e)
 		{
-			if (e.MiddleButton == MouseButtonState.Released)
+			_window.Focus();
+			var cursorPos = e;
+			if (!_mouseMiddlePressed)
 			{
-				if (_mouseMiddlePressed)
-				{
-					_window.EnableRawCursor = false;
-					_window.DisableCursor = false;
-					_mouseMiddlePressed = false;
-				}
+				_window.DisableCursor = true;
+				_window.EnableRawCursor = true;
+				_lastCursorPos = cursorPos;
+				_mouseMiddlePressed = true;
 			}
 		}
 
-		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+		private void _window_MouseRightButtonUp(object sender, Point e)
 		{
-			if (e.MiddleButton == MouseButtonState.Pressed)
+			if (_mouseMiddlePressed)
 			{
-				var cursorPos = e.GetPosition(_window);
-				if (!_mouseMiddlePressed)
-				{
-					_window.DisableCursor = true;
-					_window.EnableRawCursor = true;
-					_lastCursorPos = cursorPos;
-					_mouseMiddlePressed = true;
-				}
+				_window.EnableRawCursor = false;
+				_window.DisableCursor = false;
+				_mouseMiddlePressed = false;
 			}
 		}
 

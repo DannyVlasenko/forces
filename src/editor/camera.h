@@ -20,6 +20,12 @@ __declspec(dllexport)
 void camera_set_position(ForcesCamera *camera, vec3 pos);
 
 __declspec(dllexport)
+vec4 camera_get_rotation(ForcesCamera *camera);
+
+__declspec(dllexport)
+void camera_set_rotation(ForcesCamera *camera, vec4 rot);
+
+__declspec(dllexport)
 void camera_yaw(ForcesCamera *camera, float grad);
 
 __declspec(dllexport)
