@@ -55,6 +55,18 @@ namespace Forces.Utilities
 			return angles;
 		}
 
+		public static Vector3 Multiply(this Quaternion q, Vector3 v)
+		{
+			var quatVector = new Vector3(q.X, q.Y, q.Z);
+			var uv = Vector3.Cross(quatVector, v);
+			var uuv = Vector3.Cross(quatVector, uv);
+
+			return v + ((uv * q.W) + uuv) * 2;
+		}
+	}
+
+	public static class NumericExtension
+	{
 		public static float ToRadians(this float angle)
 		{
 			return (float)(angle * Math.PI / 180.0f);

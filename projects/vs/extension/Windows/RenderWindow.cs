@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
-using Microsoft.Internal.VisualStudio.PlatformUI;
 using WindowsUtilities;
 
 namespace Forces.Windows
@@ -115,6 +117,18 @@ namespace Forces.Windows
 			return base.WndProc(hwnd, msg, wParam, lParam, ref handled);
 		}
 
+		public HashSet<Key> PressedKeys()
+		{
+			byte[] keyStates = new byte[256];
+			if (!GetKeyboardState(keyStates))
+				throw new Win32Exception(Marshal.GetLastWin32Error());
+			return keyStates
+				.Select((b, i) => ((b & 0x80) != 0, i))
+				.Where(x=>x.Item1)
+				.Select(x=>KeyInterop.KeyFromVirtualKey(x.i))
+				.ToHashSet();
+		}
+
 		[DllImport("glfw3.dll")]
 		private static extern int glfwInit();
 
@@ -123,9 +137,6 @@ namespace Forces.Windows
 
 		[DllImport("glfw3.dll")]
 		private static extern void glfwTerminate();
-
-		[DllImport("glfw3.dll")]
-		private static extern void glfwPollEvents();
 
 		[DllImport("glfw3.dll")]
 		private static extern int glfwRawMouseMotionSupported();
@@ -153,5 +164,8 @@ namespace Forces.Windows
 
 		[DllImport("user32.dll")]
 		private static extern uint SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
+
+		[DllImport("user32.dll")]
+		private static extern bool GetKeyboardState(byte[] states);
 	}
 }
