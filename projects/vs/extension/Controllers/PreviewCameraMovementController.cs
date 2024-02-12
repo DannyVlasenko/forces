@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Runtime.InteropServices;
-using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -17,7 +15,6 @@ namespace Forces.Controllers
 		private readonly RenderWindow _window;
 		private readonly PreviewCamera _camera;
 		private bool _mouseRightPressed;
-		private Point _lastCursorPos;
 		private readonly DispatcherTimer _controlsTimer;
 		private readonly HashSet<Key> _pressedKeys = new HashSet<Key>();
 
@@ -27,7 +24,7 @@ namespace Forces.Controllers
 			_camera = camera;
 			_window.MouseRightButtonUp += Window_MouseRightButtonUp;
 			_window.MouseRightButtonDown += Window_MouseRightButtonDown;
-			_window.MouseMove += Window_MouseMove;
+			_window.RawMouseMove += Window_MouseMove;
 			_controlsTimer = new DispatcherTimer(DispatcherPriority.Normal)
 			{
 				Interval = new TimeSpan(0, 0, 0, 0, 5)
@@ -61,7 +58,7 @@ namespace Forces.Controllers
 		{
 			_window.MouseRightButtonDown -= Window_MouseRightButtonDown;
 			_window.MouseRightButtonUp -= Window_MouseRightButtonUp;
-			_window.MouseMove -= Window_MouseMove;
+			_window.RawMouseMove -= Window_MouseMove;
 			_controlsTimer.Stop();
 		}
 
@@ -69,24 +66,19 @@ namespace Forces.Controllers
 		{
 			if (_mouseRightPressed)
 			{
-				var cursorPos = e;
 				var sens = 0.2f;
-				var cursorMovement = cursorPos - _lastCursorPos;
-				Pitch(_camera, (float)(cursorMovement.Y * sens));
-				Yaw(_camera, (float)(-cursorMovement.X * sens));
-				_lastCursorPos = cursorPos;
+				Pitch(_camera, (float)(e.Y * sens));
+				Yaw(_camera, (float)(-e.X * sens));
 			}
 		}
 
 		private void Window_MouseRightButtonDown(object sender, Point e)
 		{
 			_window.Focus();
-			var cursorPos = e;
 			if (!_mouseRightPressed)
 			{
 				_window.DisableCursor = true;
 				_window.EnableRawCursor = true;
-				_lastCursorPos = cursorPos;
 				_mouseRightPressed = true;
 				_controlsTimer.Start();
 			}

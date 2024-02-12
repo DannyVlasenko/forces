@@ -6,6 +6,8 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using Microsoft.VisualStudio.Imaging.Interop;
+using Microsoft.VisualStudio.Utilities;
 using WindowsUtilities;
 
 namespace Forces.Windows
@@ -14,9 +16,13 @@ namespace Forces.Windows
 	{
 		private readonly int _multisampling;
 		private IntPtr _windowHandle;
+		private int _lastX = 0;
+		private int _lastY = 0;
 
 		public event EventHandler ContextInitialized;
 		public event EventHandler Paint;
+
+		public event EventHandler<Point> RawMouseMove;
 		public new event EventHandler<Point> MouseMove;
 		public new event EventHandler<Point> MouseRightButtonDown;
 		public new event EventHandler<Point> MouseRightButtonUp;
@@ -30,16 +36,36 @@ namespace Forces.Windows
 		{
 			set
 			{
-				if (glfwRawMouseMotionSupported() != 0)
+				RAWINPUTDEVICE[] rid = new RAWINPUTDEVICE[1];
+				rid[0].usUsagePage = Convert.ToUInt16(1);
+				rid[0].usUsage = Convert.ToUInt16(2);
+				rid[0].dwFlags = value ? 0 : 1;
+				rid[0].hwndTarget = value ? Handle : IntPtr.Zero;
+				if (!RegisterRawInputDevices(rid, Convert.ToUInt32(rid.Length),
+						Convert.ToUInt32(Marshal.SizeOf(rid[0]))))
 				{
-					glfwSetInputMode(_windowHandle, 0x00033005, value ? 1 : 0);
+					throw new ApplicationException("Failed to register raw input device(s). " +
+												   "Error code: " + Marshal.GetLastWin32Error());
 				}
 			}
 		}
 
 		public bool DisableCursor
 		{
-			set => glfwSetInputMode(_windowHandle, 0x00033001, value ? 0x00034003 : 0x00034001);
+			set
+			{
+				glfwSetInputMode(_windowHandle, 0x00033001, value ? 0x00034003 : 0x00034001);
+				if (value)
+				{
+					var origin = PointToScreen(new Point(0, 0));
+					var rect = new System.Drawing.Rectangle((int)origin.X, (int)origin.Y, (int)(origin.X + RenderSize.Width * this.GetDpiXScale()), (int)(origin.Y + RenderSize.Height * this.GetDpiYScale()));
+					ClipCursor(ref rect);
+				}
+				else
+				{
+					ClipCursor(IntPtr.Zero);
+				}
+			}
 		}
 
 		public void MakeContextCurrent()
@@ -108,6 +134,41 @@ namespace Forces.Windows
 					MouseRightButtonUp?.Invoke(this, new Point(xPos, yPos));
 					break;
 				}
+				case (int)WindowsMessages.WM_INPUT:
+				{
+					handled = true;
+					uint size = 0;
+					if (GetRawInputData(lParam, 0x10000003, IntPtr.Zero, ref size,
+						    Marshal.SizeOf<RAWINPUTHEADER>()) != 0)
+					{
+						throw new ApplicationException("Failed to get raw input. " +
+						                               "Error code: " + Marshal.GetLastWin32Error());
+					}
+					var count = size/Marshal.SizeOf<RAWINPUT>();
+					var input = new RAWINPUT();
+					if (GetRawInputData(lParam, 0x10000003, ref input, ref size,
+						    Marshal.SizeOf<RAWINPUTHEADER>()) == 0xFFFFFFFF)
+					{
+						throw new ApplicationException("Failed to get raw input. " +
+						                               "Error code: " + Marshal.GetLastWin32Error());
+					}
+					if (input.header.dwType == 0) //RIM_TYPEMOUSE
+					{
+						if ((input.data.Mouse.usFlags & 0x01) != 0) //MOUSE_MOVE_ABSOLUTE
+						{
+							var dx = input.data.Mouse.lLastX - _lastX;
+							_lastX = input.data.Mouse.lLastX;
+							var dy = input.data.Mouse.lLastY - _lastY;
+							_lastY = input.data.Mouse.lLastY;
+							RawMouseMove?.Invoke(this, new Point(dx, dy));
+						}
+						else
+						{
+							RawMouseMove?.Invoke(this, new Point(input.data.Mouse.lLastX, input.data.Mouse.lLastY));
+						}
+					}
+					break;
+				}
 				case (int)WindowsMessages.WM_PAINT:
 				{
 					Paint?.Invoke(this, null);
@@ -139,9 +200,6 @@ namespace Forces.Windows
 		private static extern void glfwTerminate();
 
 		[DllImport("glfw3.dll")]
-		private static extern int glfwRawMouseMotionSupported();
-
-		[DllImport("glfw3.dll")]
 		private static extern IntPtr glfwCreateWindow(int width, int height, string title, IntPtr monitor, IntPtr share);
 
 		[DllImport("glfw3.dll")]
@@ -167,5 +225,87 @@ namespace Forces.Windows
 
 		[DllImport("user32.dll")]
 		private static extern bool GetKeyboardState(byte[] states);
+
+		[DllImport("user32.dll")]
+		private static extern void ClipCursor(ref System.Drawing.Rectangle rect);
+
+		[DllImport("user32.dll")]
+		private static extern void ClipCursor(IntPtr rect);
+
+		[DllImport("User32.dll", SetLastError = true)]
+		private static extern bool RegisterRawInputDevices(RAWINPUTDEVICE[] pRawInputDevice, UInt32 uiNumDevices, UInt32 cbSize);
+
+		[StructLayout(LayoutKind.Sequential)]
+		private struct RAWINPUTDEVICE
+		{
+			[MarshalAs(UnmanagedType.U2)]
+			public ushort usUsagePage;
+			[MarshalAs(UnmanagedType.U2)]
+			public ushort usUsage;
+			[MarshalAs(UnmanagedType.U4)]
+			public int dwFlags;
+			public IntPtr hwndTarget;
+		}
+
+		[DllImport("User32.dll", SetLastError = true)]
+		private static extern uint GetRawInputData(IntPtr hRawInput, uint uiCommand, ref RAWINPUT pData, ref uint pcbSize, int cbSizeHeader);
+
+		[DllImport("User32.dll", SetLastError = true)]
+		private static extern uint GetRawInputData(IntPtr hRawInput, uint uiCommand, IntPtr nullable, ref uint pcbSize, int cbSizeHeader);
+
+		[StructLayout(LayoutKind.Sequential)]
+		private struct RAWINPUT
+		{
+			public RAWINPUTHEADER header;
+			public RAWINPUTDATA data;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		private struct RAWINPUTHEADER
+		{
+			public int dwType;
+			public int dwSize;
+			public IntPtr hDevice;
+			public IntPtr wParam;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		private struct RAWMOUSE
+		{
+			[MarshalAs(UnmanagedType.U2)]
+			public ushort usFlags;
+			[MarshalAs(UnmanagedType.U2)]
+			public ushort usButtonFlags;
+			[MarshalAs(UnmanagedType.U2)]
+			public ushort usButtonData;
+			[MarshalAs(UnmanagedType.U4)]
+			public uint ulRawButtons;
+			[MarshalAs(UnmanagedType.I4)]
+			public int lLastX;
+			[MarshalAs(UnmanagedType.I4)]
+			public int lLastY;
+			[MarshalAs(UnmanagedType.U4)]
+			public uint ulExtraInformation;
+		}
+
+		[StructLayout(LayoutKind.Explicit)]
+		private struct RAWINPUTDATA
+		{
+			[FieldOffset(0)]
+			public RAWMOUSE Mouse;
+			[FieldOffset(0)]
+			public RAWKEYBOARD Keyboard;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		private struct RAWKEYBOARD
+		{
+			public ushort MakeCode;
+			public ushort Flags;
+			public ushort Reserved;
+			public ushort VKey;
+			public uint Message;
+			public ulong ExtraInformation;
+		}
 	}
 }
