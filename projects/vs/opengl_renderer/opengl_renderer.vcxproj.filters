@@ -61,6 +61,9 @@
       <Filter>opengl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\opengl_renderer\renderer.hpp" />
+    <ClInclude Include="..\..\..\src\opengl_renderer\scene\light_sources.hpp">
+      <Filter>scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

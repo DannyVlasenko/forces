@@ -3,17 +3,16 @@
 #include <memory>
 
 #include "engine/render/renderer.hpp"
-#include "engine/scene/camera.hpp"
+#include "engine/render/window.hpp"
 
 namespace opengl
 {
 	class Renderer : public forces::Renderer
 	{
 	public:
-		Renderer();
-		void setCurrentRootNode(const forces::Node& root) override;
+		explicit Renderer(forces::Window& window);
 		void render() override;
-		void setCamera(forces::Camera* camera) noexcept override;
+		void processScene(forces::Scene& scene) override;
 
 	private:
 		struct Impl;

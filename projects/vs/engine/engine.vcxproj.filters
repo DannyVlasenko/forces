@@ -20,6 +20,9 @@
     <ClInclude Include="..\..\..\src\engine\scene\camera.hpp">
       <Filter>scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\engine\scene\light.hpp">
+      <Filter>scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="scene">

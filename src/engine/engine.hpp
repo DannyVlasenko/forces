@@ -7,7 +7,9 @@ namespace forces
 	class Engine
 	{
 	public:
-		void setCurrentScene(Scene &scene);
-		void step();
+		Scene& currentScene() noexcept;
+		void tick();
+		bool isRunning();
+		explicit Engine(Scene& startup_scene);
 	};
 }
