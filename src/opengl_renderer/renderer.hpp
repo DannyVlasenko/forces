@@ -12,7 +12,7 @@ namespace opengl
 	public:
 		explicit Renderer(forces::Window& window);
 		void render() override;
-		void processScene(forces::Scene& scene) override;
+		void processScene(const forces::Scene& scene) override;
 
 	private:
 		struct Impl;

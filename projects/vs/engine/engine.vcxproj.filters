@@ -23,6 +23,21 @@
     <ClInclude Include="..\..\..\src\engine\scene\light.hpp">
       <Filter>scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\engine\scene\empty_node.hpp">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\engine\scene\mesh_node.hpp">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\engine\scene\material.hpp">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\engine\scene\camera_node.hpp">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\engine\scene\light_node.hpp">
+      <Filter>scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="scene">
@@ -34,9 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\engine\scene\mesh.cpp">
-      <Filter>scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\engine\scene\camera.cpp">
       <Filter>scene</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,6 +11,6 @@ namespace forces
 	public:
 		virtual ~Renderer() = default;
 		virtual void render() = 0;
-		virtual void processScene(Scene& scene) = 0;
+		virtual void processScene(const Scene& scene) = 0;
 	};
 }
