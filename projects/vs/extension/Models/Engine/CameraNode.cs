@@ -1,7 +1,7 @@
-﻿using System.Runtime.InteropServices;
-using System;
+﻿using System;
+using System.Runtime.InteropServices;
 
-namespace Forces.Engine
+namespace Forces.Models.Engine
 {
 	public class CameraNode : Node
 	{

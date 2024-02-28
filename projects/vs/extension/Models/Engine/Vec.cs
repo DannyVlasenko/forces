@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace Forces.Engine
+namespace Forces.Models.Engine
 {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Vec2

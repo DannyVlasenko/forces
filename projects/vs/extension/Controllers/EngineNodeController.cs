@@ -5,8 +5,8 @@ using Forces.Models;
 using Forces.Models.SceneTree;
 using ReactiveUI;
 using SceneNode = Forces.Models.SceneTree.Node;
-using EngineNode = Forces.Engine.Node;
-using EngineMesh = Forces.Engine.Mesh;
+using EngineNode = Forces.Models.Engine.Node;
+using EngineMesh = Forces.Models.Engine.Mesh;
 
 namespace Forces.Controllers
 {

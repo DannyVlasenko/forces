@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Forces.Models.Engine;
 
-namespace Forces.Engine
+namespace Forces.Models.Render
 {
 	public class OpenGLRenderer : IDisposable
 	{
-		private IntPtr _renderer = create_opengl_renderer();
+		private readonly Window _window;
+		private IntPtr _renderer;
 
-		public void SetCurrentRootNode(Node root)
+		public OpenGLRenderer(RenderWindow window)
 		{
-			opengl_renderer_set_root_node(_renderer, root.Handle);
+			_window = new Window(window);
+			_renderer = create_opengl_renderer(_window.Handle);
 		}
-		public void SetCamera(Camera camera)
+
+		public void ProcessScene(Scene scene)
 		{
-			opengl_renderer_set_camera(_renderer, camera.Handle);
+			opengl_renderer_process_scene(_renderer, scene.Handle);
 		}
 
 		public void Render()
@@ -30,6 +34,7 @@ namespace Forces.Engine
 		public void Dispose()
 		{
 			ReleaseUnmanagedResources();
+			_window.Dispose();
 			GC.SuppressFinalize(this);
 		}
 
@@ -39,7 +44,7 @@ namespace Forces.Engine
 		}
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern IntPtr create_opengl_renderer();
+		private static extern IntPtr create_opengl_renderer(IntPtr window);
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern void delete_opengl_renderer(IntPtr renderer);
@@ -48,9 +53,7 @@ namespace Forces.Engine
 		private static extern void opengl_renderer_render(IntPtr renderer);
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern void opengl_renderer_set_root_node(IntPtr renderer, IntPtr node);
+		private static extern void opengl_renderer_process_scene(IntPtr renderer, IntPtr scene);
 
-		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern void opengl_renderer_set_camera(IntPtr renderer, IntPtr camera);
 	}
 }

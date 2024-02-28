@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Reactive.Linq;
-using Forces.Engine;
 using Forces.Models;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Utilities;
 using System.Runtime.InteropServices;
 using System.Windows;
 using Forces.Controllers;
+using Forces.Models.Engine;
+using Forces.Models.Render;
 using ReactiveUI;
 
 namespace Forces.Windows

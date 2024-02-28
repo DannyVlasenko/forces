@@ -6,16 +6,15 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
-using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Utilities;
 using WindowsUtilities;
 
-namespace Forces.Windows
+namespace Forces.Models.Render
 {
 	public class RenderWindow : HwndHost
 	{
 		private readonly int _multisampling;
-		private IntPtr _windowHandle;
+		public IntPtr WindowHandle { get; private set; }
 		private int _lastX = 0;
 		private int _lastY = 0;
 
@@ -54,7 +53,7 @@ namespace Forces.Windows
 		{
 			set
 			{
-				glfwSetInputMode(_windowHandle, 0x00033001, value ? 0x00034003 : 0x00034001);
+				glfwSetInputMode(WindowHandle, 0x00033001, value ? 0x00034003 : 0x00034001);
 				if (value)
 				{
 					var origin = PointToScreen(new Point(0, 0));
@@ -70,20 +69,20 @@ namespace Forces.Windows
 
 		public void MakeContextCurrent()
 		{
-			glfwMakeContextCurrent(_windowHandle);
+			glfwMakeContextCurrent(WindowHandle);
 		}
 
 		public void SwapBuffers()
 		{
-			glfwSwapBuffers(_windowHandle);
+			glfwSwapBuffers(WindowHandle);
 		}
 
 		protected override HandleRef BuildWindowCore(HandleRef hwndParent)
 		{
 			glfwInit();
 			glfwWindowHint(0x0002100D, _multisampling);
-			_windowHandle = glfwCreateWindow(100, 100, "Forces Preview", IntPtr.Zero, IntPtr.Zero);
-			var win32Handle = glfwGetWin32Window(_windowHandle);
+			WindowHandle = glfwCreateWindow(100, 100, "Forces Preview", IntPtr.Zero, IntPtr.Zero);
+			var win32Handle = glfwGetWin32Window(WindowHandle);
 			const int GWL_STYLE = (-16);
 			const int WS_CHILD = 0x40000000;
 			SetWindowLong(win32Handle, GWL_STYLE, WS_CHILD);
@@ -96,8 +95,8 @@ namespace Forces.Windows
 		protected override void DestroyWindowCore(HandleRef hwnd)
 		{
 			if (!ReferenceEquals(hwnd.Wrapper, this)) return;
-			glfwDestroyWindow(_windowHandle);
-			_windowHandle = IntPtr.Zero;
+			glfwDestroyWindow(WindowHandle);
+			WindowHandle = IntPtr.Zero;
 			glfwTerminate();
 		}
 

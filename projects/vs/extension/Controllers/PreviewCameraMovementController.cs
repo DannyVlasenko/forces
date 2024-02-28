@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Forces.Models.Render;
 using Forces.Models.SceneTree;
 using Forces.Utilities;
 using Forces.Windows;

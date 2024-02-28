@@ -51,6 +51,9 @@
     <ClCompile Include="..\..\..\src\engine\scene\mesh.cpp">
       <Filter>scene</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\engine\scene\node.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

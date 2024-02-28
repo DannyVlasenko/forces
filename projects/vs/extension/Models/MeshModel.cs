@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 using SceneMesh = Forces.Models.SceneTree.Mesh;
-using EngineMesh = Forces.Engine.Mesh;
+using EngineMesh = Forces.Models.Engine.Mesh;
 
 namespace Forces.Models
 {

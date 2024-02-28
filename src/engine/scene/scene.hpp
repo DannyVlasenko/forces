@@ -52,8 +52,6 @@ namespace forces
 		
 	private:
 		EmptyNode rootNode_{L"Root"};
-		std::unordered_set<Mesh> meshes_;
-		std::unordered_set<Material> materials_;
 		AmbientLight ambientLight_;
 		std::vector<DirectedLight> directedLights_;
 		CameraNode* selectedCamera_{ nullptr };

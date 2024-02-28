@@ -1,6 +1,7 @@
 #pragma once
 
 //stl
+#include <span>
 #include <string>
 #include <vector>
 #include <variant>
@@ -70,16 +71,18 @@ namespace forces
 		}
 
 		[[nodiscard]]
-		const std::vector<ConcreteNode>& children() const noexcept
+		std::span<const ConcreteNode> children() const noexcept
 		{
 			return children_;
 		}
 
 		[[nodiscard]]
-		std::vector<ConcreteNode>& children() noexcept
+		std::span<ConcreteNode> children() noexcept
 		{
 			return children_;
 		}
+
+		void addChild(ConcreteNode &&child);
 
 	protected:
 		explicit Node(const wchar_t* name) :

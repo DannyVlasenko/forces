@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Forces.Engine
+namespace Forces.Models.Engine
 {
 	public class Scene : IDisposable
 	{
-		private IntPtr _handle = create_scene();
+		public IntPtr Handle { get; private set; } = create_scene();
 
-		public Node RootNode => new Node(scene_root_node(_handle));
+		public Node RootNode => new Node(scene_root_node(Handle));
 
 		private void ReleaseUnmanagedResources()
 		{
-			delete_scene(_handle);
-			_handle = IntPtr.Zero;
+			delete_scene(Handle);
+			Handle = IntPtr.Zero;
 		}
 
 		public void Dispose()

@@ -2,7 +2,8 @@
 using Forces.Models;
 using Forces.Models.SceneTree;
 using ReactiveUI;
-using Scene = Forces.Engine.Scene;
+using Camera = Forces.Models.Engine.Camera;
+using Scene = Forces.Models.Engine.Scene;
 
 namespace Forces.Controllers
 {
@@ -22,7 +23,7 @@ namespace Forces.Controllers
 					_rootNodeController = new EngineNodeController(x?.RootNode ?? new EmptyNode(String.Empty), _scene.RootNode, renderModel, _meshModel);
 					renderModel.RootNode = _scene.RootNode;
 					if (x == null) return;
-					renderModel.PreviewCamera = new Engine.Camera()
+					renderModel.PreviewCamera = new Camera()
 					{
 						FOV = x.PreviewCamera.FOV,
 						Far = x.PreviewCamera.Far,
