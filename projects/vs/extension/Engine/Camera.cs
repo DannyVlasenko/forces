@@ -3,61 +3,44 @@ using System.Runtime.InteropServices;
 
 namespace Forces.Engine
 {
-	public sealed class Camera : IDisposable
+	public sealed class Camera
 	{
-		public IntPtr Handle { get; private set; } = create_camera();
+		public Camera(IntPtr handle)
+		{
+			Handle = handle;
+		}
+
+		public IntPtr Handle { get; }
 
 		public Vec3 Position
 		{
-			get => camera_get_position(Handle);
 			set => camera_set_position(Handle, value);
 		}
 		public Vec4 Rotation
 		{
-			get => camera_get_rotation(Handle);
 			set => camera_set_rotation(Handle, value);
 		}
 
 		public Vec2 Viewport
 		{
-			get => camera_get_viewport(Handle);
 			set => camera_set_viewport(Handle, value);
 		}
 
 		public float Near
 		{
-			get => camera_get_near(Handle);
 			set => camera_set_near(Handle, value);
 		}
 
 		public float Far
 		{
-			get => camera_get_far(Handle);
 			set => camera_set_far(Handle, value);
 		}
 
 		public float FOV
 		{
-			get => camera_get_fov(Handle);
 			set => camera_set_fov(Handle, value);
 		}
 
-		private void ReleaseUnmanagedResources()
-		{
-			delete_camera(Handle);
-			Handle = IntPtr.Zero;
-		}
-
-		public void Dispose()
-		{
-			ReleaseUnmanagedResources();
-			GC.SuppressFinalize(this);
-		}
-
-		~Camera()
-		{
-			ReleaseUnmanagedResources();
-		}
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern IntPtr create_camera();

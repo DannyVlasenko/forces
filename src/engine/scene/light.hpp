@@ -35,15 +35,5 @@ namespace forces
 	};
 
 	class PointLight final : public Light
-	{
-	public:
-		[[nodiscard]]
-		glm::vec3& position() noexcept { return position_; }
-
-		[[nodiscard]]
-		const glm::vec3& position() const noexcept { return position_; }
-
-	private:
-		glm::vec3 position_{ 0.0f, 0.0f, 0.0f };
-	};
+	{};
 }

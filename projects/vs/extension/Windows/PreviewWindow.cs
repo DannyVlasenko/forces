@@ -131,21 +131,6 @@ namespace Forces.Windows
 					}
 				}
 			};
-			renderModel
-				.WhenAnyValue(x => x.PreviewCamera)
-				.WhereNotNull()
-				.Subscribe(camera =>
-				{
-					window.MakeContextCurrent();
-					camera.Viewport = new Vec2()
-					{
-						X = (float)(window.RenderSize.Width * window.GetDpiXScale()),
-						Y = (float)(window.RenderSize.Height * window.GetDpiYScale())
-					};
-					_renderer?.SetCamera(camera); 
-					_renderer?.Render();
-					window.SwapBuffers();
-				});
 			Content = window;
 		}
 	}

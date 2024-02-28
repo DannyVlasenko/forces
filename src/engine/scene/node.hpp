@@ -3,10 +3,9 @@
 //stl
 #include <string>
 #include <vector>
-
-//glm
 #include <variant>
 
+//glm
 #include "gtc/quaternion.hpp"
 
 
