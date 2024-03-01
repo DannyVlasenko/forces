@@ -13,6 +13,12 @@ namespace Forces.Models.Render
 		{
 			_window = new Window(window);
 			_renderer = create_opengl_renderer(_window.Handle);
+			window.Paint += Window_Paint;
+		}
+
+		private void Window_Paint(object sender, EventArgs e)
+		{
+			Render();
 		}
 
 		public void ProcessScene(Scene scene)

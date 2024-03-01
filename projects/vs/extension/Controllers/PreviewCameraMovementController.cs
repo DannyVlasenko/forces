@@ -7,7 +7,6 @@ using System.Windows.Threading;
 using Forces.Models.Render;
 using Forces.Models.SceneTree;
 using Forces.Utilities;
-using Forces.Windows;
 
 namespace Forces.Controllers
 {
@@ -17,7 +16,6 @@ namespace Forces.Controllers
 		private readonly PreviewCamera _camera;
 		private bool _mouseRightPressed;
 		private readonly DispatcherTimer _controlsTimer;
-		private readonly HashSet<Key> _pressedKeys = new HashSet<Key>();
 
 		public PreviewCameraMovementController(RenderWindow window, PreviewCamera camera)
 		{

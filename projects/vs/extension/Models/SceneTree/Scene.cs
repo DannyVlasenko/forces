@@ -18,7 +18,7 @@ namespace Forces.Models.SceneTree
 			set => SetField(ref _name, value);
 		}
 
-		public Node RootNode { get; } = new EmptyNode("Root");
+		public EmptyNode RootNode { get; } = new EmptyNode("Root");
 
 		public PreviewCamera PreviewCamera { get; } = new PreviewCamera(){Near = 0.1f, Far = 10.0f, FOV = 60.0f};
 

@@ -22,14 +22,11 @@ namespace Forces
 
 		private readonly SelectionModel _selectionModel = new SelectionModel();
 		private readonly SceneFileModel _sceneFileModel = new SceneFileModel();
-		private readonly RenderModel _renderModel = new RenderModel();
 		private readonly SolutionExplorerSelectionController _solutionSelectionController;
-		private readonly RenderModelController _renderModelController;
 
 		public ForcesPackage()
 		{
 			_solutionSelectionController = new SolutionExplorerSelectionController(_selectionModel, _sceneFileModel);
-			_renderModelController = new RenderModelController(_renderModel, _selectionModel);
 		}
 
 		protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
@@ -44,7 +41,7 @@ namespace Forces
 		{
 			if (toolWindowType == typeof(PreviewWindow))
 			{
-				return base.InstantiateToolWindow(toolWindowType, new WindowContext(_selectionModel, _renderModel));
+				return base.InstantiateToolWindow(toolWindowType, _selectionModel);
 			}
 
 			if (toolWindowType == typeof(SceneViewWindow))

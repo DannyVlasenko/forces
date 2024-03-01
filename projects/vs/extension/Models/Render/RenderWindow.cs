@@ -31,6 +31,13 @@ namespace Forces.Models.Render
 			_multisampling = multisampling;
 		}
 
+		public System.Drawing.Size RenderScaledSize =>
+			new System.Drawing.Size()
+			{
+				Width = (int)(RenderSize.Width * this.GetDpiXScale()),
+				Height = (int)(RenderSize.Height * this.GetDpiYScale())
+			};
+
 		public bool EnableRawCursor
 		{
 			set
@@ -67,16 +74,6 @@ namespace Forces.Models.Render
 			}
 		}
 
-		public void MakeContextCurrent()
-		{
-			glfwMakeContextCurrent(WindowHandle);
-		}
-
-		public void SwapBuffers()
-		{
-			glfwSwapBuffers(WindowHandle);
-		}
-
 		protected override HandleRef BuildWindowCore(HandleRef hwndParent)
 		{
 			glfwInit();
@@ -87,7 +84,7 @@ namespace Forces.Models.Render
 			const int WS_CHILD = 0x40000000;
 			SetWindowLong(win32Handle, GWL_STYLE, WS_CHILD);
 			SetParent(win32Handle, hwndParent.Handle);
-			MakeContextCurrent();
+			glfwMakeContextCurrent(WindowHandle);
 			ContextInitialized?.Invoke(this, null);
 			return new HandleRef(this, win32Handle);
 		}

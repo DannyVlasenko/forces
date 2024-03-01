@@ -7,7 +7,7 @@ namespace Forces.Models.Engine
 	{
 		public IntPtr Handle { get; private set; } = create_scene();
 
-		public Node RootNode => new Node(scene_root_node(Handle));
+		public EmptyNode RootNode => new EmptyNode(scene_root_node(Handle));
 
 		private void ReleaseUnmanagedResources()
 		{
