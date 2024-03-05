@@ -4,6 +4,7 @@ using System;
 using DynamicData.Binding;
 using Forces.Models.Engine;
 using ReactiveUI;
+using EngineScene = Forces.Models.Engine.Scene;
 using EngineNode = Forces.Models.Engine.Node;
 using EditorNode = Forces.Models.SceneTree.Node;
 using EngineEmptyNode = Forces.Models.Engine.EmptyNode;
@@ -25,64 +26,67 @@ namespace Forces.Controllers.Engine
 		private readonly IDisposable _rotationSubscription;
 		private readonly IDisposable _childrenSubscription;
 
-		protected EngineNodeController(EditorNode editorNode, EngineNode engineNode, OpenGLRenderer renderer, MeshModel meshModel)
+		protected EngineNodeController(EditorNode editorNode, EngineNode engineNode, EngineScene scene, OpenGLRenderer renderer, MeshModel meshModel)
 		{
 			_nameSubscription = editorNode.WhenAnyValue(x => x.Name).Subscribe(x => engineNode.Name = x);
 			_translationSubscription = editorNode.WhenAnyValue(x => x.Translation).Subscribe(translation =>
 			{
 				engineNode.Translation = translation;
-				renderer.ProcessScene(engineNode.Scene);
+				renderer.ProcessScene(scene);
 				renderer.Render();
 			});
 			_scaleSubscription = editorNode.WhenAnyValue(x => x.Scale).Subscribe(scale =>
 			{
 				engineNode.Scale = scale;
-				renderer.ProcessScene(engineNode.Scene);
+				renderer.ProcessScene(scene);
 				renderer.Render();
 			});
 			_rotationSubscription = editorNode.WhenAnyValue(x => x.Rotation).Subscribe(rotation =>
 			{
 				engineNode.Rotation = rotation;
-				renderer.ProcessScene(engineNode.Scene);
+				renderer.ProcessScene(scene);
 				renderer.Render();
 			});
 			_childrenSubscription = editorNode.Children
-				.ToObservableChangeSet(x =>
+				.ToObservableChangeSet(editorChildNode =>
 				{
-					if (x is EditorEmptyNode editorEmptyNode)
+					switch (editorChildNode)
 					{
-						var engineEmptyNode = new EngineEmptyNode(engineNode, x.Name);
-						return new EngineEmptyNodeController(editorEmptyNode, engineEmptyNode, renderer, meshModel);
+						case EditorEmptyNode editorEmptyNode:
+						{
+							var engineEmptyNode = new EngineEmptyNode(engineNode, editorChildNode.Name);
+							return new EngineEmptyNodeController(editorEmptyNode, engineEmptyNode, scene, renderer, meshModel);
+						}
+						case EditorMeshNode editorMeshNode:
+						{
+							var editorMesh = editorMeshNode.Mesh.TryGetTarget(out var edms) ? edms : meshModel.DefaultMesh;
+							var engineMesh = meshModel.EngineMeshes.TryGetValue(editorMesh, out var enms)
+								? enms
+								: meshModel.EngineMeshes[editorMesh] = new Mesh(editorMesh.Path);
+							var editorMaterial = editorMeshNode.Material.TryGetTarget(out var edmt) ? edmt : meshModel.DefaultMaterial;
+							var engineMaterial = meshModel.EngineMaterials.TryGetValue(editorMaterial, out var enmt)
+								? enmt
+								: meshModel.EngineMaterials[editorMaterial] = new Material() { Color = new Vec3() { X = editorMaterial.Color.R, Y = editorMaterial.Color.G, Z = editorMaterial.Color.B } };
+							var engineMeshNode = new EngineMeshNode(engineNode, editorChildNode.Name, engineMesh, engineMaterial);
+							return new EngineMeshNodeController(editorMeshNode, engineMeshNode, scene, renderer, meshModel);
+						}
+						case EditorCameraNode editorCameraNode:
+						{
+							var engineCameraNode = new EngineCameraNode(engineNode, editorChildNode.Name);
+							return new EngineCameraNodeController(editorCameraNode, engineCameraNode, scene, renderer, meshModel);
+						}
+						case EditorLightNode editorLightNode:
+						{
+							var engineLightNode = new EngineLightNode(engineNode, editorChildNode.Name);
+							return new EngineLightNodeController(editorLightNode, engineLightNode, scene, renderer, meshModel);
+						}
+						default:
+							throw new InvalidOperationException($"Scene node type <{editorChildNode.GetType().FullName}> is not recognized.");
 					}
-					if (x is EditorMeshNode editorMeshNode)
-					{
-						var editorMesh = editorMeshNode.Mesh.TryGetTarget(out var edms) ? edms : meshModel.DefaultMesh;
-						var engineMesh = meshModel.EngineMeshes.TryGetValue(editorMesh, out var enms)
-							? enms
-							: meshModel.EngineMeshes[editorMesh] = new Mesh(editorMesh.Path);
-						var editorMaterial = editorMeshNode.Material.TryGetTarget(out var edmt) ? edmt : meshModel.DefaultMaterial;
-						var engineMaterial = meshModel.EngineMaterials.TryGetValue(editorMaterial, out var enmt)
-							? enmt
-							: meshModel.EngineMaterials[editorMaterial] = new Material() { Color = new Vec3() { X = editorMaterial.Color.R, Y = editorMaterial.Color.G, Z = editorMaterial.Color.B } };
-						var engineMeshNode = new EngineMeshNode(engineNode, x.Name, engineMesh, engineMaterial);
-						return new EngineMeshNodeController(editorMeshNode, engineMeshNode, renderer, meshModel);
-					}
-					if (x is EditorCameraNode editorCameraNode)
-					{
-						var engineCameraNode = new EngineCameraNode(engineNode, x.Name);
-						return new EngineCameraNodeController(editorCameraNode, engineCameraNode, renderer, meshModel);
-					}
-					if (x is EditorLightNode editorLightNode)
-					{
-						var engineLightNode = new EngineLightNode(engineNode, x.Name);
-						return new EngineLightNodeController(editorLightNode, engineLightNode, renderer, meshModel);
-					}
-
-					throw new InvalidOperationException($"Scene node type <{x.GetType().FullName}> is not recognized.");
 				})
 				.Subscribe(_ =>
 				{
-					renderer.ProcessScene(engineNode.Scene);
+					renderer.ProcessScene(scene);
 					renderer.Render();
 				});
 		}

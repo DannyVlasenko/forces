@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Controllers\Engine\EngineCameraNodeController.cs" />
     <Compile Include="Controllers\Engine\EngineEmptyNodeController.cs" />
+    <Compile Include="Controllers\Engine\EngineLightNodeController.cs" />
     <Compile Include="Controllers\Engine\EngineMeshNodeController.cs" />
     <Compile Include="Controllers\Engine\EngineNodeController.cs" />
     <Compile Include="Controllers\Engine\EngineSceneController.cs" />
