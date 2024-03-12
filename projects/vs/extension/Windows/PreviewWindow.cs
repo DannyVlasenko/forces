@@ -47,7 +47,7 @@ namespace Forces.Windows
 					_cameraMovementController?.Dispose();
 					_cameraViewportController?.Dispose();
 					_cameraMovementController = new PreviewCameraMovementController(window, camera);
-					_cameraViewportController = new PreviewCameraViewportController(window, camera);
+					_cameraViewportController = new PreviewCameraViewportController(window, camera.Camera);
 				});
 			selectionModel
 				.WhenAnyValue(x => x.SelectedScene)

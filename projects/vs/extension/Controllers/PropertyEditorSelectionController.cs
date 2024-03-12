@@ -44,8 +44,6 @@ namespace Forces.Controllers
 					return new CameraNodePropertyEditorViewModel(cn);
 				case LightNode ln:
 					return new LightNodePropertyEditorViewModel(ln);
-				case PreviewCamera pc:
-					return new PreviewCameraPropertyEditorViewModel(pc);
 				case AmbientLight al:
 					return new AmbientLightPropertyEditorViewModel(al);
 				case DirectedLight dl:

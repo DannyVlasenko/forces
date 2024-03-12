@@ -95,7 +95,6 @@
     <Compile Include="Models\ModelObjectWithNotifications.cs" />
     <Compile Include="Models\SceneTree\Node.cs" />
     <Compile Include="Models\SceneTree\PointLight.cs" />
-    <Compile Include="Models\SceneTree\PreviewCamera.cs" />
     <Compile Include="Models\SceneTree\Scene.cs" />
     <Compile Include="Models\SceneFileModel.cs" />
     <Compile Include="Models\SelectionModel.cs" />
@@ -112,7 +111,6 @@
     <Compile Include="ViewModels\PropertyEditor\LightNodePropertyEditorViewModel.cs" />
     <Compile Include="ViewModels\PropertyEditor\MeshNodePropertyEditorViewModel.cs" />
     <Compile Include="ViewModels\PropertyEditor\NodePropertyEditorViewModel.cs" />
-    <Compile Include="ViewModels\PropertyEditor\PreviewCameraPropertyEditorViewModel.cs" />
     <Compile Include="ViewModels\PropertyEditor\Vector3Property.cs" />
     <Compile Include="ViewModels\SceneView\SceneViewModel.cs" />
     <Compile Include="Commands\OptionsCommand.cs" />

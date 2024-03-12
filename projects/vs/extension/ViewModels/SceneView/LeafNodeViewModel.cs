@@ -25,9 +25,9 @@ namespace Forces.ViewModels.SceneView
 				.Where(x => x)
 				.Subscribe(_ => selectionModel.SelectedSceneViewNode = ambientLightModel);
 		}
-		public LeafViewModel(PreviewCamera previewCameraModel, SelectionModel selectionModel)
+		public LeafViewModel(CameraNode previewCameraModel, SelectionModel selectionModel)
 		{
-			Name = "Preview Camera";
+			Name = previewCameraModel.Name;
 			this.WhenAnyValue(x => x.IsSelected)
 				.Where(x => x)
 				.Subscribe(_ => selectionModel.SelectedSceneViewNode = previewCameraModel);

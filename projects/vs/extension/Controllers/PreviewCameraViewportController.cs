@@ -8,9 +8,9 @@ namespace Forces.Controllers
 	public class PreviewCameraViewportController : IDisposable
 	{
 		private readonly RenderWindow _window;
-		private readonly PreviewCamera _camera;
+		private readonly Camera _camera;
 
-		public PreviewCameraViewportController(RenderWindow window, PreviewCamera camera)
+		public PreviewCameraViewportController(RenderWindow window, Camera camera)
 		{
 			_window = window;
 			_camera = camera;

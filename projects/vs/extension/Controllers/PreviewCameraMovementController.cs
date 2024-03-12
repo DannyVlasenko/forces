@@ -13,11 +13,11 @@ namespace Forces.Controllers
 	public class PreviewCameraMovementController : IDisposable
 	{
 		private readonly RenderWindow _window;
-		private readonly PreviewCamera _camera;
+		private readonly CameraNode _camera;
 		private bool _mouseRightPressed;
 		private readonly DispatcherTimer _controlsTimer;
 
-		public PreviewCameraMovementController(RenderWindow window, PreviewCamera camera)
+		public PreviewCameraMovementController(RenderWindow window, CameraNode camera)
 		{
 			_window = window;
 			_camera = camera;
@@ -94,27 +94,27 @@ namespace Forces.Controllers
 			}
 		}
 
-		static void Yaw(PreviewCamera camera, float grad)
+		static void Yaw(CameraNode camera, float grad)
 		{
 			camera.Rotation *= new Vector3(0.0f, grad.ToRadians(), 0.0f ).EulerXYZToQuaternion();
 		}
 
-		static void Pitch(PreviewCamera camera, float grad)
+		static void Pitch(CameraNode camera, float grad)
 		{
 			camera.Rotation *= new Vector3(grad.ToRadians(), 0.0f, 0.0f).EulerXYZToQuaternion();
 		}
 
-		static void Roll(PreviewCamera camera, float grad)
+		static void Roll(CameraNode camera, float grad)
 		{
 			camera.Rotation *= new Vector3(0.0f, 0.0f, grad.ToRadians()).EulerXYZToQuaternion();
 		}
 
-		static Vector3 Front(PreviewCamera camera)
+		static Vector3 Front(CameraNode camera)
 		{
 			return camera.Rotation.Multiply(new Vector3(0.0f, 0.0f, 1.0f));
 		}
 
-		static Vector3 Right(PreviewCamera camera)
+		static Vector3 Right(CameraNode camera)
 		{
 			return camera.Rotation.Multiply(new Vector3(1.0f, 0.0f, 0.0f));
 		}
