@@ -62,8 +62,10 @@
     <Compile Include="Controllers\PreviewCameraViewportController.cs" />
     <Compile Include="Controllers\PropertyEditorSelectionController.cs" />
     <Compile Include="Controllers\SolutionExplorerSelectionController.cs" />
+    <Compile Include="Models\Engine\AmbientLight.cs" />
     <Compile Include="Models\Engine\Camera.cs" />
     <Compile Include="Models\Engine\CameraNode.cs" />
+    <Compile Include="Models\Engine\DirectedLight.cs" />
     <Compile Include="Models\Engine\EmptyNode.cs" />
     <Compile Include="Models\Engine\LightNode.cs" />
     <Compile Include="Models\Engine\Material.cs" />

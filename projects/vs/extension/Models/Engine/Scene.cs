@@ -9,6 +9,8 @@ namespace Forces.Models.Engine
 
 		public EmptyNode RootNode => new EmptyNode(scene_root_node(Handle));
 
+		public AmbientLight AmbientLight => new AmbientLight(scene_ambient_light(Handle));
+
 		private void ReleaseUnmanagedResources()
 		{
 			delete_scene(Handle);
@@ -35,5 +37,8 @@ namespace Forces.Models.Engine
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern IntPtr scene_root_node(IntPtr scene);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern IntPtr scene_ambient_light(IntPtr scene);
 	}
 }
