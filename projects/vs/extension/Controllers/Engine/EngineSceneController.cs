@@ -1,7 +1,6 @@
 ﻿using System;
 using Forces.Models;
 using Forces.Models.Render;
-using ReactiveUI;
 using EditorScene = Forces.Models.SceneTree.Scene;
 using EngineScene = Forces.Models.Engine.Scene;
 
@@ -16,7 +15,7 @@ namespace Forces.Controllers.Engine
 		public EngineSceneController(EditorScene editorScene, OpenGLRenderer renderer)
 		{
 			_engineScene = new EngineScene();
-			_rootNodeController = new EngineEmptyNodeController(editorScene.RootNode, _engineScene.RootNode, renderer, _meshModel);
+			_rootNodeController = new EngineEmptyNodeController(editorScene.RootNode, _engineScene.RootNode, _engineScene, renderer, _meshModel);
 			//2. create an EngineCameraNode in the EngineScene from ScenePreviewCamera,
 			//	 set it as selected camera node in EngineScene
 			//	 create a controller to transfer changes from ScenePreviewCamera

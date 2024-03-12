@@ -48,7 +48,7 @@ namespace Forces.Controllers.Engine
 				renderer.Render();
 			});
 			_childrenSubscription = editorNode.Children
-				.ToObservableChangeSet(editorChildNode =>
+				.ToObservableChangeSet<EditorNode, EngineNodeController>(editorChildNode =>
 				{
 					switch (editorChildNode)
 					{

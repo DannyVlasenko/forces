@@ -8,6 +8,12 @@ namespace Forces.Models.Engine
 	{
 		public float X;
 		public float Y;
+
+		public Vec2(float x, float y)
+		{
+			X = x;
+			Y = y;
+		}
 	};
 
 	[StructLayout(LayoutKind.Sequential)]
@@ -16,6 +22,13 @@ namespace Forces.Models.Engine
 		public float X;
 		public float Y;
 		public float Z;
+
+		public Vec3(float x, float y, float z)
+		{
+			X = x;
+			Y = y;
+			Z = z;
+		}
 
 		private Vec3(Vector3 src)
 		{

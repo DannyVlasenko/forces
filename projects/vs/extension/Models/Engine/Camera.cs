@@ -12,15 +12,6 @@ namespace Forces.Models.Engine
 
 		public IntPtr Handle { get; }
 
-		public Vec3 Position
-		{
-			set => camera_set_position(Handle, value);
-		}
-		public Vec4 Rotation
-		{
-			set => camera_set_rotation(Handle, value);
-		}
-
 		public Vec2 Viewport
 		{
 			set => camera_set_viewport(Handle, value);
@@ -40,25 +31,6 @@ namespace Forces.Models.Engine
 		{
 			set => camera_set_fov(Handle, value);
 		}
-
-
-		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern IntPtr create_camera();
-
-		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern void delete_camera(IntPtr camera);
-
-		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern Vec3 camera_get_position(IntPtr node);
-
-		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern void camera_set_position(IntPtr node, Vec3 position);
-
-		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern Vec4 camera_get_rotation(IntPtr node);
-
-		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern void camera_set_rotation(IntPtr node, Vec4 position);
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern Vec2 camera_get_viewport(IntPtr node);
