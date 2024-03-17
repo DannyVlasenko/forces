@@ -23,19 +23,10 @@
     <ClInclude Include="..\..\..\src\engine\scene\light.hpp">
       <Filter>scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\engine\scene\empty_node.hpp">
-      <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\engine\scene\mesh_node.hpp">
+    <ClInclude Include="..\..\..\src\engine\scene\mesh_content.hpp">
       <Filter>scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\engine\scene\material.hpp">
-      <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\engine\scene\camera_node.hpp">
-      <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\engine\scene\light_node.hpp">
       <Filter>scene</Filter>
     </ClInclude>
   </ItemGroup>

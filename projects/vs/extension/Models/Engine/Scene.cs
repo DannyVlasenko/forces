@@ -11,6 +11,21 @@ namespace Forces.Models.Engine
 
 		public AmbientLight AmbientLight => new AmbientLight(scene_ambient_light(Handle));
 
+		public CameraNode ActiveCameraNode
+		{
+			set => scene_set_active_camera_node(Handle, value.Handle);
+		}
+
+		public DirectedLight AddDirectedLight(string name)
+		{
+			return new DirectedLight(scene_create_directed_light(Handle, name));
+		}
+
+		public void RemoveDirectedLight(DirectedLight light)
+		{
+			scene_remove_directed_light(Handle, light.Handle);
+		}
+
 		private void ReleaseUnmanagedResources()
 		{
 			delete_scene(Handle);
@@ -40,5 +55,14 @@ namespace Forces.Models.Engine
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern IntPtr scene_ambient_light(IntPtr scene);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern IntPtr scene_create_directed_light(IntPtr scene, string name);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern void scene_remove_directed_light(IntPtr scene, IntPtr light);
+
+		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
+		private static extern void scene_set_active_camera_node(IntPtr scene, IntPtr cameraNode);
 	}
 }

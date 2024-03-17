@@ -49,11 +49,22 @@ namespace forces
 		{
 			return directedLights_;
 		}
-		
+
+		[[nodiscard]]
+		const CameraNode * activeCameraNode() const noexcept
+		{
+			return activeCameraNode_;
+		}
+
+		void selectActiveCameraNode(CameraNode* cameraNode) noexcept
+		{
+			activeCameraNode_ = cameraNode;
+		}
+
 	private:
 		EmptyNode rootNode_{L"Root"};
 		AmbientLight ambientLight_;
 		std::vector<DirectedLight> directedLights_;
-		CameraNode* selectedCamera_{ nullptr };
+		CameraNode* activeCameraNode_{ nullptr };
 	};
 }

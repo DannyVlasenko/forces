@@ -2,7 +2,9 @@
 #define FORCES_NODE_H
 
 #include "glm_wrap.h"
+#include "material.h"
 #include "mesh.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -10,28 +12,34 @@ extern "C" {
 typedef struct ForcesNode ForcesNode;
 
 __declspec(dllexport)
-ForcesNode * create_node(ForcesNode *parent, const wchar_t *name);
+ForcesNode * create_empty_node(ForcesNode *parent, const wchar_t *name);
+
+__declspec(dllexport)
+ForcesNode * create_camera_node(ForcesNode *parent, const wchar_t *name);
+
+__declspec(dllexport)
+ForcesNode * create_light_node(ForcesNode *parent, const wchar_t *name);
+
+__declspec(dllexport)
+ForcesNode * create_mesh_node(ForcesNode *parent, const wchar_t *name, ForcesMesh *mesh, ForcesMaterial *material);
+
+__declspec(dllexport)
+void node_set_name(ForcesNode* node, const wchar_t* name);
 
 __declspec(dllexport)
 void node_set_mesh(ForcesNode *node, ForcesMesh *mesh);
 
 __declspec(dllexport)
-int node_children_count(ForcesNode *node);
-
-__declspec(dllexport)
-int node_get_children(ForcesNode *node, ForcesNode* outChildren[], int outChildrenCount);
-
-__declspec(dllexport)
-vec3 node_get_translation(ForcesNode *node);
+void node_set_material(ForcesNode *node, ForcesMaterial *material);
 
 __declspec(dllexport)
 void node_set_translation(ForcesNode *node, vec3 translation);
 
 __declspec(dllexport)
-const wchar_t * node_get_name(ForcesNode *node);
+void node_set_scale(ForcesNode *node, vec3 scale);
 
 __declspec(dllexport)
-void node_set_name(ForcesNode *node, const wchar_t *name);
+void node_set_rotation(ForcesNode *node, vec4 rotation);
 
 #ifdef __cplusplus
 }

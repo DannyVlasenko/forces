@@ -9,19 +9,40 @@
 //glm
 #include "gtc/quaternion.hpp"
 
+//forces
+#include "camera.hpp"
+#include "light.hpp"
+#include "mesh_content.hpp"
 
 namespace forces
 {
-	class EmptyNode;
-	class LightNode;
-	class CameraNode;
-	class MeshNode;
-
-	using ConcreteNode = std::variant<EmptyNode, MeshNode, CameraNode, LightNode>;
-
 	class Node
 	{
 	public:
+		using Empty = std::monostate;
+		using Content = std::variant<Empty, Camera, PointLight, MeshContent>;
+
+		explicit Node(const wchar_t* name) :
+			name_(name),
+			content_(Empty{})
+		{}
+
+		Node(const wchar_t* name, const Camera& camera) :
+			name_(name),
+			content_(camera)
+		{}
+
+		Node(const wchar_t* name, const PointLight& light) :
+			name_(name),
+			content_(light)
+		{}
+
+		Node(const wchar_t* name, const MeshContent& meshContent) :
+			name_(name),
+			content_(meshContent)
+		{}
+
+
 		[[nodiscard]]
 		std::wstring& name() noexcept
 		{
@@ -71,30 +92,42 @@ namespace forces
 		}
 
 		[[nodiscard]]
-		std::span<const ConcreteNode> children() const noexcept
+		const Content& content() const noexcept
+		{
+			return content_;
+		}
+
+		[[nodiscard]]
+		Content& content() noexcept
+		{
+			return content_;
+		}
+
+		[[nodiscard]]
+		std::span<const Node> children() const noexcept
 		{
 			return children_;
 		}
 
 		[[nodiscard]]
-		std::span<ConcreteNode> children() noexcept
+		std::span<Node> children() noexcept
 		{
 			return children_;
 		}
-
-		void addChild(ConcreteNode &&child);
-
-	protected:
-		explicit Node(const wchar_t* name) :
-			name_(name)
-		{}
+		
+		[[nodiscard]]
+		Node& addChild(Node&& child)
+		{
+			return children_.emplace_back(std::move(child));
+		}
 
 	private:
 		std::wstring name_;
 		glm::vec3 translation_{ 0.f, 0.f, 0.f };
 		glm::vec3 scale_{ 1.f, 1.f, 1.f };
 		glm::quat rotation_{ 1.f, 0.f, 0.f, 0.f };
-		std::vector<ConcreteNode> children_;
+		Content content_;
+		std::vector<Node> children_{};
 	};
 
 	inline void yaw(Node& node, float grad) noexcept

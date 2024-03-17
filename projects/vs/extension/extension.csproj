@@ -53,6 +53,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Controllers\Engine\EngineCameraNodeController.cs" />
+    <Compile Include="Controllers\Engine\EngineDirectedLightController.cs" />
     <Compile Include="Controllers\Engine\EngineEmptyNodeController.cs" />
     <Compile Include="Controllers\Engine\EngineLightNodeController.cs" />
     <Compile Include="Controllers\Engine\EngineMeshNodeController.cs" />
@@ -67,11 +68,13 @@
     <Compile Include="Models\Engine\CameraNode.cs" />
     <Compile Include="Models\Engine\DirectedLight.cs" />
     <Compile Include="Models\Engine\EmptyNode.cs" />
+    <Compile Include="Models\Engine\Light.cs" />
     <Compile Include="Models\Engine\LightNode.cs" />
     <Compile Include="Models\Engine\Material.cs" />
     <Compile Include="Models\Engine\Mesh.cs" />
     <Compile Include="Models\Engine\MeshNode.cs" />
     <Compile Include="Models\Engine\Node.cs" />
+    <Compile Include="Models\Engine\PointLight.cs" />
     <Compile Include="Models\Render\OpenGLRenderer.cs" />
     <Compile Include="Models\Engine\Scene.cs" />
     <Compile Include="Models\Engine\Vec.cs" />

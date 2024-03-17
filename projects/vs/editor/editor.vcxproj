@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\editor\camera.cpp" />
+    <ClCompile Include="..\..\..\src\editor\light.cpp" />
     <ClCompile Include="..\..\..\src\editor\mesh.cpp" />
     <ClCompile Include="..\..\..\src\editor\node.cpp" />
     <ClCompile Include="..\..\..\src\editor\opengl_renderer.cpp" />
@@ -28,6 +29,8 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\src\editor\camera.h" />
     <ClInclude Include="..\..\..\src\editor\glm_wrap.h" />
+    <ClInclude Include="..\..\..\src\editor\light.h" />
+    <ClInclude Include="..\..\..\src\editor\material.h" />
     <ClInclude Include="..\..\..\src\editor\mesh.h" />
     <ClInclude Include="..\..\..\src\editor\node.h" />
     <ClInclude Include="..\..\..\src\editor\opengl_renderer.h" />

@@ -11,21 +11,21 @@ namespace Forces.Models.Engine
 
 		public Mesh Mesh
 		{
-			set => mesh_node_set_mesh(Handle, value.Handle);
+			set => node_set_mesh(Handle, value.Handle);
 		}
 
 		public Material Material
 		{
-			set => mesh_node_set_material(Handle, value.Handle);
+			set => node_set_material(Handle, value.Handle);
 		}
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern IntPtr create_mesh_node(IntPtr parent, string name, IntPtr mesh, IntPtr material);
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern void mesh_node_set_mesh(IntPtr meshNode, IntPtr mesh);
+		private static extern void node_set_mesh(IntPtr meshNode, IntPtr mesh);
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern void mesh_node_set_material(IntPtr meshNode, IntPtr material);
+		private static extern void node_set_material(IntPtr meshNode, IntPtr material);
 	}
 }

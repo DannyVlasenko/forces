@@ -1,17 +1,14 @@
 #pragma once
 
-#include "node.hpp"
-
 namespace forces
 {
 	class Mesh;
 	class Material;
 
-	class MeshNode : public Node
+	class MeshContent
 	{
 	public:
-		MeshNode(const wchar_t *name, const Mesh *mesh, const Material* material):
-			Node(name),
+		MeshContent(const Mesh *mesh, const Material* material):
 			mesh_(mesh),
 			material_(material)
 		{}

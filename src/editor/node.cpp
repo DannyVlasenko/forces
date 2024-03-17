@@ -1,36 +1,50 @@
 #include "node.h"
 #include "engine/scene/node.hpp"
 
-ForcesNode* create_node(ForcesNode *parent, const wchar_t* name)
-{	
-	return reinterpret_cast<ForcesNode*>(&reinterpret_cast<forces::Node*>(parent)->addChild(forces::Node{ name }));
+ForcesNode* create_empty_node(ForcesNode *parent, const wchar_t* name)
+{
+	auto& newEmptyNode = reinterpret_cast<forces::Node*>(parent)->addChild(forces::Node{ name });
+	return reinterpret_cast<ForcesNode*>(&newEmptyNode);
+}
+
+ForcesNode* create_camera_node(ForcesNode* parent, const wchar_t* name)
+{
+	auto& newCameraNode = reinterpret_cast<forces::Node*>(parent)->addChild(forces::Node{ name, forces::Camera{} });
+	return reinterpret_cast<ForcesNode*>(&newCameraNode);
+}
+
+ForcesNode* create_light_node(ForcesNode* parent, const wchar_t* name)
+{
+	auto& newLightNode = reinterpret_cast<forces::Node*>(parent)->addChild(forces::Node{ name, forces::PointLight{} });
+	return reinterpret_cast<ForcesNode*>(&newLightNode);
+}
+
+ForcesNode* create_mesh_node(ForcesNode* parent, const wchar_t* name, ForcesMesh* mesh, ForcesMaterial* material)
+{
+	const forces::MeshContent meshContent
+	{
+		reinterpret_cast<forces::Mesh*>(mesh),
+		reinterpret_cast<forces::Material*>(material)
+	};
+	auto& newMeshNode = reinterpret_cast<forces::Node*>(parent)->addChild(forces::Node{ name, meshContent });
+	return reinterpret_cast<ForcesNode*>(&newMeshNode);
+}
+
+void node_set_name(ForcesNode* node, const wchar_t* name)
+{
+	reinterpret_cast<forces::Node*>(node)->name() = name;
 }
 
 void node_set_mesh(ForcesNode* node, ForcesMesh *mesh)
 {
-	reinterpret_cast<forces::Node*>(node)->setMesh(reinterpret_cast<forces::Mesh*>(mesh));
+	auto& meshContent = std::get<forces::MeshContent>(reinterpret_cast<forces::Node*>(node)->content());
+	meshContent.setMesh(reinterpret_cast<forces::Mesh*>(mesh));
 }
 
-int node_children_count(ForcesNode* node)
+void node_set_material(ForcesNode* node, ForcesMaterial *material)
 {
-	return reinterpret_cast<forces::Node*>(node)->children().size();
-}
-
-int node_get_children(ForcesNode* node, ForcesNode* outChildren[], int outChildrenCount)
-{
-	auto &children = reinterpret_cast<forces::Node*>(node)->children();
-	auto i = 0;
-	for (; i < outChildrenCount && i < children.size(); ++i)
-	{
-		outChildren[i] = reinterpret_cast<ForcesNode*>(&children[i]);
-	}
-	return i;
-}
-
-vec3 node_get_translation(ForcesNode* node)
-{
-	const auto& translation = reinterpret_cast<forces::Node*>(node)->translation();
-	return vec3{ translation.x, translation.y, translation.z };
+	auto& meshContent = std::get<forces::MeshContent>(reinterpret_cast<forces::Node*>(node)->content());
+	meshContent.setMaterial(reinterpret_cast<forces::Material*>(material));
 }
 
 void node_set_translation(ForcesNode* node, vec3 translation)
@@ -41,12 +55,19 @@ void node_set_translation(ForcesNode* node, vec3 translation)
 	nodeTranslation.z = translation.z;
 }
 
-const wchar_t* node_get_name(ForcesNode* node)
+void node_set_scale(ForcesNode* node, vec3 scale)
 {
-	return reinterpret_cast<forces::Node*>(node)->name().c_str();
+	auto& nodeScale = reinterpret_cast<forces::Node*>(node)->scale();
+	nodeScale.x = scale.x;
+	nodeScale.y = scale.y;
+	nodeScale.z = scale.z;
 }
 
-void node_set_name(ForcesNode* node, const wchar_t* name)
+void node_set_rotation(ForcesNode* node, vec4 rotation)
 {
-	reinterpret_cast<forces::Node*>(node)->name() = name;
+	auto& nodeRotation = reinterpret_cast<forces::Node*>(node)->rotation();
+	nodeRotation.x = rotation.x;
+	nodeRotation.y = rotation.y;
+	nodeRotation.z = rotation.z;
+	nodeRotation.w = rotation.w;
 }

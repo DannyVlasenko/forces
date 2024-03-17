@@ -23,13 +23,10 @@
     <ClInclude Include="..\..\..\src\engine\render\renderer.hpp" />
     <ClInclude Include="..\..\..\src\engine\render\window.hpp" />
     <ClInclude Include="..\..\..\src\engine\scene\camera.hpp" />
-    <ClInclude Include="..\..\..\src\engine\scene\camera_node.hpp" />
-    <ClInclude Include="..\..\..\src\engine\scene\empty_node.hpp" />
     <ClInclude Include="..\..\..\src\engine\scene\light.hpp" />
-    <ClInclude Include="..\..\..\src\engine\scene\light_node.hpp" />
     <ClInclude Include="..\..\..\src\engine\scene\material.hpp" />
     <ClInclude Include="..\..\..\src\engine\scene\mesh.hpp" />
-    <ClInclude Include="..\..\..\src\engine\scene\mesh_node.hpp" />
+    <ClInclude Include="..\..\..\src\engine\scene\mesh_content.hpp" />
     <ClInclude Include="..\..\..\src\engine\scene\node.hpp" />
     <ClInclude Include="..\..\..\src\engine\scene\scene.hpp" />
   </ItemGroup>

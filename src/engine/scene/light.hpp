@@ -35,5 +35,14 @@ namespace forces
 	};
 
 	class PointLight final : public Light
-	{};
+	{
+	public:
+		[[nodiscard]]
+		float& strength() noexcept { return strength_; }
+
+		[[nodiscard]]
+		const float& strength() const noexcept { return strength_; }
+	private:
+		float strength_{ 1.0f };
+	};
 }

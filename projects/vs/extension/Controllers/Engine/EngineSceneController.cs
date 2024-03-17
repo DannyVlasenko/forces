@@ -1,4 +1,6 @@
 ﻿using System;
+using DynamicData;
+using DynamicData.Alias;
 using Forces.Models;
 using Forces.Models.Render;
 using ReactiveUI;
@@ -19,6 +21,7 @@ namespace Forces.Controllers.Engine
 		private EngineCameraNodeController _previewCameraController;
 		private readonly IDisposable _previewCameraSubscription;
 		private readonly IDisposable _ambientLightController;
+		private readonly IDisposable _directedLightsSubscription;
 
 		public EngineSceneController(EditorScene editorScene, OpenGLRenderer renderer)
 		{
@@ -29,12 +32,27 @@ namespace Forces.Controllers.Engine
 				_previewCameraController?.Dispose();
 				var engineCameraNode = new EngineCameraNode(_engineScene.RootNode, previewCamera.Name);
 				_previewCameraController = new EngineCameraNodeController(previewCamera, engineCameraNode, _engineScene, renderer, _meshModel);
+				_engineScene.ActiveCameraNode = engineCameraNode;
+				renderer.ProcessScene(_engineScene);
+				renderer.Render();
 			});
-			//3. Set directed and ambient lights in the EngineScene,
-			//	 create controllers to transfer changes.
+			_directedLightsSubscription = editorScene.DirectedLights
+				.ToObservableChangeSet(editorDirectedLight => new EngineDirectedLightController(_engineScene.AddDirectedLight(editorDirectedLight.Name), editorDirectedLight, _engineScene, renderer))
+				.OnItemRemoved(
+					light =>
+					{
+						//_engineScene.RemoveDirectedLight(light);
+					})
+				.Subscribe(_ =>
+				{
+					renderer.ProcessScene(_engineScene);
+					renderer.Render();
+				}); ;
 			_ambientLightController = editorScene.WhenAnyValue(x => x.AmbientLight.Color).Subscribe(color =>
 			{
 				_engineScene.AmbientLight.Color = new Vec3(color.R, color.G, color.B);
+				renderer.ProcessScene(_engineScene);
+				renderer.Render();
 			});
 			renderer.ProcessScene(_engineScene);
 			renderer.Render();
@@ -42,6 +60,7 @@ namespace Forces.Controllers.Engine
 
 		public void Dispose()
 		{
+			_directedLightsSubscription.Dispose();
 			_ambientLightController.Dispose();
 			_previewCameraSubscription.Dispose();
 			_previewCameraController?.Dispose();

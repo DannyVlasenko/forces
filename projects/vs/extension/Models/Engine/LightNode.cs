@@ -8,15 +8,13 @@ namespace Forces.Models.Engine
 		public LightNode(Node parent, string name) :
 			base(create_light_node(parent.Handle, name))
 		{ }
-		public Vec3 Color
-		{
-			set => light_node_set_color(Handle, value);
-		}
+		
+		private PointLight Light => new PointLight(node_get_light(Handle));
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern IntPtr create_light_node(IntPtr parent, string name);
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern void light_node_set_color(IntPtr material, Vec3 color);
+		private static extern IntPtr node_get_light(IntPtr node);
 	}
 }

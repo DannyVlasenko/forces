@@ -6,6 +6,7 @@
     <ClCompile Include="..\..\..\src\editor\opengl_renderer.cpp" />
     <ClCompile Include="..\..\..\src\editor\mesh.cpp" />
     <ClCompile Include="..\..\..\src\editor\camera.cpp" />
+    <ClCompile Include="..\..\..\src\editor\light.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\editor\scene.h" />
@@ -14,6 +15,8 @@
     <ClInclude Include="..\..\..\src\editor\mesh.h" />
     <ClInclude Include="..\..\..\src\editor\camera.h" />
     <ClInclude Include="..\..\..\src\editor\glm_wrap.h" />
+    <ClInclude Include="..\..\..\src\editor\light.h" />
+    <ClInclude Include="..\..\..\src\editor\material.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

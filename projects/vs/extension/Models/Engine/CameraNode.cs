@@ -9,12 +9,12 @@ namespace Forces.Models.Engine
 			base(create_camera_node(parent.Handle, name))
 		{ }
 
-		public Camera Camera => new Camera(camera_node_get_camera(Handle));
+		public Camera Camera => new Camera(node_get_camera(Handle));
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern IntPtr create_camera_node(IntPtr parent, string name);
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern IntPtr camera_node_get_camera(IntPtr cameraNode);
+		private static extern IntPtr node_get_camera(IntPtr cameraNode);
 	}
 }
