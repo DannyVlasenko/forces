@@ -71,3 +71,15 @@ void node_set_rotation(ForcesNode* node, vec4 rotation)
 	nodeRotation.z = rotation.z;
 	nodeRotation.w = rotation.w;
 }
+
+ForcesPointLight* node_get_light(ForcesNode* node)
+{
+	auto& lightContent = std::get<forces::PointLight>(reinterpret_cast<forces::Node*>(node)->content());
+	return reinterpret_cast<ForcesPointLight*>(&lightContent);
+}
+
+ForcesCamera* node_get_camera(ForcesNode* node)
+{
+	auto& cameraContent = std::get<forces::Camera>(reinterpret_cast<forces::Node*>(node)->content());
+	return reinterpret_cast<ForcesCamera*>(&cameraContent);
+}

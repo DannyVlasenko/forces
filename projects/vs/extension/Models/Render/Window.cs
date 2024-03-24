@@ -9,11 +9,11 @@ namespace Forces.Models.Render
 
 		public Window(RenderWindow from)
 		{
-			Handle = create_render_window(from.Handle);
+			Handle = adapt_glfw_window(from.Handle);
 		}
 		private void ReleaseUnmanagedResources()
 		{
-			delete_render_window(Handle);
+			delete_window_adapter(Handle);
 			Handle = IntPtr.Zero;
 		}
 
@@ -29,9 +29,9 @@ namespace Forces.Models.Render
 		}
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern IntPtr create_render_window(IntPtr glfwWindow);
+		private static extern IntPtr adapt_glfw_window(IntPtr glfwWindow);
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
-		private static extern void delete_render_window(IntPtr handle);
+		private static extern void delete_window_adapter(IntPtr handle);
 	}
 }

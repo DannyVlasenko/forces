@@ -1,6 +1,8 @@
 #ifndef FORCES_OPENGL_RENDERER_H
 #define FORCES_OPENGL_RENDERER_H
 
+#include <GLFW/glfw3.h>
+
 #include "camera.h"
 #include "node.h"
 
@@ -9,6 +11,13 @@ extern "C" {
 #endif
 
 typedef struct ForcesOpenGLRenderer ForcesOpenGLRenderer;
+typedef struct ForcesWindow ForcesWindow;
+
+__declspec(dllexport)
+ForcesWindow* adapt_glfw_window(GLFWwindow* glfwWindow);
+
+__declspec(dllexport)
+void delete_window_adapter(ForcesWindow* window);
 
 __declspec(dllexport)
 ForcesOpenGLRenderer * create_opengl_renderer();

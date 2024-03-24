@@ -145,7 +145,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;../../../third_parties/assimp/include;../../../src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;../../../third_parties/assimp/include;../../../third_parties/glfw/include;../../../src</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -167,7 +167,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;../../../third_parties/assimp/include;../../../src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../third_parties/glm/glm;../../../third_parties/assimp/include;../../../third_parties/glfw/include;../../../src</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>

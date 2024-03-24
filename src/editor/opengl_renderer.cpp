@@ -4,6 +4,35 @@
 #include "engine/scene/node.hpp"
 #include "opengl_renderer/renderer.hpp"
 
+struct ForcesWindow : forces::Window
+{
+	explicit ForcesWindow(GLFWwindow* window)
+		: window_(window)
+	{}
+
+	void makeContextCurrent() const override
+	{
+		glfwMakeContextCurrent(window_);
+	}
+
+	void swapBuffers() const override
+	{
+		glfwSwapBuffers(window_);
+	}
+private:
+	GLFWwindow* window_;
+};
+
+ForcesWindow* adapt_glfw_window(GLFWwindow* glfwWindow)
+{
+	return new ForcesWindow(glfwWindow);
+}
+
+void delete_window_adapter(ForcesWindow* window)
+{
+	delete window;
+}
+
 ForcesOpenGLRenderer* create_opengl_renderer()
 {
 	return reinterpret_cast<ForcesOpenGLRenderer*>(new opengl::Renderer);
