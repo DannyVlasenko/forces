@@ -4,8 +4,8 @@ namespace Forces.Models.SceneTree
 {
 	public class MeshNode : Node
 	{
-		private WeakReference<Material> _material;
-		private WeakReference<Mesh> _mesh;
+		private WeakReference<Material> _material = new WeakReference<Material>(null);
+		private WeakReference<Mesh> _mesh = new WeakReference<Mesh>(null);
 
 		public MeshNode(string name) : base(name) {}
 

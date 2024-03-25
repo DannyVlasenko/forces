@@ -9,7 +9,7 @@ namespace Forces.Models.Engine
 			base(create_light_node(parent.Handle, name))
 		{ }
 		
-		private PointLight Light => new PointLight(node_get_light(Handle));
+		public PointLight Light => new PointLight(node_get_light(Handle));
 
 		[DllImport("editor.dll", CharSet = CharSet.Unicode)]
 		private static extern IntPtr create_light_node(IntPtr parent, string name);

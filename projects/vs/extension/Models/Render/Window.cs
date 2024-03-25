@@ -9,7 +9,7 @@ namespace Forces.Models.Render
 
 		public Window(RenderWindow from)
 		{
-			Handle = adapt_glfw_window(from.Handle);
+			Handle = adapt_glfw_window(from.WindowHandle);
 		}
 		private void ReleaseUnmanagedResources()
 		{

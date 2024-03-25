@@ -36,5 +36,5 @@ ForcesDirectedLight* scene_create_directed_light(ForcesScene* scene, const wchar
 void scene_set_active_camera_node(ForcesScene* scene, ForcesNode* cameraNode)
 {
 	auto* sc = reinterpret_cast<forces::Scene*>(scene);
-	sc->selectActiveCameraNode(reinterpret_cast<forces::CameraNode*>(cameraNode));
+	sc->selectActiveCameraNode(reinterpret_cast<forces::Node*>(cameraNode));
 }

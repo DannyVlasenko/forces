@@ -159,4 +159,14 @@ namespace forces
 	{
 		return node.rotation() * glm::vec3{ 1.0f, 0.0f, 0.0f };
 	}
+
+	inline Camera& get_camera(Node& node)
+	{
+		return std::get<Camera>(node.content());
+	}
+
+	inline const Camera& get_camera(const Node& node)
+	{
+		return std::get<Camera>(node.content());
+	}
 }

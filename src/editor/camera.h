@@ -14,27 +14,6 @@ __declspec(dllexport)
 void delete_camera(ForcesCamera *camera);
 
 __declspec(dllexport)
-vec3 camera_get_position(ForcesCamera *camera);
-
-__declspec(dllexport)
-void camera_set_position(ForcesCamera *camera, vec3 pos);
-
-__declspec(dllexport)
-vec4 camera_get_rotation(ForcesCamera *camera);
-
-__declspec(dllexport)
-void camera_set_rotation(ForcesCamera *camera, vec4 rot);
-
-__declspec(dllexport)
-void camera_yaw(ForcesCamera *camera, float grad);
-
-__declspec(dllexport)
-void camera_pitch(ForcesCamera *camera, float grad);
-
-__declspec(dllexport)
-void camera_roll(ForcesCamera *camera, float grad);
-
-__declspec(dllexport)
 float camera_get_fov(ForcesCamera *camera);
 
 __declspec(dllexport)

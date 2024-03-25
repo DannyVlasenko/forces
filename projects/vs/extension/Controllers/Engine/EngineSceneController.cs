@@ -50,7 +50,7 @@ namespace Forces.Controllers.Engine
 				}); ;
 			_ambientLightController = editorScene.WhenAnyValue(x => x.AmbientLight.Color).Subscribe(color =>
 			{
-				_engineScene.AmbientLight.Color = new Vec3(color.R, color.G, color.B);
+				_engineScene.AmbientLight.Color = new Vec3(color.R / 256.0f, color.G / 256.0f, color.B / 256.0f);
 				renderer.ProcessScene(_engineScene);
 				renderer.Render();
 			});

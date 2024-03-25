@@ -2,8 +2,6 @@
 #include <span>
 #include <unordered_set>
 
-#include "camera_node.hpp"
-#include "empty_node.hpp"
 #include "light.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
@@ -15,13 +13,13 @@ namespace forces
 	{
 	public:
 		[[nodiscard]]
-		EmptyNode& rootNode() noexcept
+		Node& rootNode() noexcept
 		{
 			return rootNode_;
 		}
 
 		[[nodiscard]]
-		const EmptyNode& rootNode() const noexcept
+		const Node& rootNode() const noexcept
 		{
 			return rootNode_;
 		}
@@ -51,20 +49,20 @@ namespace forces
 		}
 
 		[[nodiscard]]
-		const CameraNode * activeCameraNode() const noexcept
+		const Node * activeCameraNode() const noexcept
 		{
 			return activeCameraNode_;
 		}
 
-		void selectActiveCameraNode(CameraNode* cameraNode) noexcept
+		void selectActiveCameraNode(Node* cameraNode) noexcept
 		{
 			activeCameraNode_ = cameraNode;
 		}
 
 	private:
-		EmptyNode rootNode_{L"Root"};
+		Node rootNode_{L"Root"};
 		AmbientLight ambientLight_;
 		std::vector<DirectedLight> directedLights_;
-		CameraNode* activeCameraNode_{ nullptr };
+		Node* activeCameraNode_{ nullptr };
 	};
 }

@@ -11,6 +11,8 @@
 //stl
 #include <unordered_map>
 
+template<class... Ts>
+struct overloaded : Ts... { using Ts::operator()...; };
 
 namespace opengl
 {
@@ -31,64 +33,32 @@ namespace opengl
 		std::vector<PointLight> pointLights_;
 		std::vector<DirectedLight> directedLights_;
 		std::unique_ptr<LightProgram> lightProgram_;
-		forces::CameraNode* camera_{nullptr};
+		const forces::Node* cameraNode_{nullptr};
 
-		void addNodeWithChildren(const std::variant<forces::ConcreteNode>& node, glm::vec3 parentTranslation)
+		void addNodeWithChildren(const forces::Node& node, glm::vec3 parentTranslation)
 		{
-			std::visit(
-				[&parentTranslation](const auto& nd)
+			const auto thisTranslation = node.translation() + parentTranslation;
+			std::visit(overloaded{
+				[&](const forces::MeshContent& mc)
 				{
-					addNodeWithChildren(nd, parentTranslation);
-				}, node);
-		}
-
-		void addNodeWithChildren(const forces::MeshNode& node, glm::vec3 parentTranslation)
-		{
-			const auto thisTranslation = node.translation() + parentTranslation;
-			auto* nodeMesh = node.mesh();
-			if (nodeMesh != nullptr) 
-			{
-				if (!meshes_.contains(nodeMesh))
+					if (!meshes_.contains(mc.mesh()))
+					{
+						meshes_.insert_or_assign(mc.mesh(), load_from_file(mc.mesh()->path()));
+					}
+					for (const auto& mesh : meshes_.at(mc.mesh()))
+					{
+						auto& obj = objects_.emplace_back(mesh, *lightProgram_);
+						obj.postion() = thisTranslation;
+						obj.color() = mc.material()->color();
+					}
+				},
+				[&](const forces::PointLight& l)
 				{
-					meshes_.insert_or_assign(nodeMesh, load_from_file(nodeMesh->path()));
-				}
-				for (const auto& mesh : meshes_.at(nodeMesh))
-				{
-					auto& obj = objects_.emplace_back(mesh, *lightProgram_);
-					obj.postion() = thisTranslation;
-					obj.color() = node.material()->color();
-				}
-			}
-			for(const auto &child : node.children())
-			{
-				addNodeWithChildren(child, thisTranslation);
-			}
-		}
-
-		void addNodeWithChildren(const forces::LightNode& node, glm::vec3 parentTranslation)
-		{
-			const auto thisTranslation = node.translation() + parentTranslation;
-			pointLights_.push_back(PointLight{ thisTranslation, node.light().color() });
-
-			for(const auto &child : node.children())
-			{
-				addNodeWithChildren(child, thisTranslation);
-			}
-		}
-
-		void addNodeWithChildren(const forces::CameraNode& node, glm::vec3 parentTranslation)
-		{
-			const auto thisTranslation = node.translation() + parentTranslation;
-			for(const auto &child : node.children())
-			{
-				addNodeWithChildren(child, thisTranslation);
-			}
-		}
-
-		void addNodeWithChildren(const forces::EmptyNode& node, glm::vec3 parentTranslation)
-		{
-			const auto thisTranslation = node.translation() + parentTranslation;
-			for(const auto &child : node.children())
+					pointLights_.push_back(PointLight{ thisTranslation, l.color() });
+				},
+				[&](const auto&){},
+			}, node.content());
+			for (const auto& child : node.children())
 			{
 				addNodeWithChildren(child, thisTranslation);
 			}
@@ -114,12 +84,12 @@ namespace opengl
 		GLCall(glClearColor(pImpl_->ambient_light_.Color.x, pImpl_->ambient_light_.Color.y, pImpl_->ambient_light_.Color.z, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-		if (pImpl_->camera_ == nullptr)
+		if (pImpl_->cameraNode_ == nullptr)
 		{
 			return;
 		}
 
-		GLCall(glViewport(0, 0, pImpl_->camera_->camera().viewport().x, pImpl_->camera_->camera().viewport().y));
+		GLCall(glViewport(0, 0, get_camera(*pImpl_->cameraNode_).viewport().x, get_camera(*pImpl_->cameraNode_).viewport().y));
 		pImpl_->lightProgram_->setAmbientLightColor(pImpl_->ambient_light_.Color);
 		if (!pImpl_->directedLights_.empty())
 		{
@@ -134,10 +104,10 @@ namespace opengl
 		for (const auto& obj : pImpl_->objects_)
 		{
 
-			obj.draw(view_projection(pImpl_->camera_->camera(), 
-										pImpl_->camera_->translation(), 
-										front(*pImpl_->camera_), 
-										up(*pImpl_->camera_)));
+			obj.draw(view_projection(get_camera(*pImpl_->cameraNode_),
+										pImpl_->cameraNode_->translation(), 
+										front(*pImpl_->cameraNode_), 
+										up(*pImpl_->cameraNode_)));
 		}
 		pImpl_->window_.swapBuffers();
 	}
@@ -150,7 +120,8 @@ namespace opengl
 		for (const auto& dl : scene.directedLights())
 		{
 			pImpl_->directedLights_.push_back(DirectedLight{ dl.direction(), dl.color() });
-		}		
+		}
+		pImpl_->cameraNode_ = scene.activeCameraNode();
 		pImpl_->objects_.clear();
 		pImpl_->addNodeWithChildren(scene.rootNode(), glm::vec3{ 0.f, 0.f, 0.f });
 	}
