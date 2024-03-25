@@ -5,14 +5,11 @@
 //engine
 #include "engine/scene/node.hpp"
 #include "engine/scene/mesh.hpp"
-#include "engine/scene/mesh_node.hpp"
 #include "engine/scene/scene.hpp"
 #include "scene/light_sources.hpp"
 
 //stl
 #include <unordered_map>
-
-#include "engine/scene/light_node.hpp"
 
 
 namespace opengl

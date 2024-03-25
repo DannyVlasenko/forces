@@ -1,7 +1,5 @@
 #include "opengl_renderer.h"
 
-#include "engine/scene/camera.hpp"
-#include "engine/scene/node.hpp"
 #include "opengl_renderer/renderer.hpp"
 
 struct ForcesWindow : forces::Window
@@ -33,9 +31,9 @@ void delete_window_adapter(ForcesWindow* window)
 	delete window;
 }
 
-ForcesOpenGLRenderer* create_opengl_renderer()
+ForcesOpenGLRenderer* create_opengl_renderer(ForcesWindow* window)
 {
-	return reinterpret_cast<ForcesOpenGLRenderer*>(new opengl::Renderer);
+	return reinterpret_cast<ForcesOpenGLRenderer*>(new opengl::Renderer(*window));
 }
 
 void delete_opengl_renderer(ForcesOpenGLRenderer* renderer)
@@ -43,17 +41,12 @@ void delete_opengl_renderer(ForcesOpenGLRenderer* renderer)
 	delete reinterpret_cast<opengl::Renderer*>(renderer);
 }
 
-void opengl_renderer_set_root_node(ForcesOpenGLRenderer* renderer, ForcesNode* root)
+void opengl_renderer_process_scene(ForcesOpenGLRenderer* renderer, ForcesScene* scene)
 {
-	reinterpret_cast<opengl::Renderer*>(renderer)->setCurrentRootNode(*reinterpret_cast<forces::Node*>(root));
+	reinterpret_cast<opengl::Renderer*>(renderer)->processScene(*reinterpret_cast<forces::Scene*>(scene));
 }
 
 void opengl_renderer_render(ForcesOpenGLRenderer* renderer)
 {
 	reinterpret_cast<opengl::Renderer*>(renderer)->render();
-}
-
-void opengl_renderer_set_camera(ForcesOpenGLRenderer* renderer, ForcesCamera* camera)
-{
-	reinterpret_cast<opengl::Renderer*>(renderer)->setCamera(reinterpret_cast<forces::Camera *>(camera));
 }
