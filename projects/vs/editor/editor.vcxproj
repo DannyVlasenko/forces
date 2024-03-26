@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\editor\camera.cpp" />
     <ClCompile Include="..\..\..\src\editor\light.cpp" />
+    <ClCompile Include="..\..\..\src\editor\material.cpp" />
     <ClCompile Include="..\..\..\src\editor\mesh.cpp" />
     <ClCompile Include="..\..\..\src\editor\node.cpp" />
     <ClCompile Include="..\..\..\src\editor\opengl_renderer.cpp" />

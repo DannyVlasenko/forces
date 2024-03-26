@@ -25,8 +25,7 @@ namespace Forces.Controllers.Engine
 
 		public EngineSceneController(EditorScene editorScene, OpenGLRenderer renderer)
 		{
-			_engineScene = new EngineScene();
-			_rootNodeController = new EngineEmptyNodeController(editorScene.RootNode, _engineScene.RootNode, _engineScene, renderer, _meshModel);
+			_engineScene = new EngineScene(); 
 			_previewCameraSubscription = editorScene.WhenAnyValue(x => x.PreviewCamera).Subscribe(previewCamera =>
 			{
 				_previewCameraController?.Dispose();
@@ -36,6 +35,7 @@ namespace Forces.Controllers.Engine
 				renderer.ProcessScene(_engineScene);
 				renderer.Render();
 			});
+			_rootNodeController = new EngineEmptyNodeController(editorScene.RootNode, _engineScene.RootNode, _engineScene, renderer, _meshModel);
 			_directedLightsSubscription = editorScene.DirectedLights
 				.ToObservableChangeSet(editorDirectedLight => new EngineDirectedLightController(_engineScene.AddDirectedLight(editorDirectedLight.Name), editorDirectedLight, _engineScene, renderer))
 				.OnItemRemoved(

@@ -7,16 +7,16 @@
 extern "C" {
 #endif
 
-	typedef struct ForcesMaterial ForcesMaterial;
+typedef struct ForcesMaterial ForcesMaterial;
 
-	__declspec(dllexport)
-		ForcesMaterial* create_material();
+__declspec(dllexport)
+ForcesMaterial* create_material();
 
-	__declspec(dllexport)
-		void delete_material(ForcesMaterial* material);
+__declspec(dllexport)
+void delete_material(ForcesMaterial* material);
 
-	__declspec(dllexport)
-		const wchar_t* mesh_set_color(ForcesMaterial* material, vec3 color);
+__declspec(dllexport)
+void material_set_color(ForcesMaterial* material, vec3 color);
 
 #ifdef __cplusplus
 }

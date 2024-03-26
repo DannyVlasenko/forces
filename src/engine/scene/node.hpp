@@ -118,6 +118,7 @@ namespace forces
 		[[nodiscard]]
 		Node& addChild(Node&& child)
 		{
+			children_.reserve(100);
 			return children_.emplace_back(std::move(child));
 		}
 

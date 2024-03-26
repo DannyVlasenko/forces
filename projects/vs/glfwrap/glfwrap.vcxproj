@@ -141,7 +141,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>../../../third_parties/glfw/lib/win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;</AdditionalDependencies>
+      <AdditionalDependencies>glfw3dll.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
