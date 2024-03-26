@@ -19,3 +19,8 @@ void point_light_set_strength(ForcesPointLight* light, float strength)
 {
 	reinterpret_cast<forces::PointLight*>(light)->strength() = strength;
 }
+
+void directed_light_set_name(ForcesDirectedLight* light, const wchar_t* name)
+{
+	
+}

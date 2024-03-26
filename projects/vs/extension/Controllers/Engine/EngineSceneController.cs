@@ -38,11 +38,6 @@ namespace Forces.Controllers.Engine
 			_rootNodeController = new EngineEmptyNodeController(editorScene.RootNode, _engineScene.RootNode, _engineScene, renderer, _meshModel);
 			_directedLightsSubscription = editorScene.DirectedLights
 				.ToObservableChangeSet(editorDirectedLight => new EngineDirectedLightController(_engineScene.AddDirectedLight(editorDirectedLight.Name), editorDirectedLight, _engineScene, renderer))
-				.OnItemRemoved(
-					light =>
-					{
-						//_engineScene.RemoveDirectedLight(light);
-					})
 				.Subscribe(_ =>
 				{
 					renderer.ProcessScene(_engineScene);

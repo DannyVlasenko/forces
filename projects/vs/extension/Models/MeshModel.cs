@@ -11,7 +11,7 @@ namespace Forces.Models
 {
 	public class MeshModel
 	{
-		public SceneMaterial DefaultMaterial { get; } = new SceneMaterial("Default Material", Color.Black);
+		public SceneMaterial DefaultMaterial { get; } = new SceneMaterial("Default Material", Color.BurlyWood);
 
 		public Dictionary<SceneMaterial, EngineMaterial> EngineMaterials { get; } = new Dictionary<SceneMaterial, EngineMaterial>();
 

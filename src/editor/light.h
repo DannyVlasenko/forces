@@ -19,6 +19,9 @@ __declspec(dllexport)
 void directed_light_set_direction(ForcesDirectedLight* light, vec3 direction);
 
 __declspec(dllexport)
+void directed_light_set_name(ForcesDirectedLight* light, const wchar_t* name);
+
+__declspec(dllexport)
 void point_light_set_strength(ForcesPointLight* light, float strength);
 
 #ifdef __cplusplus

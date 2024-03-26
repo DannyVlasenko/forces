@@ -19,7 +19,7 @@ namespace Forces.Controllers.Engine
 		{
 			_colorSubscription = editorNode.WhenAnyValue(x => x.Light.Color).Subscribe(color =>
 			{
-				engineNode.Light.Color = new Vec3(color.R, color.G, color.B);
+				engineNode.Light.Color = new Vec3(color.R / 256.0f, color.G / 256.0f, color.B / 256.0f);
 				renderer.ProcessScene(scene);
 				renderer.Render();
 			});

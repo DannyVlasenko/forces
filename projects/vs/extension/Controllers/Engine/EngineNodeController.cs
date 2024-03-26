@@ -66,7 +66,7 @@ namespace Forces.Controllers.Engine
 							var editorMaterial = editorMeshNode.Material.TryGetTarget(out var edmt) ? edmt : meshModel.DefaultMaterial;
 							var engineMaterial = meshModel.EngineMaterials.TryGetValue(editorMaterial, out var enmt)
 								? enmt
-								: meshModel.EngineMaterials[editorMaterial] = new Material() { Color = new Vec3() { X = editorMaterial.Color.R, Y = editorMaterial.Color.G, Z = editorMaterial.Color.B } };
+								: meshModel.EngineMaterials[editorMaterial] = new Material() { Color = new Vec3() { X = editorMaterial.Color.R / 256.0f, Y = editorMaterial.Color.G / 256.0f, Z = editorMaterial.Color.B / 256.0f } };
 							var engineMeshNode = new EngineMeshNode(engineNode, editorChildNode.Name, engineMesh, engineMaterial);
 							return new EngineMeshNodeController(editorMeshNode, engineMeshNode, scene, renderer, meshModel);
 						}

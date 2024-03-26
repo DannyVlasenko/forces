@@ -36,7 +36,7 @@ namespace Forces.Controllers.Engine
 				.WhenAnyValue(x => x.Color)
 				.Subscribe(color =>
 				{
-					engineLight.Color = new Vec3(color.R, color.G, color.B);
+					engineLight.Color = new Vec3(color.R / 256.0f, color.G / 256.0f, color.B / 256.0f);
 					renderer.ProcessScene(scene);
 					renderer.Render();
 				});

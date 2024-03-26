@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using Forces.Models.SceneTree;
 
@@ -13,7 +14,12 @@ namespace Forces.Models
 			{
 				//Load from file
 				//Subscribe scene file changed
-				_loadedScenes.Add(path, new Scene(Path.GetFileNameWithoutExtension(path)));
+				var scene = new Scene(Path.GetFileNameWithoutExtension(path));
+				scene.PreviewCamera.Camera.FOV = 60;
+				scene.PreviewCamera.Camera.Near = 1;
+				scene.PreviewCamera.Camera.Far = 100;
+				scene.PreviewCamera.Camera.Viewport = new Size(100, 100);
+				_loadedScenes.Add(path, scene);
 			}
 
 			return _loadedScenes[path];

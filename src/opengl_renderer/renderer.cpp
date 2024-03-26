@@ -116,6 +116,7 @@ namespace opengl
 	{
 		pImpl_->window_.makeContextCurrent();
 		pImpl_->ambient_light_.Color = scene.ambientLight().color();
+		pImpl_->pointLights_.clear();
 		pImpl_->directedLights_.clear();
 		for (const auto& dl : scene.directedLights())
 		{

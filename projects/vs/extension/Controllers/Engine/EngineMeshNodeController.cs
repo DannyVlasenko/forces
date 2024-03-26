@@ -29,7 +29,7 @@ namespace Forces.Controllers.Engine
 				});
 			_materialSubscription = editorNode.WhenAnyValue(x => x.Material)
 				.Select(x => (x?.TryGetTarget(out var material) ?? false) ? material : meshModel.DefaultMaterial)
-				.Select(x => meshModel.EngineMaterials.TryGetValue(x, out var material) ? material : meshModel.EngineMaterials[x] = new Material() { Color = new Vec3() { X = x.Color.R, Y = x.Color.G, Z = x.Color.B } })
+				.Select(x => meshModel.EngineMaterials.TryGetValue(x, out var material) ? material : meshModel.EngineMaterials[x] = new Material() { Color = new Vec3() { X = x.Color.R / 256.0f, Y = x.Color.G / 256.0f, Z = x.Color.B / 256.0f } })
 				.Subscribe(x =>
 				{
 					engineNode.Material = x;
