@@ -6,6 +6,7 @@ namespace Forces.Models
 	{
 		private ModelObjectWithNotifications _selectedSceneViewNode;
 		private Scene _selectedScene;
+		private AssetStorage _selectedAssetStorage;
 
 		public ModelObjectWithNotifications SelectedSceneViewNode
 		{
@@ -17,6 +18,12 @@ namespace Forces.Models
 		{
 			get => _selectedScene;
 			set => SetField(ref _selectedScene, value);
+		}
+
+		public AssetStorage SelectedAssetStorage
+		{
+			get => _selectedAssetStorage;
+			set => SetField(ref _selectedAssetStorage, value);
 		}
 	}
 }

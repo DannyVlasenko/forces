@@ -22,11 +22,12 @@ namespace Forces
 
 		private readonly SelectionModel _selectionModel = new SelectionModel();
 		private readonly SceneFileModel _sceneFileModel = new SceneFileModel();
+		private readonly AssetFileModel _assetFileModel = new AssetFileModel();
 		private readonly SolutionExplorerSelectionController _solutionSelectionController;
 
 		public ForcesPackage()
 		{
-			_solutionSelectionController = new SolutionExplorerSelectionController(_selectionModel, _sceneFileModel);
+			_solutionSelectionController = new SolutionExplorerSelectionController(_selectionModel, _sceneFileModel, _assetFileModel);
 		}
 
 		protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
